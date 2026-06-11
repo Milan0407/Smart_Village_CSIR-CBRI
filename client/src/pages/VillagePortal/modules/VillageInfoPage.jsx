@@ -9,24 +9,22 @@ const VillageInfoPage = () => {
         <ModulePageHeader
           badge="Village Profile"
           title="Village Information"
-          description="Overview of demographics, geography, history and infrastructure."
+          description="Overview of demographics, geography, infrastructure and historical background of the village."
         />
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="border rounded-xl p-5">
-            <h3 className="font-semibold mb-3">Basic Details</h3>
-            <p>District: Nashik</p>
-            <p>State: Maharashtra</p>
-            <p>Population: 12,300</p>
-            <p>Area: 9.5 km²</p>
+            <h3 className="font-semibold mb-2">
+              Demographics
+            </h3>
+            <p>Population, households and literacy information.</p>
           </div>
 
           <div className="border rounded-xl p-5">
-            <h3 className="font-semibold mb-3">Infrastructure</h3>
-            <p>Schools: 4</p>
-            <p>Health Centers: 2</p>
-            <p>Road Connectivity: Good</p>
-            <p>Internet Coverage: 80%</p>
+            <h3 className="font-semibold mb-2">
+              Geography
+            </h3>
+            <p>Location, area and environmental information.</p>
           </div>
         </div>
       </ModuleLayout>

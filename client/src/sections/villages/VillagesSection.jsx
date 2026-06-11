@@ -1,37 +1,8 @@
-const villages = [
-  {
-    id: 1,
-    name: "Village One",
-    district: "Roorkee",
-    state: "Uttarakhand",
-  },
-  {
-    id: 2,
-    name: "Village Two",
-    district: "Haridwar",
-    state: "Uttarakhand",
-  },
-  {
-    id: 3,
-    name: "Village Three",
-    district: "Dehradun",
-    state: "Uttarakhand",
-  },
-  {
-    id: 4,
-    name: "Village Four",
-    district: "Pauri",
-    state: "Uttarakhand",
-  },
-  {
-    id: 5,
-    name: "Village Five",
-    district: "Tehri",
-    state: "Uttarakhand",
-  },
-];
+import { useNavigate } from "react-router-dom";
+import { villages } from "../../data/villages";
 
 const VillagesSection = () => {
+  const navigate = useNavigate();
   return (
     <section
       id="villages"
@@ -60,11 +31,27 @@ const VillagesSection = () => {
 
           {villages.map((village) => (
             <div
-              key={village.id}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition"
-            >
+  key={village.id}
+  onClick={() =>
+    navigate(`/village/${village.slug}/info`)
+  }
+  className="
+    bg-white
+    rounded-2xl
+    overflow-hidden
+    shadow-sm
+    hover:shadow-xl
+    hover:-translate-y-1
+    transition-all
+    cursor-pointer
+  "
+>
 
-              <div className="h-48 bg-slate-300"></div>
+             <div className="h-48 bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center">
+  <span className="text-green-800 font-semibold">
+    {village.name}
+  </span>
+</div>
 
               <div className="p-6">
 
@@ -80,11 +67,9 @@ const VillagesSection = () => {
                   {village.state}
                 </p>
 
-                <button
-                  className="text-blue-700 font-semibold"
-                >
-                  View Village Portal →
-                </button>
+             <span className="text-green-700 font-semibold">
+  View Village Portal →
+</span>
 
               </div>
 

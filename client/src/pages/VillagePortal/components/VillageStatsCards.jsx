@@ -42,9 +42,12 @@ transition-all duration-300 hover:-translate-y-1"
                   {item.title}
                 </p>
 
-                <h3 className="text-2xl font-bold mt-2">
+                <h3 className="text-3xl font-bold mt-2 text-slate-900">
                   {item.value}
                 </h3>
+                <p className="text-xs text-slate-400 mt-1">
+  Current Village Data
+</p>
               </div>
 
               <Icon size={26} />

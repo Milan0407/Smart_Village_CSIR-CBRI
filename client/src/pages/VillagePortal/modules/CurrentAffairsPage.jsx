@@ -1,20 +1,29 @@
+import VillageLayout from "../layout/VillageLayout";
 import ModuleLayout from "../shared/ModuleLayout";
 import ModulePageHeader from "../shared/ModulePageHeader";
 
-const VillageInfoPage = () => {
+const CurrentAffairsPage = () => {
   return (
-    <ModuleLayout>
-      <ModulePageHeader
-        badge="Village Profile"
-        title="Village Information"
-        description="Overview of demographics, history, geography, infrastructure and village profile."
-      />
+    <VillageLayout>
+      <ModuleLayout>
+        <ModulePageHeader
+          badge="Updates"
+          title="Current Affairs"
+          description="Latest developments and village news."
+        />
 
-      <div>
-        Content Coming Soon
-      </div>
-    </ModuleLayout>
+        <div className="space-y-4">
+          <div className="border rounded-xl p-5">
+            New community center inaugurated.
+          </div>
+
+          <div className="border rounded-xl p-5">
+            Solar lighting project launched.
+          </div>
+        </div>
+      </ModuleLayout>
+    </VillageLayout>
   );
 };
 
-export default VillageInfoPage;
+export default CurrentAffairsPage;

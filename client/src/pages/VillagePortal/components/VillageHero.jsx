@@ -6,7 +6,7 @@ const VillageHero = ({ village }) => {
 
       <div
         className="
-          h-[280px]
+          h-[360px]
           bg-[url('https://images.unsplash.com/photo-1506744038136-46273834b3fb')]
           bg-cover
           bg-center

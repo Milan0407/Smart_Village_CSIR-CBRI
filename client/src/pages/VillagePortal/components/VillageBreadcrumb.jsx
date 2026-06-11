@@ -1,5 +1,6 @@
 import { ChevronRight, Home } from "lucide-react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { getVillageBySlug } from "../../../data/villages";
 
 const PAGE_NAMES = {
   info: "Village Information",
@@ -18,6 +19,7 @@ const PAGE_NAMES = {
 const VillageBreadcrumb = () => {
   const location = useLocation();
   const { slug } = useParams();
+  const village = getVillageBySlug(slug);
 
   const currentPage =
     location.pathname.split("/").pop();
@@ -37,15 +39,15 @@ const VillageBreadcrumb = () => {
 
       <ChevronRight size={14} />
 
-      <span className="capitalize">
-        {slug}
-      </span>
+      <span>
+  {village?.name}
+</span>
 
       <ChevronRight size={14} />
 
       <span className="font-medium text-slate-900">
-        {PAGE_NAMES[currentPage]}
-      </span>
+  {PAGE_NAMES[currentPage] || "Page"}
+</span>
     </nav>
   );
 };
