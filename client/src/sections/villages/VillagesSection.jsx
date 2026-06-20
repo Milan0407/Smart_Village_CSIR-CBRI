@@ -1,8 +1,22 @@
-import { useNavigate } from "react-router-dom";
-import { villages } from "../../data/villages";
+import { useNavigate }
+  from "react-router-dom";
 
-const VillagesSection = () => {
-  const navigate = useNavigate();
+const VillagesSection = ({
+  data = {},
+}) => {
+  const navigate =
+    useNavigate();
+
+  const {
+    heading =
+      "Featured Villages",
+
+    description =
+      "Explore village-specific information, development plans, achievements, maps, indicators, and community activities.",
+
+    villages = [],
+  } = data;
+
   return (
     <section
       id="villages"
@@ -17,64 +31,78 @@ const VillagesSection = () => {
           </span>
 
           <h2 className="text-4xl font-bold text-slate-900 mt-3">
-            Featured Villages
+            {heading}
           </h2>
 
           <p className="text-slate-600 max-w-3xl mx-auto mt-4">
-            Explore village-specific information, development plans,
-            achievements, maps, indicators, and community activities.
+            {description}
           </p>
 
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-          {villages.map((village) => (
-            <div
-  key={village.id}
-  onClick={() =>
-    navigate(`/village/${village.slug}/info`)
-  }
-  className="
-    bg-white
-    rounded-2xl
-    overflow-hidden
-    shadow-sm
-    hover:shadow-xl
-    hover:-translate-y-1
-    transition-all
-    cursor-pointer
-  "
->
+          {villages.map(
+            (village) => (
+              <div
+                key={
+                  village.slug
+                }
+                onClick={() =>
+                  navigate(
+                    `/village/${village.slug}/info`
+                  )
+                }
+                className="
+                  bg-white
+                  rounded-2xl
+                  overflow-hidden
+                  shadow-sm
+                  hover:shadow-xl
+                  hover:-translate-y-1
+                  transition-all
+                  cursor-pointer
+                "
+              >
+                <div className="h-48 bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center">
 
-             <div className="h-48 bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center">
-  <span className="text-green-800 font-semibold">
-    {village.name}
-  </span>
-</div>
+                  <span className="text-green-800 font-semibold">
+                    {
+                      village.name
+                    }
+                  </span>
 
-              <div className="p-6">
+                </div>
 
-                <h3 className="text-xl font-bold mb-2">
-                  {village.name}
-                </h3>
+                <div className="p-6">
 
-                <p className="text-slate-600">
-                  {village.district}
-                </p>
+                  <h3 className="text-xl font-bold mb-2">
+                    {
+                      village.name
+                    }
+                  </h3>
 
-                <p className="text-slate-500 text-sm mb-4">
-                  {village.state}
-                </p>
+                  <p className="text-slate-600">
+                    {
+                      village.district
+                    }
+                  </p>
 
-             <span className="text-green-700 font-semibold">
-  View Village Portal →
-</span>
+                  <p className="text-slate-500 text-sm mb-4">
+                    {
+                      village.state
+                    }
+                  </p>
+
+                  <span className="text-green-700 font-semibold">
+                    View Village Portal →
+                  </span>
+
+                </div>
 
               </div>
-
-            </div>
-          ))}
+            )
+          )}
 
         </div>
 

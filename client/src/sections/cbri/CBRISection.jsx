@@ -1,27 +1,16 @@
-const features = [
-  {
-    title: "Research & Innovation",
-    description:
-      "Advancing science and technology solutions for sustainable rural development.",
-  },
-  {
-    title: "Rural Infrastructure",
-    description:
-      "Supporting smart infrastructure planning and resilient village ecosystems.",
-  },
-  {
-    title: "Technology Transfer",
-    description:
-      "Bridging research outcomes with real-world village implementation.",
-  },
-  {
-    title: "Capacity Building",
-    description:
-      "Empowering communities through knowledge, training, and skill development.",
-  },
-];
+const CBRISection = ({
+  data = {},
+}) => {
+  const {
+    heading =
+      "Vision & Objectives",
 
-const CBRISection = () => {
+    description =
+      "CSIR-CBRI is committed to advancing rural transformation through research, innovation, sustainable development, and technology-driven solutions.",
+
+    features = [],
+  } = data;
+
   return (
     <section
       id="cbri"
@@ -36,33 +25,47 @@ const CBRISection = () => {
           </span>
 
           <h2 className="text-4xl font-bold text-slate-900 mt-3">
-            Vision & Objectives
+            {heading}
           </h2>
 
           <p className="text-slate-600 max-w-3xl mx-auto mt-4">
-            CSIR-CBRI is committed to advancing rural transformation
-            through research, innovation, sustainable development,
-            and technology-driven solutions.
+            {description}
           </p>
 
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
 
-          {features.map((item) => (
-            <div
-              key={item.title}
-              className="border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-lg transition"
-            >
-              <h3 className="text-2xl font-semibold text-slate-900 mb-4">
-                {item.title}
-              </h3>
+          {features.map(
+            (
+              item,
+              index
+            ) => (
+              <div
+                key={index}
+                className="
+                  border
+                  border-slate-200
+                  rounded-2xl
+                  p-8
+                  shadow-sm
+                  hover:shadow-lg
+                  transition
+                "
+              >
+                <h3 className="text-2xl font-semibold text-slate-900 mb-4">
+                  {item.title}
+                </h3>
 
-              <p className="text-slate-600 leading-relaxed">
-                {item.description}
-              </p>
-            </div>
-          ))}
+                <p className="text-slate-600 leading-relaxed">
+                  {
+                    item.description
+                  }
+                </p>
+
+              </div>
+            )
+          )}
 
         </div>
 

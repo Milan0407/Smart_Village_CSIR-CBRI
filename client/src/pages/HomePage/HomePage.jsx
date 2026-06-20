@@ -1,37 +1,37 @@
-import Navbar from "../../components/common/Navbar/Navbar";
-import HeroSection from "../../sections/hero/HeroSection";
-import AboutMission from "../../sections/mission/AboutMission";
-import MissionObjectives from "../../sections/mission/MissionObjectives";
-import ImpactStatistics from "../../sections/mission/ImpactStatistics";
-import CBRISection from "../../sections/cbri/CBRISection";
-import LatestUpdates from "../../sections/updates/LatestUpdates";
-import PoliciesSection from "../../sections/policies/PoliciesSection";
-import VillagesSection from "../../sections/villages/VillagesSection";
-import Footer from "../../components/common/Footer";
+import usePage
+  from "../../hooks/usePage";
+
+import MainLayout
+  from "../../layouts/MainLayout";
+
+import HomePageRenderer
+  from "./HomePageRenderer";
 
 const HomePage = () => {
+  const {
+    page,
+    loading,
+    error,
+  } = usePage("home");
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (error) {
+    return <h1>{error}</h1>;
+  }
+console.log(page);
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Navbar />
-
-      <HeroSection />
-
-      <AboutMission />
-
-      <MissionObjectives />
-
-      <ImpactStatistics />
-
-      <CBRISection />
-
-      <LatestUpdates />
-
-      <PoliciesSection />
-
-      <VillagesSection />
-
-      <Footer />
-    </div>
+    <>
+    <MainLayout>
+    <HomePageRenderer
+      sections={
+        page.sections
+      }
+    />
+    </MainLayout>
+    </>
   );
 };
 

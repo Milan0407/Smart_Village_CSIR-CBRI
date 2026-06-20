@@ -3,3 +3,27 @@
 html {
   scroll-behavior: smooth;
 }
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: white !important;
+  background: rgba(0, 0, 0, 0.4);
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 9999px;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 20px !important;
+  font-weight: bold;
+}
+
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}

@@ -14,10 +14,157 @@ import IndicatorsPage from "../pages/VillagePortal/modules/IndicatorsPage";
 import TechnologyMappingPage from "../pages/VillagePortal/modules/TechnologyMappingPage";
 import FeedbackPage from "../pages/VillagePortal/modules/FeedbackPage";
 
+
+import AboutPage from "../pages/AboutPage/AboutPage";
+import CSIRLaboratoriesPage from "../pages/CSIRLaboratoriesPage/CSIRLaboratoriesPage";
+import NodalLabPage
+  from "../pages/NodalLabPage/NodalLabPage";
+
+  import ParticipatingLabsPage
+  from "../pages/ParticipatingLabsPage/ParticipatingLabsPage";
+
+  import SmartVillagePage
+  from "../pages/SmartVillagePage/SmartVillagePage";
+
+  import NewsPage
+  from "../pages/NewsPage/NewsPage";
+
+  import NewsDetailPage
+  from "../pages/NewsPage/NewsDetailPage";
+
+  import SuccessStoriesPage
+  from "../pages/SuccessStoriesPage/SuccessStoriesPage";
+
+  import SuccessStoryDetailPage from "../pages/SuccessStoriesPage/SuccessStoryDetailPage";
+
+import ContactPage
+  from "../pages/ContactPage/ContactPage";
+
+
+import AdminRoutes
+  from "../admin/routes/AdminRoutes";
+
+  import AnnouncementDetailPage
+from "../pages/AnnouncementPage/AnnouncementDetailPage";
+
+import MissionObjectivesPage
+  from "../pages/AboutPage/MissionObjectivesPage";
+
+import DGDeskPage
+  from "../pages/AboutPage/DGDeskPage";
+
+import DirectorDeskPage
+  from "../pages/AboutPage/DirectorDeskPage";
+
+
 const AppRoutes = () => {
   return (
+
+    
     <Routes>
+      <Route
+  path="/admin/*"
+  element={<AdminRoutes />}
+/>
+
+
       <Route path="/" element={<HomePage />} />
+
+      <Route
+  path="/about"
+  element={<AboutPage />}
+/>
+
+<Route
+  path="/announcements/:slug"
+  element={
+    <AnnouncementDetailPage />
+  }
+/>
+
+
+<Route
+  path="/about/mission-objectives"
+  element={
+    <MissionObjectivesPage />
+  }
+/>
+
+<Route
+  path="/about/dg-desk"
+  element={
+    <DGDeskPage />
+  }
+/>
+
+<Route
+  path="/about/director-desk"
+  element={
+    <DirectorDeskPage />
+  }
+/>
+
+
+<Route
+  path="/csir-laboratories"
+  element={
+    <CSIRLaboratoriesPage />
+  }
+/>
+<Route
+  path="/csir-laboratories/nodal-lab"
+  element={
+    <NodalLabPage />
+  }
+/>
+
+<Route
+  path="/csir-laboratories/participating-labs"
+  element={
+    <ParticipatingLabsPage />
+  }
+/>
+
+<Route
+  path="/csir-smart-village"
+  element={
+    <SmartVillagePage />
+  }
+/>
+
+
+<Route
+  path="/news-updates"
+  element={
+    <NewsPage />
+  }
+/>
+
+<Route
+  path="/news/:slug"
+  element={
+    <NewsDetailPage />
+  }
+/>
+
+
+
+<Route
+  path="/success-stories"
+  element={
+    <SuccessStoriesPage />
+  }
+/>
+
+<Route
+  path="/success-stories/:slug"
+  element={<SuccessStoryDetailPage />}
+/>
+
+<Route
+  path="/contact"
+  element={<ContactPage />}
+/>
 
       <Route
         path="/village/:slug/info"

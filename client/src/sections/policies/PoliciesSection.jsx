@@ -1,31 +1,16 @@
-const schemes = [
-  {
-    title: "PM Awas Yojana",
-    category: "Housing",
-    description:
-      "Affordable housing initiative supporting rural infrastructure development.",
-  },
-  {
-    title: "Jal Jeevan Mission",
-    category: "Water",
-    description:
-      "Ensuring safe and adequate drinking water supply to rural households.",
-  },
-  {
-    title: "Digital India",
-    category: "Technology",
-    description:
-      "Promoting digital empowerment and online service accessibility.",
-  },
-  {
-    title: "MGNREGA",
-    category: "Employment",
-    description:
-      "Generating livelihood opportunities and strengthening rural economy.",
-  },
-];
+const PoliciesSection = ({
+  data = {},
+}) => {
+  const {
+    heading =
+      "Policies & Schemes",
 
-const PoliciesSection = () => {
+    description =
+      "Explore central and state initiatives supporting sustainable rural development and smart village transformation.",
+
+    policies = [],
+  } = data;
+
   return (
     <section
       id="policies"
@@ -40,36 +25,52 @@ const PoliciesSection = () => {
           </span>
 
           <h2 className="text-4xl font-bold text-slate-900 mt-3">
-            Policies & Schemes
+            {heading}
           </h2>
 
           <p className="text-slate-600 max-w-3xl mx-auto mt-4">
-            Explore central and state initiatives supporting
-            sustainable rural development and smart village transformation.
+            {description}
           </p>
 
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          {schemes.map((scheme) => (
-            <div
-              key={scheme.title}
-              className="border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition"
-            >
-              <span className="text-sm text-blue-700 font-medium">
-                {scheme.category}
-              </span>
+          {policies.map(
+            (
+              policy,
+              index
+            ) => (
+              <div
+                key={index}
+                className="
+                  border
+                  border-slate-200
+                  rounded-2xl
+                  p-6
+                  hover:shadow-lg
+                  transition
+                "
+              >
+                <span className="text-sm text-blue-700 font-medium">
+                  {
+                    policy.category
+                  }
+                </span>
 
-              <h3 className="text-xl font-semibold mt-3 mb-3">
-                {scheme.title}
-              </h3>
+                <h3 className="text-xl font-semibold mt-3 mb-3">
+                  {policy.title}
+                </h3>
 
-              <p className="text-slate-600">
-                {scheme.description}
-              </p>
-            </div>
-          ))}
+                <p className="text-slate-600">
+                  {
+                    policy.description
+                  }
+                </p>
+
+              </div>
+            )
+          )}
 
         </div>
 
