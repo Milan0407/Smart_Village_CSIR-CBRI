@@ -24,7 +24,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: env.clientUrl,
+    origin: [
+      "http://localhost:5173",
+      "https://smart-village-csir-cbri.vercel.app",
+    ],
     credentials: true,
   })
 );
