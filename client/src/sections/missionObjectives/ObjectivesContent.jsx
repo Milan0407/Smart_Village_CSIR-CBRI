@@ -2,7 +2,7 @@ const ObjectivesContent = ({
   data,
 }) => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-white">
 
       <div className="max-w-5xl mx-auto px-6">
 
@@ -16,14 +16,13 @@ const ObjectivesContent = ({
               font-semibold
             "
           >
-            SMART VILLAGE MISSION
+            Mission Statement
           </span>
 
           <h2
             className="
               text-4xl
               font-bold
-              text-slate-900
               mt-3
             "
           >
@@ -34,13 +33,21 @@ const ObjectivesContent = ({
 
         <div
           className="
-            text-lg
-            text-slate-600
-            leading-relaxed
+            bg-slate-50
+            rounded-2xl
+            p-10
             text-center
           "
         >
-          {data?.description}
+          <p
+            className="
+              text-lg
+              text-slate-700
+              leading-relaxed
+            "
+          >
+            {data?.description}
+          </p>
         </div>
 
       </div>

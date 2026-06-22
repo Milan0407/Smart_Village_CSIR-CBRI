@@ -2,17 +2,28 @@ const ObjectivesOutcomes = ({
   data,
 }) => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-white">
 
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
 
         <div className="text-center mb-14">
+
+          <span
+            className="
+              text-blue-600
+              uppercase
+              tracking-widest
+              font-semibold
+            "
+          >
+            Expected Outcomes
+          </span>
 
           <h2
             className="
               text-4xl
               font-bold
-              text-slate-900
+              mt-3
             "
           >
             {data?.heading}
@@ -20,8 +31,13 @@ const ObjectivesOutcomes = ({
 
         </div>
 
-        <div className="space-y-4">
-
+        <div
+          className="
+            grid
+            md:grid-cols-2
+            gap-6
+          "
+        >
           {data?.items?.map(
             (
               item,
@@ -30,43 +46,43 @@ const ObjectivesOutcomes = ({
               <div
                 key={index}
                 className="
-                  flex
-                  items-center
-                  gap-4
-                  p-5
                   bg-slate-50
-                  rounded-xl
+                  rounded-2xl
+                  p-6
+                  flex
+                  gap-4
+                  items-start
                 "
               >
                 <div
                   className="
-                    w-8
-                    h-8
+                    w-10
+                    h-10
                     rounded-full
                     bg-blue-600
                     text-white
                     flex
                     items-center
                     justify-center
-                    font-semibold
+                    font-bold
+                    flex-shrink-0
                   "
                 >
                   ✓
                 </div>
 
-                <span
+                <p
                   className="
-                    text-lg
                     text-slate-700
+                    leading-relaxed
                   "
                 >
                   {item}
-                </span>
+                </p>
 
               </div>
             )
           )}
-
         </div>
 
       </div>

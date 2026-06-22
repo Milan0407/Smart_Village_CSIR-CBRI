@@ -42,37 +42,7 @@ const seedAboutContent =
               description:
                 "Learn about the CSIR Smart Village Mission and its journey towards sustainable rural development through science, technology and innovation.",
 
-              images: [
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-                },
-
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-                },
-
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1494526585095-c41746248156",
-                },
-
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-                },
-
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1517022812141-23620dba5c23",
-                },
-
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-                },
-              ],
+              images: [],
             };
             break;
 

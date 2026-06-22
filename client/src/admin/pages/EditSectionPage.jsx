@@ -84,9 +84,10 @@ setMedia(
       );
     };
 
-    const heroSections = [
+const heroSections = [
   "HERO",
   "ABOUT_HERO",
+  "OBJECTIVES_HERO",
   "CSIR_LABS_HERO",
   "NODAL_LAB_HERO",
   "PARTICIPATING_LABS_HERO",
@@ -252,10 +253,9 @@ const isHeroSection =
 
 )}
 
-{isHeroSection && (
-
+{isHeroSection &&
+ formData.sectionType === "HERO" && (
   <div className="mt-6">
-
     <label className="block mb-4 font-medium">
       Hero Slider Images
     </label>
@@ -358,32 +358,758 @@ const isHeroSection =
   </div>
 
 )}
-          <label>
-            Content (JSON)
-          </label>
 
-          <textarea
-            rows="10"
-            className="w-full border p-3 rounded font-mono"
-            value={JSON.stringify(
-              formData.content,
-              null,
-              2
-            )}
-            onChange={(e) => {
-              try {
+
+{formData.sectionType ===
+  "PROFILE_MESSAGE" && (
+  <div className="mb-6">
+
+    <label className="block mb-2 font-medium">
+      Profile Image
+    </label>
+
+    <select
+      className="
+        w-full
+        border
+        rounded-lg
+        p-3
+      "
+      value={
+        formData.content?.image || ""
+      }
+      onChange={(e) =>
+        setFormData({
+          ...formData,
+          content: {
+            ...formData.content,
+            image:
+              e.target.value,
+          },
+        })
+      }
+    >
+      <option value="">
+        Select Image
+      </option>
+
+      {media
+        ?.filter(
+          (item) =>
+            item.resourceType ===
+            "image"
+        )
+        .map((item) => (
+          <option
+            key={item._id}
+            value={item.url}
+          >
+            {item.originalName}
+          </option>
+        ))}
+    </select>
+
+    {formData.content?.image && (
+      <img
+        src={
+          formData.content.image
+        }
+        alt="Preview"
+        className="
+          mt-4
+          h-48
+          rounded-lg
+          border
+        "
+      />
+    )}
+  </div>
+)}
+
+
+
+{formData.sectionType ===
+  "ABOUT_GALLERY" && (
+  <div className="mt-6">
+
+    <label className="block mb-4 font-medium">
+      Gallery Images
+    </label>
+
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+      {media
+        .filter(
+          (item) =>
+            item.resourceType ===
+            "image"
+        )
+        .map((item) => {
+
+          const selected =
+            formData.content?.images?.some(
+              (img) =>
+                img.imageUrl ===
+                item.url
+            );
+
+          return (
+            <div
+              key={item._id}
+              className={`
+                border rounded-lg p-2 cursor-pointer
+                ${
+                  selected
+                    ? "border-blue-600 bg-blue-50"
+                    : "border-gray-300"
+                }
+              `}
+              onClick={() => {
+
+                const current =
+                  formData.content
+                    ?.images || [];
+
+                const updated =
+                  selected
+                    ? current.filter(
+                        (img) =>
+                          img.imageUrl !==
+                          item.url
+                      )
+                    : [
+                        ...current,
+                        {
+                          imageUrl:
+                            item.url,
+                        },
+                      ];
+
                 setFormData({
                   ...formData,
-                  content:
-                    JSON.parse(
-                      e.target.value
-                    ),
+                  content: {
+                    ...formData.content,
+                    images:
+                      updated,
+                  },
                 });
-              } catch {
-                //
-              }
+
+              }}
+            >
+
+              <img
+                src={item.url}
+                alt={
+                  item.originalName
+                }
+                className="
+                  h-32
+                  w-full
+                  object-cover
+                  rounded
+                "
+              />
+
+              <div className="flex items-center mt-2">
+
+                <input
+                  type="checkbox"
+                  checked={
+                    selected
+                  }
+                  readOnly
+                />
+
+                <span className="ml-2 text-sm truncate">
+                  {item.originalName}
+                </span>
+
+              </div>
+
+            </div>
+          );
+
+        })}
+    </div>
+
+  </div>
+)}
+
+{formData.sectionType ===
+  "ABOUT_OVERVIEW" && (
+  <div className="space-y-4 mb-6">
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Heading
+      </label>
+
+      <input
+        type="text"
+        className="w-full border p-3 rounded"
+        value={
+          formData.content?.heading || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              heading:
+                e.target.value,
+            },
+          })
+        }
+      />
+    </div>
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Description
+      </label>
+
+      <textarea
+        rows="6"
+        className="w-full border p-3 rounded"
+        value={
+          formData.content?.description || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              description:
+                e.target.value,
+            },
+          })
+        }
+      />
+    </div>
+
+  </div>
+)}
+
+
+{formData.sectionType ===
+  "ABOUT_HISTORY" && (
+  <div className="space-y-6 mb-6">
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Heading
+      </label>
+
+      <input
+        type="text"
+        value={
+          formData.content?.heading || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              heading:
+                e.target.value,
+            },
+          })
+        }
+        className="w-full border rounded p-3"
+      />
+    </div>
+
+    {(formData.content?.timeline || []).map(
+      (item, index) => (
+        <div
+          key={index}
+          className="
+            border
+            rounded-lg
+            p-4
+            space-y-3
+          "
+        >
+
+          <input
+            type="text"
+            placeholder="Year"
+            value={item.year || ""}
+            onChange={(e) => {
+
+              const updated = [
+                ...(formData.content
+                  ?.timeline || []),
+              ];
+
+              updated[index].year =
+                e.target.value;
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  timeline:
+                    updated,
+                },
+              });
+
             }}
+            className="
+              w-full
+              border
+              rounded
+              p-3
+            "
           />
+
+          <input
+            type="text"
+            placeholder="Title"
+            value={item.title || ""}
+            onChange={(e) => {
+
+              const updated = [
+                ...(formData.content
+                  ?.timeline || []),
+              ];
+
+              updated[index].title =
+                e.target.value;
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  timeline:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              w-full
+              border
+              rounded
+              p-3
+            "
+          />
+
+          <textarea
+            rows="3"
+            placeholder="Description"
+            value={
+              item.description || ""
+            }
+            onChange={(e) => {
+
+              const updated = [
+                ...(formData.content
+                  ?.timeline || []),
+              ];
+
+              updated[index]
+                .description =
+                e.target.value;
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  timeline:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              w-full
+              border
+              rounded
+              p-3
+            "
+          />
+
+          <button
+            type="button"
+            onClick={() => {
+
+              const updated =
+                (
+                  formData.content
+                    ?.timeline || []
+                ).filter(
+                  (_, i) =>
+                    i !== index
+                );
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  timeline:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              text-red-600
+              text-sm
+            "
+          >
+            Remove Item
+          </button>
+
+        </div>
+      )
+    )}
+
+    <button
+      type="button"
+      onClick={() => {
+
+        const updated = [
+          ...(formData.content
+            ?.timeline || []),
+
+          {
+            year: "",
+            title: "",
+            description: "",
+          },
+        ];
+
+        setFormData({
+          ...formData,
+          content: {
+            ...formData.content,
+            timeline:
+              updated,
+          },
+        });
+
+      }}
+      className="
+        px-4
+        py-2
+        bg-blue-600
+        text-white
+        rounded
+      "
+    >
+      Add Timeline Item
+    </button>
+
+  </div>
+)}
+
+{formData.sectionType ===
+  "ABOUT_QUICK_LINKS" && (
+  <div className="space-y-6 mb-6">
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Heading
+      </label>
+
+      <input
+        type="text"
+        value={
+          formData.content?.heading || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              heading:
+                e.target.value,
+            },
+          })
+        }
+        className="w-full border rounded p-3"
+      />
+    </div>
+
+    {(formData.content?.links || []).map(
+      (link, index) => (
+        <div
+          key={index}
+          className="
+            border
+            rounded-lg
+            p-4
+            space-y-3
+          "
+        >
+
+          <input
+            type="text"
+            placeholder="Title"
+            value={link.title || ""}
+            onChange={(e) => {
+
+              const updated = [
+                ...(formData.content
+                  ?.links || []),
+              ];
+
+              updated[index].title =
+                e.target.value;
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  links:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              w-full
+              border
+              rounded
+              p-3
+            "
+          />
+
+          <textarea
+            rows="2"
+            placeholder="Description"
+            value={
+              link.description || ""
+            }
+            onChange={(e) => {
+
+              const updated = [
+                ...(formData.content
+                  ?.links || []),
+              ];
+
+              updated[index]
+                .description =
+                e.target.value;
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  links:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              w-full
+              border
+              rounded
+              p-3
+            "
+          />
+
+          <input
+            type="text"
+            placeholder="/about/example"
+            value={link.path || ""}
+            onChange={(e) => {
+
+              const updated = [
+                ...(formData.content
+                  ?.links || []),
+              ];
+
+              updated[index].path =
+                e.target.value;
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  links:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              w-full
+              border
+              rounded
+              p-3
+            "
+          />
+
+          <button
+            type="button"
+            onClick={() => {
+
+              const updated =
+                (
+                  formData.content
+                    ?.links || []
+                ).filter(
+                  (_, i) =>
+                    i !== index
+                );
+
+              setFormData({
+                ...formData,
+                content: {
+                  ...formData.content,
+                  links:
+                    updated,
+                },
+              });
+
+            }}
+            className="
+              text-red-600
+              text-sm
+            "
+          >
+            Remove Link
+          </button>
+
+        </div>
+      )
+    )}
+
+    <button
+      type="button"
+      onClick={() => {
+
+        const updated = [
+          ...(formData.content
+            ?.links || []),
+
+          {
+            title: "",
+            description: "",
+            path: "",
+          },
+        ];
+
+        setFormData({
+          ...formData,
+          content: {
+            ...formData.content,
+            links:
+              updated,
+          },
+        });
+
+      }}
+      className="
+        px-4
+        py-2
+        bg-blue-600
+        text-white
+        rounded
+      "
+    >
+      Add Link
+    </button>
+
+  </div>
+)}
+
+
+{formData.sectionType ===
+  "OBJECTIVES_CONTENT" && (
+  <div className="space-y-4 mb-6">
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Heading
+      </label>
+
+      <input
+        type="text"
+        value={
+          formData.content?.heading || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              heading:
+                e.target.value,
+            },
+          })
+        }
+        className="w-full border rounded p-3"
+      />
+    </div>
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Description
+      </label>
+
+      <textarea
+        rows="6"
+        value={
+          formData.content?.description || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              description:
+                e.target.value,
+            },
+          })
+        }
+        className="w-full border rounded p-3"
+      />
+    </div>
+
+  </div>
+)}
+
+{![
+  "ABOUT_GALLERY",
+  "ABOUT_OVERVIEW",
+  "ABOUT_HISTORY", 
+  "ABOUT_QUICK_LINKS", 
+  "OBJECTIVES_CONTENT",
+].includes(
+  formData.sectionType
+) && (
+  <>
+    <label>
+      Content (JSON)
+    </label>
+
+    <textarea
+      rows="10"
+      className="w-full border p-3 rounded font-mono"
+      value={JSON.stringify(
+        formData.content,
+        null,
+        2
+      )}
+      onChange={(e) => {
+        try {
+          setFormData({
+            ...formData,
+            content: JSON.parse(
+              e.target.value
+            ),
+          });
+        } catch {
+          //
+        }
+      }}
+    />
+  </>
+)}
 
         </div>
 

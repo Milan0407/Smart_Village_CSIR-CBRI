@@ -3,6 +3,15 @@ import { useEffect, useState } from "react";
 import { getPageBySlug }
   from "../../services/cms.service";
 
+import Header
+  from "../../components/common/Header/Header";
+
+import Navbar
+  from "../../components/common/Navbar/Navbar";
+
+import Footer
+  from "../../components/common/Footer";
+
 import ObjectivesHero
   from "../../sections/missionObjectives/ObjectivesHero";
 
@@ -57,70 +66,58 @@ const MissionObjectivesPage =
       );
     }
 
-    return (
-      <>
-        {sections.map(
-          (section) => {
+   return (
+  <>
+    <Header />
+    <Navbar />
 
-            switch (
-              section.sectionType
-            ) {
+    {sections.map(
+      (section) => {
+        switch (
+          section.sectionType
+        ) {
 
-              case "OBJECTIVES_HERO":
-                return (
-                  <ObjectivesHero
-                    key={
-                      section._id
-                    }
-                    data={
-                      section.content
-                    }
-                  />
-                );
+          case "OBJECTIVES_HERO":
+            return (
+              <ObjectivesHero
+                key={section._id}
+                data={section.content}
+              />
+            );
 
-              case "OBJECTIVES_CONTENT":
-                return (
-                  <ObjectivesContent
-                    key={
-                      section._id
-                    }
-                    data={
-                      section.content
-                    }
-                  />
-                );
+          case "OBJECTIVES_CONTENT":
+            return (
+              <ObjectivesContent
+                key={section._id}
+                data={section.content}
+              />
+            );
 
-              case "OBJECTIVES_FOCUS_AREAS":
-                return (
-                  <ObjectivesFocusAreas
-                    key={
-                      section._id
-                    }
-                    data={
-                      section.content
-                    }
-                  />
-                );
+          case "OBJECTIVES_FOCUS_AREAS":
+            return (
+              <ObjectivesFocusAreas
+                key={section._id}
+                data={section.content}
+              />
+            );
 
-              case "OBJECTIVES_OUTCOMES":
-                return (
-                  <ObjectivesOutcomes
-                    key={
-                      section._id
-                    }
-                    data={
-                      section.content
-                    }
-                  />
-                );
+          case "OBJECTIVES_OUTCOMES":
+            return (
+              <ObjectivesOutcomes
+                key={section._id}
+                data={section.content}
+              />
+            );
 
-              default:
-                return null;
-            }
-          }
-        )}
-      </>
-    );
+          default:
+            return null;
+        }
+      }
+    )}
+
+    <Footer />
+  </>
+);
   };
 
 export default MissionObjectivesPage;

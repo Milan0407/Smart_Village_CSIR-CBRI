@@ -2,17 +2,28 @@ const ObjectivesFocusAreas = ({
   data,
 }) => {
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-24 bg-slate-50">
 
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="text-center mb-14">
 
+          <span
+            className="
+              text-blue-600
+              uppercase
+              tracking-widest
+              font-semibold
+            "
+          >
+            Focus Areas
+          </span>
+
           <h2
             className="
               text-4xl
               font-bold
-              text-slate-900
+              mt-3
             "
           >
             {data?.heading}
@@ -37,19 +48,32 @@ const ObjectivesFocusAreas = ({
                 key={index}
                 className="
                   bg-white
-                  p-8
                   rounded-2xl
+                  p-8
                   shadow-sm
-                  hover:shadow-lg
+                  hover:shadow-xl
                   transition
                 "
               >
+                <div
+                  className="
+                    text-5xl
+                    font-bold
+                    text-blue-100
+                    mb-4
+                  "
+                >
+                  {String(
+                    index + 1
+                  ).padStart(2, "0")}
+                </div>
+
                 <h3
                   className="
                     text-xl
                     font-bold
-                    text-blue-700
-                    mb-4
+                    text-slate-900
+                    mb-3
                   "
                 >
                   {item.title}
@@ -60,9 +84,7 @@ const ObjectivesFocusAreas = ({
                     text-slate-600
                   "
                 >
-                  {
-                    item.description
-                  }
+                  {item.description}
                 </p>
 
               </div>

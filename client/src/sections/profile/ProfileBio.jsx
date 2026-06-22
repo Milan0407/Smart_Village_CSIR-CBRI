@@ -2,32 +2,52 @@ const ProfileBio = ({
   data,
 }) => {
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-24 bg-slate-50">
 
       <div className="max-w-5xl mx-auto px-6">
 
-        <h2
-          className="
-            text-4xl
-            font-bold
-            text-center
-            mb-10
-          "
-        >
-          {data?.heading}
-        </h2>
+        <div className="text-center mb-12">
+
+          <span
+            className="
+              text-blue-600
+              uppercase
+              tracking-widest
+              font-semibold
+            "
+          >
+            Biography
+          </span>
+
+          <h2
+            className="
+              text-4xl
+              font-bold
+              mt-3
+            "
+          >
+            {data?.heading}
+          </h2>
+
+        </div>
 
         <div
           className="
             bg-white
-            p-10
             rounded-2xl
+            p-10
             shadow-sm
-            text-slate-600
-            leading-relaxed
           "
         >
-          {data?.description}
+          <p
+            className="
+              text-slate-600
+              leading-relaxed
+              text-lg
+            "
+          >
+            {data?.description}
+          </p>
         </div>
 
       </div>

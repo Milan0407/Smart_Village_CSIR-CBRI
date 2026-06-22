@@ -29,6 +29,31 @@ const seedNavigation =
           menuType: "INTERNAL",
         });
 
+
+        await Navigation.create({
+  label: "Mission Objectives",
+  path: "/about/mission-objectives",
+  parentId: about._id,
+  order: 1,
+  menuType: "INTERNAL",
+});
+
+await Navigation.create({
+  label: "DG Desk",
+  path: "/about/dg-desk",
+  parentId: about._id,
+  order: 2,
+  menuType: "INTERNAL",
+});
+
+await Navigation.create({
+  label: "Director Desk",
+  path: "/about/director-desk",
+  parentId: about._id,
+  order: 3,
+  menuType: "INTERNAL",
+});
+
       const csirLabs =
         await Navigation.create({
           label:

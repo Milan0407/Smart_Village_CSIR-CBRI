@@ -12,6 +12,15 @@ import ProfileMessage
 import ProfileBio
   from "../../sections/profile/ProfileBio";
 
+  import Header
+  from "../../components/common/Header/Header";
+
+import Navbar
+  from "../../components/common/Navbar/Navbar";
+
+import Footer
+  from "../../components/common/Footer";
+
 const DGDeskPage = () => {
   const [
     sections,
@@ -53,56 +62,50 @@ const DGDeskPage = () => {
     );
   }
 
-  return (
-    <>
-      {sections.map(
-        (section) => {
-          switch (
-            section.sectionType
-          ) {
-            case "PROFILE_HERO":
-              return (
-                <ProfileHero
-                  key={
-                    section._id
-                  }
-                  data={
-                    section.content
-                  }
-                />
-              );
+return (
+  <>
+    <Header />
+    <Navbar />
 
-            case "PROFILE_MESSAGE":
-              return (
-                <ProfileMessage
-                  key={
-                    section._id
-                  }
-                  data={
-                    section.content
-                  }
-                />
-              );
+    {sections.map(
+      (section) => {
+        switch (
+          section.sectionType
+        ) {
 
-            case "PROFILE_BIO":
-              return (
-                <ProfileBio
-                  key={
-                    section._id
-                  }
-                  data={
-                    section.content
-                  }
-                />
-              );
+          case "PROFILE_HERO":
+            return (
+              <ProfileHero
+                key={section._id}
+                data={section.content}
+              />
+            );
 
-            default:
-              return null;
-          }
+          case "PROFILE_MESSAGE":
+            return (
+              <ProfileMessage
+                key={section._id}
+                data={section.content}
+              />
+            );
+
+          case "PROFILE_BIO":
+            return (
+              <ProfileBio
+                key={section._id}
+                data={section.content}
+              />
+            );
+
+          default:
+            return null;
         }
-      )}
-    </>
-  );
+      }
+    )}
+
+    <Footer />
+  </>
+);
 };
 
 export default DGDeskPage;

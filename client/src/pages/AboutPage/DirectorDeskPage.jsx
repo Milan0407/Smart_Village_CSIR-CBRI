@@ -16,6 +16,15 @@ import ProfileMessage
 import ProfileBio
   from "../../sections/profile/ProfileBio";
 
+  import Header
+  from "../../components/common/Header/Header";
+
+import Navbar
+  from "../../components/common/Navbar/Navbar";
+
+import Footer
+  from "../../components/common/Footer";
+
 const DirectorDeskPage =
   () => {
     const [
@@ -62,6 +71,9 @@ const DirectorDeskPage =
 
     return (
       <>
+
+          <Header />
+          <Navbar />
         {sections.map(
           (section) => {
             switch (
@@ -109,6 +121,8 @@ const DirectorDeskPage =
             }
           }
         )}
+
+        <Footer />
       </>
     );
   };

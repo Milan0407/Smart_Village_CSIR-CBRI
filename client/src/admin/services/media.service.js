@@ -1,7 +1,8 @@
 import axios from "axios";
 
+const API =import.meta.env.VITE_API_URL;
 const API_URL =
-  "http://localhost:5000/api/admin/media";
+  `${API}/admin/media`;
 
 const getToken = () =>
   localStorage.getItem(
