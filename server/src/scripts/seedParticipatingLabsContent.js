@@ -57,36 +57,92 @@ const seedParticipatingLabsContent =
             break;
 
           case "PARTICIPATING_LABS_LIST":
-            section.content = {
+            section.content = { 
               heading:
                 "Participating Laboratories",
 
-              laboratories: [
-                {
-                  name:
-                    "CSIR-CBRI",
-                  location:
-                    "Roorkee",
-                },
-                {
-                  name:
-                    "CSIR-IITR",
-                  location:
-                    "Lucknow",
-                },
-                {
-                  name:
-                    "CSIR-NEERI",
-                  location:
-                    "Nagpur",
-                },
-                {
-                  name:
-                    "CSIR-CMERI",
-                  location:
-                    "Durgapur",
-                },
-              ],
+             "laboratories": [
+               {
+                 "name": "CSIR-AMPRI",
+                 "slug": "csir-ampri",
+                 "location": "Bhopal"
+               },
+               {
+                 "name": "CSIR-CEERI",
+                 "slug": "csir-ceeri",
+                 "location": "Pilani"
+               },
+               {
+                 "name": "CSIR-CFTRI",
+                 "slug": "csir-cftri",
+                 "location": "Mysuru"
+               },
+               {
+                 "name": "CSIR-CIMAP",
+                 "slug": "csir-cimap",
+                 "location": "Lucknow"
+               },
+               {
+                 "name": "CSIR-CLRI",
+                 "slug": "csir-clri",
+                 "location": "Chennai"
+               },
+               {
+                 "name": "CSIR-CMERI",
+                 "slug": "csir-cmeri",
+                 "location": "Durgapur"
+               },
+               {
+                 "name": "CSIR-CRRI",
+                 "slug": "csir-crri",
+                 "location": "New Delhi"
+               },
+               {
+                 "name": "CSIR-CSIO",
+                 "slug": "csir-csio",
+                 "location": "Chandigarh"
+               },
+               {
+                 "name": "CSIR-IHBT",
+                 "slug": "csir-ihbt",
+                 "location": "Palampur"
+               },
+               {
+                 "name": "CSIR-IICT",
+                 "slug": "csir-iict",
+                 "location": "Hyderabad"
+               },
+               {
+                 "name": "CSIR-IMMT",
+                 "slug": "csir-immt",
+                 "location": "Bhubaneswar"
+               },
+               {
+                 "name": "CSIR-NEERI",
+                 "slug": "csir-neeri",
+                 "location": "Nagpur"
+               },
+               {
+                 "name": "CSIR-NEIST",
+                 "slug": "csir-neist",
+                 "location": "Jorhat"
+               },
+               {
+                 "name": "CSIR-NGRI",
+                 "slug": "csir-ngri",
+                 "location": "Hyderabad"
+               },
+               {
+                 "name": "CSIR-NIIST",
+                 "slug": "csir-niist",
+                 "location": "Thiruvananthapuram"
+               },
+               {
+                 "name": "CSIR-SERC",
+                 "slug": "csir-serc",
+                 "location": "Chennai"
+               }
+               ],
             };
             break;
 

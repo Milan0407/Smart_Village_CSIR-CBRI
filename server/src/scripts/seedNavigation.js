@@ -54,19 +54,16 @@ await Navigation.create({
   menuType: "INTERNAL",
 });
 
-      const csirLabs =
-        await Navigation.create({
-          label:
-            "CSIR Laboratories",
+const csirLabs =
+  await Navigation.create({
+    label: "CSIR Laboratories",
 
-          path:
-            "/csir-laboratories",
+    path: "#",
 
-          order: 3,
+    order: 3,
 
-          menuType:
-            "INTERNAL",
-        });
+    menuType: "INTERNAL",
+  });
 
       await Navigation.create({
         label:

@@ -20,44 +20,26 @@ const seedContactSections = async () => {
       pageId: page._id,
     });
 
-    await PageSection.insertMany([
-      {
-        pageId: page._id,
-        sectionType: "CONTACT_HERO",
-        title: "Contact Us",
-        order: 1,
-      },
-      {
-        pageId: page._id,
-        sectionType:
-          "CONTACT_INFORMATION",
-        title:
-          "Contact Information",
-        order: 2,
-      },
-      {
-        pageId: page._id,
-        sectionType:
-          "CONTACT_FORM",
-        title:
-          "Contact Form",
-        order: 3,
-      },
-      {
-        pageId: page._id,
-        sectionType:
-          "CONTACT_LOCATION",
-        title:
-          "Location",
-        order: 4,
-      },
-      {
-        pageId: page._id,
-        sectionType: "CONTACT_FAQ",
-        title: "FAQ",
-        order: 5,
-      },
-    ]);
+  await PageSection.insertMany([
+  {
+    pageId: page._id,
+    sectionType: "CONTACT_HERO",
+    title: "Contact Hero",
+    order: 1,
+  },
+  {
+    pageId: page._id,
+    sectionType: "CONTACT_FORM",
+    title: "Contact Form",
+    order: 2,
+  },
+  {
+    pageId: page._id,
+    sectionType: "CONTACT_INFORMATION",
+    title: "Contact Information",
+    order: 3,
+  },
+]);
 
     console.log(
       "✅ Contact Sections Seeded"

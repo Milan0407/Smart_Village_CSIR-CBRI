@@ -16,22 +16,26 @@ const successStorySchema =
         trim: true,
       },
 
-      villageName: {
-        type: String,
+      village: {
+        type:
+          mongoose.Schema.Types.ObjectId,
+        ref: "SuccessStoryVillage",
         required: true,
-        trim: true,
       },
 
       summary: {
         type: String,
+        default: "",
       },
 
       story: {
         type: String,
+        default: "",
       },
 
       impact: {
         type: String,
+        default: "",
       },
 
       beneficiaries: {
@@ -40,11 +44,25 @@ const successStorySchema =
       },
 
       featuredImage: {
-  type:
-    mongoose.Schema.Types.ObjectId,
-  ref: "Media",
-  default: null,
-},
+        type:
+          mongoose.Schema.Types.ObjectId,
+        ref: "Media",
+        default: null,
+      },
+
+      galleryImages: [
+        {
+          type:
+            mongoose.Schema.Types.ObjectId,
+          ref: "Media",
+        },
+      ],
+
+      videoUrl: {
+        type: String,
+        default: "",
+        trim: true,
+      },
 
       isFeatured: {
         type: Boolean,
@@ -79,6 +97,18 @@ const successStorySchema =
         ref: "Admin",
         default: null,
       },
+
+      website: {
+  type: String,
+  trim: true,
+},
+
+footerQuickLinks: [
+  {
+    label: String,
+    url: String,
+  },
+],
     },
     {
       timestamps: true,

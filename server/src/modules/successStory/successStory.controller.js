@@ -18,6 +18,36 @@ export const getAllStories =
     );
   };
 
+export const getPublishedStories =
+  async (req, res) => {
+    const stories =
+      await successStoryService.getPublishedStories();
+
+    return res.json(
+      new ApiResponse(
+        200,
+        stories,
+        "Published success stories fetched successfully"
+      )
+    );
+  };
+
+export const getStoriesByVillageSlug =
+  async (req, res) => {
+    const data =
+      await successStoryService.getStoriesByVillageSlug(
+        req.params.villageSlug
+      );
+
+    return res.json(
+      new ApiResponse(
+        200,
+        data,
+        "Village success stories fetched successfully"
+      )
+    );
+  };
+
 export const getStoryBySlug =
   async (req, res) => {
     const story =
@@ -38,7 +68,8 @@ export const createStory =
   async (req, res) => {
     const story =
       await successStoryService.createStory(
-        req.body
+        req.body,
+        req.admin?._id
       );
 
     return res.json(
@@ -50,8 +81,7 @@ export const createStory =
     );
   };
 
-
-  export const getStoryById =
+export const getStoryById =
   async (req, res) => {
     const story =
       await successStoryService.getStoryById(
@@ -72,7 +102,8 @@ export const updateStory =
     const story =
       await successStoryService.updateStory(
         req.params.id,
-        req.body
+        req.body,
+        req.admin?._id
       );
 
     return res.json(

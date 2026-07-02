@@ -1,15 +1,15 @@
 import { Router } from "express";
 
-import * as successStoryController
-  from "./successStory.controller.js";
+import * as controller
+  from "./successStoryVillage.controller.js";
 
 import validate
   from "../../middleware/validate.middleware.js";
 
 import {
-  createSuccessStorySchema,
-  updateSuccessStorySchema,
-} from "./successStory.validation.js";
+  createSuccessStoryVillageSchema,
+  updateSuccessStoryVillageSchema,
+} from "./successStoryVillage.validation.js";
 
 import verifyJWT
   from "../../middleware/auth.middleware.js";
@@ -24,17 +24,12 @@ const router = Router();
 
 router.get(
   "/published",
-  successStoryController.getPublishedStories
-);
-
-router.get(
-  "/village/:villageSlug",
-  successStoryController.getStoriesByVillageSlug
+  controller.getPublishedVillages
 );
 
 router.get(
   "/slug/:slug",
-  successStoryController.getStoryBySlug
+  controller.getVillageBySlug
 );
 
 /*
@@ -46,37 +41,37 @@ router.get(
 router.get(
   "/",
   verifyJWT,
-  successStoryController.getAllStories
+  controller.getAllVillages
 );
 
 router.get(
   "/id/:id",
   verifyJWT,
-  successStoryController.getStoryById
+  controller.getVillageById
 );
 
 router.post(
   "/",
   verifyJWT,
   validate(
-    createSuccessStorySchema
+    createSuccessStoryVillageSchema
   ),
-  successStoryController.createStory
+  controller.createVillage
 );
 
 router.put(
   "/:id",
   verifyJWT,
   validate(
-    updateSuccessStorySchema
+    updateSuccessStoryVillageSchema
   ),
-  successStoryController.updateStory
+  controller.updateVillage
 );
 
 router.delete(
   "/:id",
   verifyJWT,
-  successStoryController.deleteStory
+  controller.deleteVillage
 );
 
 export default router;

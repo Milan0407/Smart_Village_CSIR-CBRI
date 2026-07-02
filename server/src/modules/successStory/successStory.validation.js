@@ -1,36 +1,94 @@
-import Joi from "joi";
+import { z } from "zod";
 
 export const createSuccessStorySchema =
-  Joi.object({
-    title: Joi.string()
-      .required(),
+  z.object({
+    body: z.object({
+      title: z
+        .string()
+        .min(3),
 
-    slug: Joi.string()
-      .required(),
+      slug: z
+        .string()
+        .min(2),
 
-    villageName:
-      Joi.string()
-        .required(),
+      village: z
+        .string()
+        .min(1),
 
-        featuredImage:
-  Joi.string()
-    .allow("", null),
+      featuredImage:
+        z.string().optional(),
 
-    summary:
-      Joi.string()
-        .allow(""),
+      galleryImages:
+        z.array(z.string()).optional(),
 
-    story:
-      Joi.string()
-        .allow(""),
+      videoUrl:
+        z.string().optional(),
 
-    impact:
-      Joi.string()
-        .allow(""),
+      summary:
+        z.string().optional(),
 
-    beneficiaries:
-      Joi.number(),
+      story:
+        z.string().optional(),
 
-    isFeatured:
-      Joi.boolean(),
+      impact:
+        z.string().optional(),
+
+      beneficiaries:
+        z.number().optional(),
+
+      isFeatured:
+        z.boolean().optional(),
+
+      status:
+        z.enum([
+          "DRAFT",
+          "PUBLISHED",
+          "ARCHIVED",
+        ]).optional(),
+    }),
+  });
+
+export const updateSuccessStorySchema =
+  z.object({
+    body: z.object({
+      title:
+        z.string().min(3).optional(),
+
+      slug:
+        z.string().min(2).optional(),
+
+      village:
+        z.string().optional(),
+
+      featuredImage:
+        z.string().optional(),
+
+      galleryImages:
+        z.array(z.string()).optional(),
+
+      videoUrl:
+        z.string().optional(),
+
+      summary:
+        z.string().optional(),
+
+      story:
+        z.string().optional(),
+
+      impact:
+        z.string().optional(),
+
+      beneficiaries:
+        z.number().optional(),
+
+      isFeatured:
+        z.boolean().optional(),
+
+      status:
+        z.enum([
+          "DRAFT",
+          "PUBLISHED",
+          "ARCHIVED",
+        ]).optional(),
+    }),
   });

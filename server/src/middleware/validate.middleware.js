@@ -13,15 +13,21 @@ const validate = (schema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
+        console.log("========== ZOD VALIDATION ==========");
+        console.log("Request Body:", req.body);
+        console.log("Issues:", error.issues);
+        console.log("====================================");
+
         return next(
           new ApiError(
             400,
             "Validation Failed",
-            error.errors
+            error.issues
           )
         );
       }
 
+      console.error(error);
       next(error);
     }
   };

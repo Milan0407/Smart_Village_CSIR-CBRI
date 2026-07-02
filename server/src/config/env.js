@@ -16,4 +16,11 @@ export const env = {
   refreshExpiry: process.env.REFRESH_TOKEN_EXPIRY,
 
   clientUrl: process.env.CLIENT_URL,
+
+  smtpHost: process.env.SMTP_HOST,
+  smtpPort: process.env.SMTP_PORT,
+  smtpUser: process.env.SMTP_USER,
+  smtpPass: process.env.SMTP_PASS,
+
+  contactReceiver: process.env.CONTACT_RECEIVER,
 };

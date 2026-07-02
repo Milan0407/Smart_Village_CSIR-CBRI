@@ -1,11 +1,11 @@
-import { Router } from "express";
+  import { Router } from "express";
 
-import healthRoutes from "./health.routes.js";
-import authRoutes from "../modules/auth/auth.routes.js";
-import villageRoutes from "../modules/village/village.routes.js";
+  import healthRoutes from "./health.routes.js";
+  import authRoutes from "../modules/auth/auth.routes.js";
+  import villageRoutes from "../modules/village/village.routes.js";
 
-import cmsRoutes from "../modules/cms/cms.routes.js";
-import newsRoutes
+  import cmsRoutes from "../modules/cms/cms.routes.js";
+  import newsRoutes
   from "../modules/news/news.routes.js";
 
   import successStoryRoutes
@@ -27,7 +27,19 @@ import newsRoutes
   from "../modules/video/video.routes.js";
 
   import announcementRoutes
-from "../modules/announcement/announcement.routes.js";
+  from "../modules/announcement/announcement.routes.js";
+
+  import laboratoryRoutes
+  from "../modules/laboratory/laboratory.routes.js";
+
+  import contactRoutes
+  from "../modules/contact/contact.routes.js";
+
+  import siteSettingsRoutes
+  from "../modules/siteSettings/siteSettings.routes.js";
+
+  import successStoryVillageRoutes
+  from "../modules/successStoryVillage/successStoryVillage.routes.js";
 
 
 const router = Router();
@@ -60,6 +72,11 @@ router.use(
 );
 
 router.use(
+  "/success-story-villages",
+  successStoryVillageRoutes
+);
+
+router.use(
   "/videos",
   videoRoutes
 );
@@ -84,6 +101,21 @@ router.use(
   mediaManagementRoutes
 );
 
+
+router.use(
+  "/laboratories",
+  laboratoryRoutes
+);
+
+router.use(
+  "/contact",
+  contactRoutes
+);
+
+router.use(
+  "/site-settings",
+  siteSettingsRoutes
+);
 
 
 export default router;
