@@ -3,183 +3,445 @@ import {
   Mail,
   Phone,
   Globe,
-  ArrowRight,
+  ArrowUpRight,
 } from "lucide-react";
 
+import {
+  FaFacebookF,
+  FaLinkedinIn,
+  FaYoutube,
+  FaInstagram,
+} from "react-icons/fa";
+
+import { Link } from "react-router-dom";
+
+import useSiteSettings from "../../hooks/useSiteSettings";
+
+// Official Logos
+import CBRILogo from "../../assets/logos/CSIRCBRI-Logo.jpg";
+import SmartVillageLogo from "../../assets/logos/SmartVillage.jpeg";
+
 const Footer = () => {
+  const { settings } = useSiteSettings();
+
+  const quickLinks = [
+    {
+      title: "Home",
+      path: "/",
+    },
+    {
+      title: "About",
+      path: "/about",
+    },
+    {
+      title: "CSIR Laboratories",
+      path: "/csir-laboratories/nodal-lab",
+    },
+    {
+      title: "CSIR Smart Village",
+      path: "/smart-village",
+    },
+    {
+      title: "News & Updates",
+      path: "/news",
+    },
+    {
+      title: "Success Stories",
+      path: "/success-stories",
+    },
+    {
+      title: "Contact Us",
+      path: "/contact",
+    },
+  ];
+
+  const socialLinks = [
+    {
+    icon: FaFacebookF,
+      url: settings?.socialLinks?.facebook,
+      label: "Facebook",
+    },
+    {
+      icon: FaLinkedinIn,
+      url: settings?.socialLinks?.linkedin,
+      label: "LinkedIn",
+    },
+    {
+     icon: FaYoutube,
+      url: settings?.socialLinks?.youtube,
+      label: "YouTube",
+    },
+    {
+     icon: FaInstagram,
+      url: settings?.socialLinks?.instagram,
+      label: "Instagram",
+    },
+  ];
+
   return (
-    <footer className="bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-white">
+   <>
+  {/* Top Accent */}
+  <div className="h-1 w-full bg-gradient-to-r from-blue-800 via-blue-600 to-cyan-500" />
 
-      {/* Top Section */}
+  <footer className="bg-slate-50 border-t border-slate-200">
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-          {/* Brand */}
+        {/* ================================================= */}
+        {/* Brand */}
+        {/* ================================================= */}
 
-          <div className="lg:col-span-4">
+        <div className="lg:col-span-5">
 
-            <div className="flex items-center gap-4 mb-5">
+          {/* Logos */}
 
-              <div className="h-14 w-14 rounded-full bg-blue-700 shrink-0"></div>
+          <div className="flex items-center gap-5">
 
-              <div>
-                <h2 className="font-bold text-xl">
-                  Smart Village Portal
-                </h2>
+            <img
+              src={CBRILogo}
+              alt="CSIR-CBRI"
+              className="h-20 object-contain"
+            />
 
-                <p className="text-slate-400 text-sm">
-                  CSIR-CBRI Roorkee
-                </p>
-              </div>
+            <div className="h-12 w-px bg-slate-300" />
 
-            </div>
+            <img
+              src={SmartVillageLogo}
+              alt="Smart Village"
+              className="h-20 object-contain"
+            />
 
-            <p className="text-slate-300 leading-relaxed max-w-xs">
-              Empowering rural communities through technology,
-              sustainable development, innovation, and
-              knowledge-driven transformation.
+          </div>
+
+          {/* Heading */}
+
+          <div className="mt-7">
+
+            <h2 className="text-2xl font-bold tracking-wide text-slate-900">
+
+              {settings?.siteName ||
+                "Smart Village Management Portal"}
+
+            </h2>
+
+            <p className="mt-2 text-blue-700 font-semibold">
+
+              {settings?.organizationName ||
+                "CSIR – Central Building Research Institute"}
+
             </p>
 
           </div>
 
-          {/* Quick Links */}
+          {/* Description */}
 
-          <div className="lg:col-span-2">
+          <p className="mt-6 text-slate-600 leading-8 max-w-lg">
 
-            <h3 className="font-semibold text-lg mb-5">
-              Quick Links
-            </h3>
+            {settings?.footerDescription ||
 
-            <ul className="space-y-3 text-slate-300">
+              "Empowering rural communities through sustainable technologies, scientific research, digital innovation and collaborative development under the CSIR Smart Village Initiative."
 
-              <li>
-                <a href="#mission" className="hover:text-white">
-                  Mission
-                </a>
-              </li>
+            }
 
-              <li>
-                <a href="#cbri" className="hover:text-white">
-                  CSIR-CBRI
-                </a>
-              </li>
+          </p>
 
-              <li>
-                <a href="#updates" className="hover:text-white">
-                  Updates
-                </a>
-              </li>
+          {/* Official Website */}
 
-              <li>
-                <a href="#policies" className="hover:text-white">
-                  Policies
-                </a>
-              </li>
+          <a
+            href={settings?.website || "https://cbri.res.in"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-8 text-blue-700 font-semibold hover:text-blue-900 transition"
+          >
 
-            </ul>
+            Visit Official Website
 
-          </div>
+            <ArrowUpRight size={18} />
 
-          {/* Villages */}
+          </a>
 
- <div className="lg:col-span-3">
+        </div>
 
-            <h3 className="font-semibold text-lg mb-5">
-              Featured Villages
-            </h3>
 
-            <ul className="space-y-3 text-slate-300">
 
-              <li className="flex items-center gap-2">
-                <ArrowRight size={16} />
-                Village One
-              </li>
+        {/* ================================================= */}
+        {/* Quick Links */}
+        {/* ================================================= */}
 
-              <li className="flex items-center gap-2">
-                <ArrowRight size={16} />
-                Village Two
-              </li>
+        <div className="lg:col-span-3">
 
-              <li className="flex items-center gap-2">
-                <ArrowRight size={16} />
-                Village Three
-              </li>
+          <h3 className="text-lg font-semibold text-slate-900 mb-6">
 
-              <li className="flex items-center gap-2">
-                <ArrowRight size={16} />
-                Village Four
-              </li>
+            Quick Links
 
-            </ul>
+          </h3>
+
+          <div className="space-y-4">
+
+            {quickLinks.map((item) => (
+
+              <Link
+                key={item.title}
+                to={item.path}
+                className="group flex items-center justify-between text-slate-600 hover:text-blue-700 transition"
+              >
+
+                <span>
+
+                  {item.title}
+
+                </span>
+
+                <ArrowUpRight
+                  size={16}
+                  className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
+                />
+
+              </Link>
+
+            ))}
 
           </div>
 
-          {/* Contact */}
-<div className="lg:col-span-3">
+        </div>
 
-            <h3 className="font-semibold text-lg mb-5">
-              Contact
-            </h3>
+                {/* ================================================= */}
+        {/* Contact Information */}
+        {/* ================================================= */}
 
-            <div className="space-y-4 text-slate-300">
+        <div className="lg:col-span-4">
 
-              <div className="flex gap-3">
+          <h3 className="text-lg font-semibold text-slate-900 mb-6">
+            Contact Information
+          </h3>
+
+          <div className="space-y-6">
+
+            <div className="flex items-start gap-4">
+
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <MapPin size={18} />
-                <span>
-                  CSIR-CBRI, Roorkee, Uttarakhand
-                </span>
               </div>
 
-              <div className="flex gap-3">
+              <div>
+
+                <p className="text-sm font-semibold text-slate-900">
+                  Address
+                </p>
+
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  {settings?.address ||
+                    "CSIR-CBRI, Roorkee, Uttarakhand, India"}
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="flex items-start gap-4">
+
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <Mail size={18} />
-                <span>
-                  smartvillage@cbri.res.in
-                </span>
               </div>
 
-              <div className="flex gap-3">
+              <div>
+
+                <p className="text-sm font-semibold text-slate-900">
+                  Email
+                </p>
+
+                <a
+                  href={`mailto:${settings?.contactEmail}`}
+                  className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
+                >
+                  {settings?.contactEmail ||
+                    "smartvillage@cbri.res.in"}
+                </a>
+
+              </div>
+
+            </div>
+
+            <div className="flex items-start gap-4">
+
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <Phone size={18} />
-                <span>
-                  +91 XXXXX XXXXX
-                </span>
               </div>
 
-              <div className="flex gap-3">
+              <div>
+
+                <p className="text-sm font-semibold text-slate-900">
+                  Phone
+                </p>
+
+                <a
+                  href={`tel:${settings?.contactPhone}`}
+                  className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
+                >
+                  {settings?.contactPhone ||
+                    "+91 XXXXX XXXXX"}
+                </a>
+
+              </div>
+
+            </div>
+
+            <div className="flex items-start gap-4">
+
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <Globe size={18} />
-                <span>
-                  www.cbri.res.in
-                </span>
+              </div>
+
+              <div>
+
+                <p className="text-sm font-semibold text-slate-900">
+                  Website
+                </p>
+
+                <a
+                  href={
+                    settings?.website ||
+                    "https://cbri.res.in"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
+                >
+                  {settings?.website ||
+                    "https://cbri.res.in"}
+                </a>
+
               </div>
 
             </div>
 
           </div>
 
+
+
+          {/* Follow Us */}
+
+          <div className="mt-12">
+
+            <h3 className="text-lg font-semibold text-slate-900 mb-5">
+              Follow Us
+            </h3>
+
+            <div className="flex flex-wrap gap-4">
+
+              {socialLinks.map(
+                ({ icon: Icon, url, label }) => (
+
+                  <a
+                    key={label}
+                    href={url || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-700 hover:bg-blue-700 hover:text-white hover:shadow-lg"
+                  >
+
+                    <Icon size={20} />
+
+                  </a>
+
+                )
+              )}
+
+            </div>
+
+            <p className="mt-5 text-sm leading-6 text-slate-500">
+              Stay connected with CSIR-CBRI and follow our latest
+              research initiatives, rural development activities,
+              and Smart Village updates.
+            </p>
+
+          </div>
+
         </div>
 
       </div>
 
-      {/* Bottom Bar */}
+    </div>
 
-      <div className="border-t border-slate-800">
+        {/* ================================================= */}
+    {/* Bottom Footer */}
+    {/* ================================================= */}
 
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3">
+    <div className="border-t border-slate-200 bg-white">
 
-          <p className="text-slate-400 text-sm">
-            © 2026 Smart Village Management Portal
-          </p>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
 
-          <p className="text-slate-400 text-sm">
-            Developed for CSIR-CBRI Roorkee
-          </p>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-5">
+
+          {/* Copyright */}
+
+          <div className="text-center lg:text-left">
+
+            <p className="text-sm text-slate-600">
+
+              {settings?.copyrightText ||
+                `© ${new Date().getFullYear()} Smart Village Management Portal. All Rights Reserved.`}
+
+            </p>
+
+            <p className="mt-1 text-xs text-slate-500">
+
+              Developed under the{" "}
+
+              <span className="font-semibold text-blue-700">
+                CSIR Smart Village Initiative
+              </span>
+
+            </p>
+
+          </div>
+
+          {/* Quick Info */}
+
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-600">
+
+            <span className="font-medium">
+              {settings?.organizationName || "CSIR-CBRI"}
+            </span>
+
+            <span className="hidden md:block text-slate-300">
+              |
+            </span>
+
+            <span>
+              Roorkee, Uttarakhand
+            </span>
+
+            <span className="hidden md:block text-slate-300">
+              |
+            </span>
+
+            <a
+              href={
+                settings?.website ||
+                "https://cbri.res.in"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:underline"
+            >
+              Official Website
+            </a>
+
+          </div>
 
         </div>
 
       </div>
 
-    </footer>
+    </div>
+
+  </footer>
+
+</>
   );
 };
 

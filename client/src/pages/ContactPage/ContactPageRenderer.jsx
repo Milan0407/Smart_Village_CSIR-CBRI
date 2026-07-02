@@ -1,8 +1,6 @@
 import ContactHero from "../../sections/contact/ContactHero";
 import ContactInformation from "../../sections/contact/ContactInformation";
 import ContactForm from "../../sections/contact/ContactForm";
-import ContactLocation from "../../sections/contact/ContactLocation";
-import ContactFAQ from "../../sections/contact/ContactFAQ";
 
 const ContactPageRenderer = ({
   sections,
@@ -32,22 +30,6 @@ const ContactPageRenderer = ({
           case "CONTACT_FORM":
             return (
               <ContactForm
-                key={section._id}
-                data={section.content}
-              />
-            );
-
-          case "CONTACT_LOCATION":
-            return (
-              <ContactLocation
-                key={section._id}
-                data={section.content}
-              />
-            );
-
-          case "CONTACT_FAQ":
-            return (
-              <ContactFAQ
                 key={section._id}
                 data={section.content}
               />

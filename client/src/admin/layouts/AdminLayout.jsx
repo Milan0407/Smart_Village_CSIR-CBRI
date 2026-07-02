@@ -73,6 +73,14 @@ const AdminLayout = () => {
             >
               News
             </NavLink>
+
+            <NavLink
+  to="/admin/laboratories"
+  className={navClass}
+>
+  Laboratories
+</NavLink>
+
             <NavLink
               to="/admin/announcements"
               className={navClass}
@@ -85,6 +93,13 @@ const AdminLayout = () => {
               className={navClass}
             >
               Success Stories
+            </NavLink>
+
+            <NavLink
+              to="/admin/success-story-villages"
+              className={navClass}
+            >
+              Success Story Villages
             </NavLink>
 
             <NavLink

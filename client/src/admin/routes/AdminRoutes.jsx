@@ -33,8 +33,16 @@ import AdminLayout
   import EditNewsPage
   from "../pages/EditNewsPage";
 
+
+  import LaboratoriesPage
+  from "../pages/LaboratoriesPage";
+
   import CreateSuccessStoryPage
   from "../pages/CreateSuccessStoryPage";
+
+  import CreateLaboratoryPage from "../pages/CreateLaboratoryPage";
+
+  import EditLaboratoryPage from "../pages/EditLaboratoryPage"
 
   import EditSuccessStoryPage
   from "../pages/EditSuccessStoryPage";
@@ -62,6 +70,15 @@ import CreateAnnouncementPage from "../pages/CreateAnnouncementPage";
 import EditAnnouncementPage from "../pages/EditAnnouncementPage";
 import HomeSectionsPage
 from "../pages/HomeSectionsPage";
+
+import SuccessStoryVillagesPage
+  from "../pages/SuccessStoryVillagesPage";
+
+import CreateSuccessStoryVillagePage
+  from "../pages/CreateSuccessStoryVillagePage";
+
+import EditSuccessStoryVillagePage
+  from "../pages/EditSuccessStoryVillagePage";
 
 
 const ProtectedRoute = ({
@@ -124,6 +141,30 @@ const AdminRoutes = () => {
     element={<SuccessStoriesPage />}
   />
 
+
+  <Route
+  path="/success-story-villages"
+  element={
+    <SuccessStoryVillagesPage />
+  }
+/>
+
+<Route
+  path="/success-story-villages/create"
+  element={
+    <CreateSuccessStoryVillagePage />
+  }
+/>
+
+<Route
+  path="/success-story-villages/:id"
+  element={
+    <EditSuccessStoryVillagePage />
+  }
+/>
+
+
+
   <Route
   path="announcements"
   element={<AnnouncementsPage />}
@@ -172,6 +213,26 @@ const AdminRoutes = () => {
   element={
     <EditNewsPage />
   }
+/>
+
+<Route
+  path="/laboratories"
+  element={
+    <LaboratoriesPage />
+  }
+/>
+
+
+<Route
+  path="/laboratories/create"
+  element={
+    <CreateLaboratoryPage />
+  }
+/>
+
+<Route
+  path="/laboratories/:id"
+  element={<EditLaboratoryPage />}
 />
 
 <Route

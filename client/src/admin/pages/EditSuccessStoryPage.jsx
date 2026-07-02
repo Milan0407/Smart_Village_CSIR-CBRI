@@ -16,99 +16,110 @@ import {
   updateStory,
 } from "../services/successStory.service";
 
-const EditSuccessStoryPage = () => {
-  const { id } =
-    useParams();
+const EditSuccessStoryPage =
+  () => {
+    const { id } =
+      useParams();
 
-  const navigate =
-    useNavigate();
+    const navigate =
+      useNavigate();
 
-  const [loading,
-    setLoading] =
-    useState(true);
+    const [loading, setLoading] =
+      useState(true);
 
-  const [story,
-    setStory] =
-    useState(null);
+    const [story, setStory] =
+      useState(null);
 
-  useEffect(() => {
-    const loadStory =
-      async () => {
+    useEffect(() => {
+      const loadStory =
+        async () => {
+          try {
+            const data =
+              await getStoryById(id);
+
+            setStory({
+              title:
+                data.title || "",
+              slug:
+                data.slug || "",
+              village:
+                data.village?._id ||
+                "",
+              featuredImage:
+                data.featuredImage
+                  ?._id || "",
+              galleryImages:
+                data.galleryImages?.map(
+                  (img) =>
+                    img._id
+                ) || [],
+              videoUrl:
+                data.videoUrl || "",
+              summary:
+                data.summary || "",
+              story:
+                data.story || "",
+              impact:
+                data.impact || "",
+              beneficiaries:
+                data.beneficiaries ||
+                0,
+              isFeatured:
+                data.isFeatured ||
+                false,
+              status:
+                data.status ||
+                "DRAFT",
+            });
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+      loadStory();
+    }, [id]);
+
+    const handleUpdate =
+      async (data) => {
         try {
-          const data =
-            await getStoryById(id);
+          await updateStory(
+            id,
+            data
+          );
 
-          setStory(data);
-        } finally {
-          setLoading(false);
+          navigate(
+            "/admin/success-stories"
+          );
+        } catch (error) {
+          console.error(error);
         }
       };
 
-    loadStory();
-  }, [id]);
+    if (loading) {
+      return <h1>Loading...</h1>;
+    }
 
-  const handleUpdate =
-    async (data) => {
-      await updateStory(
-        id,
-        data
+    if (!story) {
+      return (
+        <h1>Story not found</h1>
       );
+    }
 
-      navigate(
-        "/admin/success-stories"
-      );
-    };
-
-  if (loading) {
     return (
-      <h1>
-        Loading...
-      </h1>
+      <div>
+        <h1 className="text-4xl font-bold mb-8">
+          Edit Success Story
+        </h1>
+
+        <SuccessStoryForm
+          initialValues={story}
+          onSubmit={handleUpdate}
+        />
+      </div>
     );
-  }
+  };
 
-  if (!story) {
-    return (
-      <h1>
-        Story not found
-      </h1>
-    );
-  }
-
-  return (
-    <div>
-
-      <h1 className="text-4xl font-bold mb-8">
-        Edit Success Story
-      </h1>
-
-      <SuccessStoryForm
-        initialValues={{
-          title:
-            story.title || "",
-
-          slug:
-            story.slug || "",
-
-          villageName:
-            story.villageName || "",
-
-            featuredImage:
-  story.featuredImage?._id || "",
-
-          summary:
-            story.summary || "",
-
-          story:
-            story.story || "",
-        }}
-        onSubmit={
-          handleUpdate
-        }
-      />
-
-    </div>
-  );
-};
-
-export default EditSuccessStoryPage;
+export default
+  EditSuccessStoryPage;

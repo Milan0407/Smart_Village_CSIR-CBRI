@@ -8,44 +8,50 @@ import {
   createStory,
 } from "../services/successStory.service";
 
-const CreateSuccessStoryPage = () => {
-  const navigate =
-    useNavigate();
+const CreateSuccessStoryPage =
+  () => {
+    const navigate =
+      useNavigate();
 
-  const handleCreate =
-    async (data) => {
-      await createStory(
-        data
-      );
+    const handleCreate =
+      async (data) => {
+        try {
+          await createStory(data);
 
-      navigate(
-        "/admin/success-stories"
-      );
-    };
-
-  return (
-    <div>
-
-      <h1 className="text-4xl font-bold mb-8">
-        Create Success Story
-      </h1>
-
-      <SuccessStoryForm
-        initialValues={{
-  title: "",
-  slug: "",
-  villageName: "",
-  featuredImage: "",
-  summary: "",
-  story: "",
-}}
-        onSubmit={
-          handleCreate
+          navigate(
+            "/admin/success-stories"
+          );
+        } catch (error) {
+          console.error(error);
         }
-      />
+      };
 
-    </div>
-  );
-};
+    return (
+      <div>
+        <h1 className="text-4xl font-bold mb-8">
+          Create Success Story
+        </h1>
 
-export default CreateSuccessStoryPage;
+        <SuccessStoryForm
+          initialValues={{
+            title: "",
+            slug: "",
+            village: "",
+            featuredImage: "",
+            galleryImages: [],
+            videoUrl: "",
+            summary: "",
+            story: "",
+            impact: "",
+            beneficiaries: 0,
+            isFeatured: false,
+            status: "DRAFT",
+          }}
+          onSubmit={handleCreate}
+        />
+      </div>
+    );
+  };
+
+export default
+  CreateSuccessStoryPage;
