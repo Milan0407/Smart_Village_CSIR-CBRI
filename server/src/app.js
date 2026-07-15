@@ -21,6 +21,7 @@ import {
 import { env } from "./config/env.js";
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(
   cors({
@@ -53,7 +54,9 @@ app.use(
   })
 );
 
-app.use(globalLimiter);
+app.use("/api/auth", authLimiter);
+
+app.use("/api", globalLimiter);
 
 app.use("/api", routes);
 
