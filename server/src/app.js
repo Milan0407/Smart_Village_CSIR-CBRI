@@ -14,9 +14,6 @@ import {
   securityMiddleware,
 } from "./middleware/security.middleware.js";
 
-import {
-  globalLimiter,
-} from "./middleware/rateLimit.middleware.js";
 
 import { env } from "./config/env.js";
 
@@ -53,10 +50,6 @@ app.use(
     limit: "10mb",
   })
 );
-
-app.use("/api/auth", authLimiter);
-
-app.use("/api", globalLimiter);
 
 app.use("/api", routes);
 

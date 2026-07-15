@@ -46,6 +46,10 @@
   import developmentPlanRoutes from "../modules/developmentPlan/developmentPlan.routes.js";
 
   import eventRoutes from "../modules/events/event.routes.js";
+  import {
+  publicLimiter,
+  adminLimiter,
+} from "../middleware/rateLimit.middleware.js";
 
 const router = Router();
 
@@ -55,88 +59,113 @@ router.use("/auth", authRoutes);
 
 router.use(
   "/public",
+  publicLimiter,
   cmsRoutes
 );
 
 router.use(
   "/states",
+  publicLimiter,
   stateRoutes
 );
 
-router.use("/villages", villageRoutes);
+router.use(
+  "/villages",
+  publicLimiter,
+  villageRoutes
+);
+
 router.use(
   "/news",
+  publicLimiter,
   newsRoutes
 );
 
+
 router.use(
   "/village-profiles",
+  publicLimiter,
   villageProfileRoutes
 );
 
-
 router.use(
   "/announcements",
+  publicLimiter,
   announcementRoutes
 );
 
 
 router.use(
   "/success-stories",
+  publicLimiter,
   successStoryRoutes
 );
 
+
 router.use(
   "/success-story-villages",
+  publicLimiter,
   successStoryVillageRoutes
 );
 
 router.use(
   "/videos",
+  publicLimiter,
   videoRoutes
 );
 
 router.use(
-  "/admin/pages",
-  pageManagementRoutes
-);
-
-router.use(
-  "/admin/sections",
-  sectionManagementRoutes
-);
-
-router.use(
-  "/admin/navigation",
-  navigationManagementRoutes
-);
-
-router.use(
-  "/admin/media",
-  mediaManagementRoutes
-);
-
-
-router.use(
   "/laboratories",
+  publicLimiter,
   laboratoryRoutes
 );
 
 router.use(
   "/contact",
+  publicLimiter,
   contactRoutes
 );
 
 router.use(
   "/site-settings",
+  publicLimiter,
   siteSettingsRoutes
 );
 
 router.use(
   "/development-plans",
+  publicLimiter,
   developmentPlanRoutes
 );
 
-router.use("/events", eventRoutes);
+router.use(
+  "/events",
+  publicLimiter,
+  eventRoutes
+);
+
+router.use(
+  "/admin/pages",
+  adminLimiter,
+  pageManagementRoutes
+);
+
+router.use(
+  "/admin/sections",
+  adminLimiter,
+  sectionManagementRoutes
+);
+
+router.use(
+  "/admin/navigation",
+  adminLimiter,
+  navigationManagementRoutes
+);
+
+router.use(
+  "/admin/media",
+  adminLimiter,
+  mediaManagementRoutes
+);
 
 export default router;
