@@ -1,0 +1,14 @@
+export const EVENT_TYPES = {
+  EVENT: "EVENT",
+  ACHIEVEMENT: "ACHIEVEMENT",
+};
+
+export const EVENT_STATUS = {
+  UPCOMING: "UPCOMING",
+  ONGOING: "ONGOING",
+  COMPLETED: "COMPLETED",
+};
+
+export const EVENT_TYPE_VALUES = Object.values(EVENT_TYPES);
+
+export const EVENT_STATUS_VALUES = Object.values(EVENT_STATUS);

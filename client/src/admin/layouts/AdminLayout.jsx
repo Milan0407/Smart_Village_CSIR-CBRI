@@ -27,9 +27,9 @@ const AdminLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <aside className="w-64 fixed h-screen border-r bg-white p-6 flex flex-col">
+      <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r bg-white">
 
-        <div>
+        <div className="flex-1 overflow-y-auto p-6">
           <h2 className="font-bold text-2xl mb-2">
             CMS Admin
           </h2>
@@ -113,8 +113,29 @@ const AdminLayout = () => {
               to="/admin/home-sections"
               className={navClass}
             >
-  Home Sections
-</NavLink>
+              Home Sections
+             </NavLink>
+
+           <NavLink
+             to="/admin/smart-village"
+             className={navClass}
+           >
+             Smart Village
+           </NavLink>
+           
+           <NavLink
+             to="/admin/development-plans"
+             className={navClass}
+           >
+             Development Plans
+           </NavLink>
+
+           <NavLink
+             to="/admin/events"
+             className={navClass}
+           >
+             Events & Achievements
+           </NavLink>
 
           </nav>
         </div>

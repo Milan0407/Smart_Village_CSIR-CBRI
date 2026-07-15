@@ -81,6 +81,19 @@ import EditSuccessStoryVillagePage
   from "../pages/EditSuccessStoryVillagePage";
 
 
+import SmartVillageDashboard from "../pages/SmartVillageDashboard";
+import VillageProfilesPage from "../pages/VillageProfilesPage";
+import CreateVillageProfilePage from "../pages/CreateVillageProfilePage";
+import EditVillageProfilePage from "../pages/EditVillageProfilePage";
+
+
+import DevelopmentPlanManagementPage from "../pages/DevelopmentPlanManagementPage";
+import CreateDevelopmentPlanPage from "../pages/CreateDevelopmentPlanPage";
+import EditDevelopmentPlanPage from "../pages/EditDevelopmentPlanPage";
+
+import EventsManagementPage from "../pages/EventsManagementPage";
+import CreateEventPage from "../pages/CreateEventPage";
+import EditEventPage from "../pages/EditEventPage";
 const ProtectedRoute = ({
   children,
 }) => {
@@ -149,6 +162,9 @@ const AdminRoutes = () => {
   }
 />
 
+
+
+
 <Route
   path="/success-story-villages/create"
   element={
@@ -161,6 +177,59 @@ const AdminRoutes = () => {
   element={
     <EditSuccessStoryVillagePage />
   }
+/>
+
+
+<Route
+  path="smart-village"
+  element={<SmartVillageDashboard />}
+/>
+
+<Route
+  path="village-profiles"
+  element={<VillageProfilesPage />}
+/>
+
+<Route
+  path="village-profiles/create"
+  element={<CreateVillageProfilePage />}
+/>
+
+<Route
+  path="village-profiles/:id/edit"
+  element={<EditVillageProfilePage />}
+/>
+
+
+<Route
+  path="development-plans"
+  element={<DevelopmentPlanManagementPage />}
+/>
+
+<Route
+  path="development-plans/create"
+  element={<CreateDevelopmentPlanPage />}
+/>
+
+<Route
+  path="development-plans/:id/edit"
+  element={<EditDevelopmentPlanPage />}
+/>
+
+
+<Route
+  path="events"
+  element={<EventsManagementPage />}
+/>
+
+<Route
+  path="events/create"
+  element={<CreateEventPage />}
+/>
+
+<Route
+    path="events/:id/edit"
+    element={<EditEventPage />}
 />
 
 

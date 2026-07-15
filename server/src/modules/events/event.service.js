@@ -1,0 +1,370 @@
+import Event from "./Event.model.js";
+import ApiError from "../../utils/ApiError.js";
+
+/**
+ * Create Event
+ */
+export const createEvent = async (data, adminId) => {
+  const event = await Event.create({
+    ...data,
+    createdBy: adminId,
+    updatedBy: adminId,
+  });
+
+  return event.populate([
+    {
+      path: "village",
+      select: "name slug",
+    },
+    {
+      path: "createdBy",
+      select: "name email",
+    },
+  ]);
+};
+
+/**
+ * Get All Events
+ */
+export const getEvents = async (query = {}) => {
+  const {
+    page = 1,
+    limit = 10,
+    search,
+    village,
+    type,
+    status,
+    featured,
+    published,
+    sortBy = "eventDate",
+    sortOrder = "desc",
+  } = query;
+
+  const filter = {
+    isDeleted: false,
+  };
+
+  if (search) {
+       filter.$or = [
+  {
+    title: {
+      $regex: search,
+      $options: "i",
+    },
+  },
+  {
+    summary: {
+      $regex: search,
+      $options: "i",
+    },
+  },
+  {
+    category: {
+      $regex: search,
+      $options: "i",
+    },
+  },
+];
+  }
+
+  if (village) filter.village = village;
+  if (type) filter.type = type;
+  if (status) filter.status = status;
+
+  if (featured !== undefined) {
+    filter.isFeatured = featured === "true";
+  }
+
+  if (published !== undefined) {
+    filter.published = published === "true";
+  }
+
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const [events, total] = await Promise.all([
+    Event.find(filter)
+      .populate("village", "name slug")
+      .sort({
+        [sortBy]: sortOrder === "asc" ? 1 : -1,
+      })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean(),
+
+    Event.countDocuments(filter),
+  ]);
+
+  return {
+    data: events,
+
+    pagination: {
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / Number(limit)),
+    },
+  };
+};
+
+/**
+ * Get Event By ID
+ */
+export const getEventById = async (id) => {
+  const event = await Event.findOne({
+    _id: id,
+    isDeleted: false,
+  })
+    .populate("village", "name slug")
+    .populate("createdBy", "name email")
+    .populate("updatedBy", "name email");
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  return event;
+};
+
+/**
+ * Get Event By Slug
+ */
+export const getEventBySlug = async (slug) => {
+  const event = await Event.findOne({
+    slug,
+    published: true,
+    isDeleted: false,
+  })
+    .populate("village", "name slug")
+    .lean();
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  const relatedEvents = await getRelatedEvents(
+    event._id,
+    event.village._id
+  );
+
+  return {
+    event,
+    relatedEvents,
+  };
+};
+
+
+/**
+ * Get Featured Event
+ */
+export const getFeaturedEvent = async () => {
+  const event = await Event.findOne({
+    published: true,
+    isDeleted: false,
+    isFeatured: true,
+  })
+    .populate("village", "name slug")
+    .sort({
+      eventDate: -1,
+    })
+    .lean();
+
+  if (!event) {
+    throw new ApiError(
+      404,
+      "Featured event not found."
+    );
+  }
+
+  return event;
+};
+
+/**
+ * Update Event
+ */
+export const updateEvent = async (
+  id,
+  data,
+  adminId
+) => {
+  const event = await Event.findOneAndUpdate(
+    {
+      _id: id,
+      isDeleted: false,
+    },
+    {
+      ...data,
+      updatedBy: adminId,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  ).populate("village", "name slug");
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  return event;
+};
+
+/**
+ * Soft Delete Event
+ */
+export const deleteEvent = async (
+  id,
+  adminId
+) => {
+  const event = await Event.findOneAndUpdate(
+    {
+      _id: id,
+      isDeleted: false,
+    },
+    {
+      isDeleted: true,
+      updatedBy: adminId,
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  return event;
+};
+
+/**
+ * Publish / Unpublish
+ */
+export const togglePublish = async (
+  id,
+  published,
+ adminId
+) => {
+  const event = await Event.findOneAndUpdate(
+    {
+      _id: id,
+      isDeleted: false,
+    },
+    {
+      published,
+      updatedBy: adminId,
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  return event;
+};
+
+/**
+ * Feature / Unfeature
+ */
+export const toggleFeatured = async (
+  id,
+  featured,
+  adminId
+) => {
+  const event = await Event.findOneAndUpdate(
+    {
+      _id: id,
+      isDeleted: false,
+    },
+    {
+      isFeatured: featured,
+      updatedBy: adminId,
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  return event;
+};
+
+/**
+ * Get Event Statistics
+ */
+export const getEventStatistics =
+  async () => {
+    const [
+      total,
+      upcoming,
+      completed,
+      achievements,
+      featured,
+    ] = await Promise.all([
+      Event.countDocuments({
+        published: true,
+        isDeleted: false,
+      }),
+
+      Event.countDocuments({
+        published: true,
+        isDeleted: false,
+        status: "UPCOMING",
+      }),
+
+      Event.countDocuments({
+        published: true,
+        isDeleted: false,
+        status: "COMPLETED",
+      }),
+
+      Event.countDocuments({
+        published: true,
+        isDeleted: false,
+        type: "ACHIEVEMENT",
+      }),
+
+      Event.countDocuments({
+        published: true,
+        isDeleted: false,
+        isFeatured: true,
+      }),
+    ]);
+
+    return {
+      total,
+      upcoming,
+      completed,
+      achievements,
+      featured,
+    };
+  };
+
+  /**
+ * Get Related Events
+ */
+export const getRelatedEvents = async (
+  eventId,
+  villageId,
+  limit = 3
+) => {
+  const events = await Event.find({
+    _id: { $ne: eventId },
+    village: villageId,
+    published: true,
+    isDeleted: false,
+  })
+    .populate("village", "name slug")
+    .sort({
+      eventDate: -1,
+    })
+    .limit(limit)
+    .lean();
+
+  return events;
+};

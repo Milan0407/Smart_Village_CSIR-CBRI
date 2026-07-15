@@ -1,0 +1,150 @@
+import axios from "axios";
+
+const API = import.meta.env.VITE_API_URL;
+
+/*
+=====================================================
+SMART VILLAGE NAVIGATION
+=====================================================
+*/
+
+/**
+ * Get all published villages
+ */
+export const getVillages = async () => {
+  const response = await axios.get(
+    `${API}/villages/public`
+  );
+
+  return response.data.data;
+};
+
+/**
+ * Get villages by state
+ * Used in Navbar Mega Menu
+ */
+export const getVillagesByState = async (
+  stateSlug
+) => {
+  const response = await axios.get(
+    `${API}/villages/public/state/${stateSlug}`
+  );
+
+  return response.data.data;
+};
+
+/**
+ * Get village by slug
+ */
+export const getVillageBySlug = async (
+  slug
+) => {
+  const response = await axios.get(
+    `${API}/villages/slug/${slug}`
+  );
+
+  return response.data.data;
+};
+
+/*
+=====================================================
+VILLAGE PROFILE
+=====================================================
+*/
+
+export const getVillageProfile = async (
+  slug
+) => {
+  const response = await axios.get(
+    `${API}/village-profiles/slug/${slug}`
+  );
+
+  return response.data.data;
+};
+
+/*
+=====================================================
+FUTURE MODULES
+=====================================================
+*/
+
+export const getVillageStatistics =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/village-statistics/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getVillageVDI =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/village-vdi/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getDevelopmentPlan =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/development-plans/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getTechnologyMapping =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/technology-mapping/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getKnowledgeHub =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/knowledge-hub/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getCurrentAffairs =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/current-affairs/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getVillageEvents =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/events/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getTraditionalFood =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/traditional-food/slug/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getVillageMap =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/village-map/slug/${slug}`
+    );
+
+    return response.data.data;
+  };

@@ -1,6 +1,6 @@
 import csirLogo from "../../../assets/logos/CSIRCBRI-Logo.jpg";
-import cbriLogo from "../../../assets/logos/Smart.jpg";
-import smartVillageLogo from "../../../assets/logos/SmartVill.jpg";
+// import cbriLogo from "../../../assets/logos/Smart.jpeg";
+import smartVillageLogo from "../../../assets/logos/SmartVill.jpeg";
 
 const Header = () => {
   return (
@@ -20,11 +20,11 @@ const Header = () => {
               className="h-16 lg:h-20 object-contain"
             />
 
-            <img
+            {/* <img
               src={cbriLogo}
               alt="CSIR Smart Village"
               className="h-16 lg:h-20 object-contain"
-            />
+            /> */}
 
           </div>
 
@@ -80,11 +80,11 @@ const Header = () => {
               className="h-12 object-contain"
             />
 
-            <img
+            {/* <img
               src={cbriLogo}
               alt="CSIR Smart Village"
               className="h-12 object-contain"
-            />
+            /> */}
 
             <img
               src={smartVillageLogo}

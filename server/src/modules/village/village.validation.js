@@ -1,31 +1,154 @@
-import Joi from "joi";
+import { z } from "zod";
 
-export const createVillageSchema =
-  Joi.object({
-    name: Joi.object({
-      en: Joi.string()
-        .required(),
+export const createVillageSchema = z.object({
+  body: z.object({
+    state: z
+      .string()
+      .min(1, "State is required."),
 
-      regional: Joi.string()
-        .allow(""),
-    }).required(),
+    name: z.object({
+      en: z
+        .string()
+        .trim()
+        .min(2, "English name must be at least 2 characters.")
+        .max(100),
 
-    slug: Joi.string()
-      .required(),
+      regional: z
+        .string()
+        .trim()
+        .optional()
+        .default(""),
+    }),
 
-    district: Joi.string()
-      .required(),
+    slug: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .min(2, "Slug is required."),
 
-    state: Joi.string()
-      .required(),
+    villageCode: z
+      .string()
+      .trim()
+      .toUpperCase()
+      .min(2, "Village code is required.")
+      .max(50),
 
-    pinCode: Joi.string(),
+    district: z
+      .string()
+      .trim()
+      .min(2, "District is required."),
 
-    population: Joi.number(),
+    block: z
+      .string()
+      .trim()
+      .optional()
+      .default(""),
 
-    coverImageUrl:
-      Joi.string(),
+    gramPanchayat: z
+      .string()
+      .trim()
+      .optional()
+      .default(""),
 
-    languages: Joi.array()
-      .items(Joi.string()),
-  });
+    pinCode: z
+      .string()
+      .trim()
+      .optional()
+      .default(""),
+
+    location: z
+      .object({
+        type: z.literal("Point").default("Point"),
+
+        coordinates: z
+          .array(z.number())
+          .length(2, "Coordinates must contain longitude and latitude."),
+      })
+      .optional(),
+
+    coverImage: z
+      .string()
+      .nullable()
+      .optional(),
+
+    languages: z
+      .array(z.string())
+      .optional()
+      .default(["en"]),
+
+    sortOrder: z
+      .number()
+      .int()
+      .nonnegative()
+      .optional()
+      .default(0),
+
+    isPublished: z
+      .boolean()
+      .optional()
+      .default(true),
+
+    status: z
+      .enum([
+        "ACTIVE",
+        "INACTIVE",
+        "ARCHIVED",
+      ])
+      .optional()
+      .default("ACTIVE"),
+  }),
+});
+
+export const updateVillageSchema = z.object({
+  body: z.object({
+    state: z.string().optional(),
+
+    name: z
+      .object({
+        en: z.string().trim().min(2).max(100),
+
+        regional: z.string().trim().optional(),
+      })
+      .optional(),
+
+    slug: z.string().trim().toLowerCase().optional(),
+
+    villageCode: z
+      .string()
+      .trim()
+      .toUpperCase()
+      .optional(),
+
+    district: z.string().trim().optional(),
+
+    block: z.string().trim().optional(),
+
+    gramPanchayat: z.string().trim().optional(),
+
+    pinCode: z.string().trim().optional(),
+
+    location: z
+      .object({
+        type: z.literal("Point").optional(),
+
+        coordinates: z.array(z.number()).length(2).optional(),
+      })
+      .optional(),
+
+    coverImage: z.string().nullable().optional(),
+
+    languages: z.array(z.string()).optional(),
+
+    sortOrder: z.number().int().nonnegative().optional(),
+
+    isPublished: z.boolean().optional(),
+
+    status: z
+      .enum([
+        "ACTIVE",
+        "INACTIVE",
+        "ARCHIVED",
+      ])
+      .optional(),
+  }),
+});

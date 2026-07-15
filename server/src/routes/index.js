@@ -3,7 +3,7 @@
   import healthRoutes from "./health.routes.js";
   import authRoutes from "../modules/auth/auth.routes.js";
   import villageRoutes from "../modules/village/village.routes.js";
-
+  import stateRoutes from "../modules/state/state.routes.js";
   import cmsRoutes from "../modules/cms/cms.routes.js";
   import newsRoutes
   from "../modules/news/news.routes.js";
@@ -41,6 +41,11 @@
   import successStoryVillageRoutes
   from "../modules/successStoryVillage/successStoryVillage.routes.js";
 
+  import villageProfileRoutes from "../modules/villageProfile/villageProfile.routes.js";
+
+  import developmentPlanRoutes from "../modules/developmentPlan/developmentPlan.routes.js";
+
+  import eventRoutes from "../modules/events/event.routes.js";
 
 const router = Router();
 
@@ -53,10 +58,20 @@ router.use(
   cmsRoutes
 );
 
+router.use(
+  "/states",
+  stateRoutes
+);
+
 router.use("/villages", villageRoutes);
 router.use(
   "/news",
   newsRoutes
+);
+
+router.use(
+  "/village-profiles",
+  villageProfileRoutes
 );
 
 
@@ -117,5 +132,11 @@ router.use(
   siteSettingsRoutes
 );
 
+router.use(
+  "/development-plans",
+  developmentPlanRoutes
+);
+
+router.use("/events", eventRoutes);
 
 export default router;

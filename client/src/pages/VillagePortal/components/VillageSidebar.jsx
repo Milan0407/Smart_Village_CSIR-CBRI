@@ -1,110 +1,313 @@
+import { NavLink } from "react-router-dom";
+
 import {
   Home,
-  ClipboardList,
+  FolderKanban,
   Newspaper,
   Trophy,
   UtensilsCrossed,
   Map,
-  FileText,
+  ScrollText,
   BookOpen,
   BarChart3,
-  Lightbulb,
-  MessageSquare,
+  Cpu,
+  MessageCircle,
+  MapPinned,
+  Landmark,
+  Trees,
+  ChevronRight,
 } from "lucide-react";
 
-import { NavLink, useParams } from "react-router-dom";
+const VillageSidebar = ({ village }) => {
+  const slug = village?.slug;
 
-const VillageSidebar = () => {
-  const { slug } = useParams();
-
-  const links = [
+  const menuItems = [
     {
       label: "Village Information",
-      path: "info",
+      description: "Profile & demographics",
       icon: Home,
+      path: "",
     },
     {
-      label: "Development Plan",
+      label: "Development Plans",
+      description: "Projects & infrastructure",
+      icon: FolderKanban,
       path: "development-plan",
-      icon: ClipboardList,
     },
     {
       label: "Current Affairs",
-      path: "current-affairs",
+      description: "News & updates",
       icon: Newspaper,
+      path: "current-affairs",
     },
     {
       label: "Events & Achievements",
-      path: "events",
+      description: "Community highlights",
       icon: Trophy,
+      path: "events",
     },
     {
       label: "Traditional Food",
-      path: "traditional-food",
+      description: "Local cuisine",
       icon: UtensilsCrossed,
+      path: "traditional-food",
     },
     {
       label: "Village Map",
-      path: "map",
+      description: "Explore village",
       icon: Map,
+      path: "map",
     },
     {
       label: "Policies & Schemes",
+      description: "Government schemes",
+      icon: ScrollText,
       path: "policies",
-      icon: FileText,
     },
     {
       label: "Knowledge Hub",
-      path: "knowledge-hub",
+      description: "Learning resources",
       icon: BookOpen,
+      path: "knowledge-hub",
     },
     {
       label: "Development Indicators",
-      path: "indicators",
+      description: "Village statistics",
       icon: BarChart3,
+      path: "indicators",
     },
     {
       label: "Technology Mapping",
+      description: "Technology adoption",
+      icon: Cpu,
       path: "technology-mapping",
-      icon: Lightbulb,
     },
     {
       label: "Feedback",
+      description: "Share your opinion",
+      icon: MessageCircle,
       path: "feedback",
-      icon: MessageSquare,
     },
   ];
 
   return (
-    <aside className="bg-white rounded-xl border shadow-sm p-4 h-fit">
-      <h2 className="font-bold text-lg mb-4">
-        Village Modules
-      </h2>
+   <div className="sticky top-28 space-y-6">
 
-      <div className="space-y-2">
-        {links.map((item) => {
-          const Icon = item.icon;
+      {/* ================= Header ================= */}
 
-          return (
-            <NavLink
-              key={item.path}
-              to={`/village/${slug}/${item.path}`}
-              className={({ isActive }) =>
-                `flex items-center gap-3 p-3 rounded-lg transition-all ${
-                  isActive
-? "bg-[#448a61] text-white shadow-md"
-                    : "hover:bg-slate-100 text-slate-700"
-                }`
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+        <div className="bg-gradient-to-r from-blue-700 to-cyan-600 px-6 py-5 text-white">
+
+          <div className="flex items-center gap-4">
+
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur">
+
+              <Trees size={28} />
+
+            </div>
+
+            <div>
+
+              <h2 className="text-xl font-bold">
+
+                Village Modules
+
+              </h2>
+
+              <p className="mt-1 text-sm text-blue-100">
+
+                Explore every aspect of the village
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+{/* ================= Navigation ================= */}
+
+<div className="max-h-[calc(100vh-8rem)] overflow-y-auto p-3">
+
+  {menuItems.map((item) => {
+    const Icon = item.icon;
+
+    return (
+      <NavLink
+        key={item.path}
+        to={`/village/${slug}/${item.path}`}
+        end={item.path === ""}
+        className={({ isActive }) =>
+          `
+          group
+          mb-2
+          flex
+          items-center
+          justify-between
+          rounded-xl
+          px-4
+          py-3
+          transition-all
+          duration-300
+
+          ${
+            isActive
+              ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
+              : "hover:bg-slate-100"
+          }
+          `
+        }
+      >
+        {({ isActive }) => (
+          <>
+            <div className="flex items-center gap-3">
+
+              <div
+                className={`
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-xl
+                  transition-all
+
+                  ${
+                    isActive
+                      ? "bg-white/20"
+                      : "bg-slate-100 group-hover:bg-blue-100"
+                  }
+                `}
+              >
+                <Icon
+                  size={19}
+                  className={
+                    isActive
+                      ? "text-white"
+                      : "text-slate-700"
+                  }
+                />
+              </div>
+
+              <div>
+
+                <h4
+                  className={`text-sm font-semibold ${
+                    isActive
+                      ? "text-white"
+                      : "text-slate-800"
+                  }`}
+                >
+                  {item.label}
+                </h4>
+
+                <p
+                  className={`mt-1 text-xs ${
+                    isActive
+                      ? "text-blue-100"
+                      : "text-slate-500"
+                  }`}
+                >
+                  {item.description}
+                </p>
+
+              </div>
+
+            </div>
+
+            <ChevronRight
+              size={16}
+              className={
+                isActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-blue-600"
               }
-            >
-              <Icon size={18} />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
+            />
+
+          </>
+        )}
+      </NavLink>
+    );
+  })}
+
+</div>
+</div>
+
+      {/* ================= Quick Information ================= */}
+
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+
+        <div className="border-b bg-slate-50 px-6 py-4">
+
+          <h3 className="text-lg font-semibold text-slate-800">
+
+            Quick Information
+
+          </h3>
+
+          <p className="text-sm text-slate-500 mt-1">
+
+            Basic village details
+
+          </p>
+
+        </div>
+
+        <div className="space-y-4 p-5">
+
+          <InfoRow
+            icon={<Landmark size={18} />}
+            label="State"
+            value={village?.state?.name}
+          />
+
+          <InfoRow
+            icon={<MapPinned size={18} />}
+            label="District"
+            value={village?.district}
+          />
+
+          <InfoRow
+            icon={<Trees size={18} />}
+            label="Village"
+            value={village?.name?.en || village?.name}
+          />
+
+        </div>
+
       </div>
-    </aside>
+
+    </div>
   );
 };
 
+const InfoRow = ({
+  icon,
+  label,
+  value,
+}) => (
+  <div className="flex items-start gap-3">
+
+    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+
+      {icon}
+
+    </div>
+
+    <div className="min-w-0">
+
+      <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+        {label}
+      </p>
+
+      <p className="mt-1 break-words text-sm font-semibold text-slate-800">
+        {value || "-"}
+      </p>
+
+    </div>
+
+  </div>
+);
 export default VillageSidebar;

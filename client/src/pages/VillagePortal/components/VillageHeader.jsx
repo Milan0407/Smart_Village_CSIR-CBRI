@@ -1,36 +1,38 @@
-import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ChevronRight, Home } from "lucide-react";
 
-const VillageHeader = () => {
+const VillageHeader = ({ village }) => {
   return (
-    <header className="bg-white border-b shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <header className="bg-white border-b border-slate-200 shadow-sm">
 
-        <div>
-          <h1 className="text-xl font-bold text-slate-900">
-            Smart Village Management Portal
-          </h1>
+      <div className="max-w-7xl mx-auto px-4 py-4">
 
-          <p className="text-sm text-slate-500">
-            CSIR-CBRI Roorkee
-          </p>
+        {/* Breadcrumb */}
+
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+
+          <Link
+            to="/"
+            className="flex items-center gap-1 hover:text-blue-700"
+          >
+            <Home size={16} />
+            Home
+          </Link>
+
+          <ChevronRight size={16} />
+
+          <span>CSIR Smart Village</span>
+
+          <ChevronRight size={16} />
+
+          <span className="font-medium text-slate-800">
+            {village?.name?.en || village?.name}
+          </span>
+
         </div>
 
-        <Link
-          to="/#villages"
-          className="
-            flex items-center gap-2
-            px-4 py-2
-            rounded-lg
-            border
-            hover:bg-slate-50
-          "
-        >
-          <ArrowLeft size={18} />
-          Back to Villages
-        </Link>
-
       </div>
+
     </header>
   );
 };
