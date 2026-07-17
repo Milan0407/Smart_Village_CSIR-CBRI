@@ -73,6 +73,16 @@ export const createEventSchema = z.object({
       .boolean()
       .optional(),
 
+    showOnVillageInfo: z
+      .boolean()
+      .optional(),
+
+    highlightOrder: z
+      .coerce
+      .number()
+      .int()
+      .optional(),
+
     published: z
       .boolean()
       .optional(),
@@ -117,6 +127,10 @@ export const eventQuerySchema = z.object({
     status: z.enum(EVENT_STATUS_VALUES).optional(),
 
     featured: z
+      .enum(["true", "false"])
+      .optional(),
+
+    showOnVillageInfo: z
       .enum(["true", "false"])
       .optional(),
 

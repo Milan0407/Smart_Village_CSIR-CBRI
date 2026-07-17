@@ -1,4 +1,5 @@
 import CheckboxField from "../../common/form/CheckboxField";
+import InputField from "../../common/form/InputField";
 
 const PublishSection = () => {
   return (
@@ -18,6 +19,19 @@ const PublishSection = () => {
           name="isFeatured"
           label="Featured Event"
           description="Display this event in featured sections."
+        />
+
+        <CheckboxField
+          name="showOnVillageInfo"
+          label="Show on Village Information"
+          description="Use this event or achievement as a village highlight."
+        />
+
+        <InputField
+          name="highlightOrder"
+          label="Highlight Order"
+          type="number"
+          placeholder="0"
         />
 
         <CheckboxField

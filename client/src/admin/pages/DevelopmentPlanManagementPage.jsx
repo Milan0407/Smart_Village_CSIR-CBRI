@@ -1,4 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import {
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 
@@ -16,54 +20,37 @@ import {
   getAllVillages,
 } from "../services/village.service";
 
+const EMPTY_LIST = [];
+
 const DevelopmentPlanManagementPage = () => {
   const navigate = useNavigate();
-
-  const [plans, setPlans] = useState([]);
-  const [villages, setVillages] = useState([]);
-
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   const [search, setSearch] = useState("");
 
   const [village, setVillage] =
     useState("ALL");
 
-  const [category, setCategory] =
-    useState("ALL");
-
-  const [status, setStatus] =
-    useState("ALL");
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-
-      const [
-        plansData,
-        villagesData,
-      ] = await Promise.all([
+  const {
+    data,
+    isLoading: loading,
+  } = useQuery({
+    queryKey: ["admin-development-plans"],
+    queryFn: async () => {
+      const [plansData, villagesData] = await Promise.all([
         getAllDevelopmentPlans(),
         getAllVillages(),
       ]);
 
-      setPlans(plansData);
+      return {
+        plans: plansData,
+        villages: villagesData,
+      };
+    },
+  });
 
-      setVillages(villagesData);
-    } catch (error) {
-      console.error(error);
-
-      alert(
-        "Failed to load Development Plans."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const plans = data?.plans || EMPTY_LIST;
+  const villages = data?.villages || EMPTY_LIST;
 
   const filteredPlans =
     useMemo(() => {
@@ -81,28 +68,15 @@ const DevelopmentPlanManagementPage = () => {
           plan.village?._id ===
             village;
 
-        const matchesCategory =
-          category === "ALL" ||
-          plan.category ===
-            category;
-
-        const matchesStatus =
-          status === "ALL" ||
-          plan.status === status;
-
         return (
           matchesSearch &&
-          matchesVillage &&
-          matchesCategory &&
-          matchesStatus
+          matchesVillage
         );
       });
     }, [
       plans,
       search,
       village,
-      category,
-      status,
     ]);
 
   const handleEdit = (id) => {
@@ -125,11 +99,14 @@ const DevelopmentPlanManagementPage = () => {
           id
         );
 
-        setPlans((prev) =>
-          prev.filter(
-            (plan) =>
-              plan._id !== id
-          )
+        queryClient.setQueryData(
+          ["admin-development-plans"],
+          (current) => ({
+            ...current,
+            plans: (current?.plans || []).filter(
+              (plan) => plan._id !== id
+            ),
+          })
         );
       } catch (error) {
         console.error(error);
@@ -148,12 +125,14 @@ const DevelopmentPlanManagementPage = () => {
             id
           );
 
-        setPlans((prev) =>
-          prev.map((plan) =>
-            plan._id === id
-              ? updated
-              : plan
-          )
+        queryClient.setQueryData(
+          ["admin-development-plans"],
+          (current) => ({
+            ...current,
+            plans: (current?.plans || []).map((plan) =>
+              plan._id === id ? updated : plan
+            ),
+          })
         );
       } catch (error) {
         console.error(error);
@@ -186,9 +165,8 @@ const DevelopmentPlanManagementPage = () => {
           </h1>
 
           <p className="text-slate-500 mt-2">
-            Manage village development projects,
-            implementation progress,
-            budgets and publishing.
+            Manage CSIR technology deployment sectors,
+            technologies and publishing.
           </p>
 
         </div>
@@ -231,10 +209,6 @@ const DevelopmentPlanManagementPage = () => {
         setSearch={setSearch}
         village={village}
         setVillage={setVillage}
-        category={category}
-        setCategory={setCategory}
-        status={status}
-        setStatus={setStatus}
         villages={villages}
       />
 

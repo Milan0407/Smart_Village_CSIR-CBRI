@@ -7,6 +7,10 @@ import {
   CheckCircle2,
   Star,
 } from "lucide-react";
+import {
+  getLocalizedText,
+  getVillageName,
+} from "../utils/eventText";
 
 const formatDate = (date) => {
   if (!date) return "-";
@@ -16,20 +20,6 @@ const formatDate = (date) => {
     month: "long",
     year: "numeric",
   });
-};
-
-const getVillageName = (village) => {
-  if (!village) return "-";
-
-  if (typeof village.name === "string") {
-    return village.name;
-  }
-
-  return (
-    village.name?.en ||
-    village.name?.regional ||
-    "-"
-  );
 };
 
 const SidebarItem = ({
@@ -79,13 +69,13 @@ const EventSidebar = ({ event }) => {
           <SidebarItem
             icon={MapPin}
             label="Location"
-            value={event.location}
+            value={getLocalizedText(event.location, "-")}
           />
 
           <SidebarItem
             icon={User}
             label="Organizer"
-            value={event.organizer}
+            value={getLocalizedText(event.organizer, "-")}
           />
 
           <SidebarItem
@@ -109,7 +99,7 @@ const EventSidebar = ({ event }) => {
           <SidebarItem
             icon={MapPin}
             label="Village"
-            value={getVillageName(event.village)}
+            value={getVillageName(event.village, "-")}
           />
 
         </div>

@@ -1,39 +1,159 @@
-import { Routes, Route } from "react-router-dom";
-import HomePage from "../pages/HomePage/HomePage";
-import AboutPage from "../pages/AboutPage/AboutPage";
-import MissionObjectivesPage from "../pages/AboutPage/MissionObjectivesPage";
-import DGDeskPage from "../pages/AboutPage/DGDeskPage";
-import DirectorDeskPage from "../pages/AboutPage/DirectorDeskPage";
-import NodalLabPage from "../pages/NodalLabPage/NodalLabPage";
-import ParticipatingLabsPage from "../pages/ParticipatingLabsPage/ParticipatingLabsPage";
-import LaboratoryDetailPage from "../pages/LaboratoryPage/LaboratoryDetailPage";
-import NewsPage from "../pages/NewsPage/NewsPage";
-import NewsDetailPage from "../pages/NewsPage/NewsDetailPage";
-import SuccessStoriesPage from "../pages/SuccessStoriesPage/SuccessStoriesPage";
-import VillageSuccessStoriesPage from "../pages/SuccessStoriesPage/VillageSuccessStoriesPage";
-import SuccessStoryDetailPage from "../pages/SuccessStoriesPage/SuccessStoryDetailPage";
-import ContactPage from "../pages/ContactPage/ContactPage";
-import AnnouncementDetailPage from "../pages/AnnouncementPage/AnnouncementDetailPage";
+import {
+  lazy,
+  Suspense,
+} from "react";
+
+import {
+  Routes,
+  Route,
+} from "react-router-dom";
+
 import AdminRoutes from "../admin/routes/AdminRoutes";
+import PageLoader from "../components/common/PageLoader";
 
+const HomePage = lazy(() =>
+  import("../pages/HomePage/HomePage")
+);
 
-import VillageLayout from "../pages/VillagePortal/layout/VillageLayout";
+const AboutPage = lazy(() =>
+  import("../pages/AboutPage/AboutPage")
+);
 
-import VillageInfoPage from "../pages/VillagePortal/modules/VillageInfo/VillageInfoPage";
-import DevelopmentPlanPage from "../pages/VillagePortal/modules/DevelopmentPlan/DevelopmentPlanPage";
-import DevelopmentPlanDetailPage from "../pages/VillagePortal/modules/DevelopmentPlan/DevelopmentPlanDetailPage";
-import CurrentAffairsPage from "../pages/VillagePortal/modules/CurrentAffairs/CurrentAffairsPage";
-import EventsPage from "../pages/VillagePortal/modules/Events/EventsPage";
-import EventDetailPage from "../pages/VillagePortal/modules/Events/EventDetailPage";
-import TraditionalFoodPage from "../pages/VillagePortal/modules/TraditionalFood/TraditionalFoodPage";
-import VillageMapPage from "../pages/VillagePortal/modules/VillageMap/VillageMapPage";
-import PoliciesPage from "../pages/VillagePortal/modules/Policies/PoliciesPage";
-import KnowledgeHubPage from "../pages/VillagePortal/modules/KnowledgeHub/KnowledgeHubPage";
-import IndicatorsPage from "../pages/VillagePortal/modules/Indicators/IndicatorsPage";
-import TechnologyMappingPage from "../pages/VillagePortal/modules/TechnologyMapping/TechnologyMappingPage";
-import FeedbackPage from "../pages/VillagePortal/modules/Feedback/FeedbackPage";
+const MissionObjectivesPage = lazy(() =>
+  import("../pages/AboutPage/MissionObjectivesPage")
+);
+
+const DGDeskPage = lazy(() =>
+  import("../pages/AboutPage/DGDeskPage")
+);
+
+const DirectorDeskPage = lazy(() =>
+  import("../pages/AboutPage/DirectorDeskPage")
+);
+
+const NodalLabPage = lazy(() =>
+  import("../pages/NodalLabPage/NodalLabPage")
+);
+
+const ParticipatingLabsPage = lazy(() =>
+  import(
+    "../pages/ParticipatingLabsPage/ParticipatingLabsPage"
+  )
+);
+
+const LaboratoryDetailPage = lazy(() =>
+  import(
+    "../pages/LaboratoryPage/LaboratoryDetailPage"
+  )
+);
+
+const NewsPage = lazy(() =>
+  import("../pages/NewsPage/NewsPage")
+);
+
+const NewsDetailPage = lazy(() =>
+  import("../pages/NewsPage/NewsDetailPage")
+);
+
+const SuccessStoriesPage = lazy(() =>
+  import(
+    "../pages/SuccessStoriesPage/SuccessStoriesPage"
+  )
+);
+
+const VillageSuccessStoriesPage = lazy(() =>
+  import(
+    "../pages/SuccessStoriesPage/VillageSuccessStoriesPage"
+  )
+);
+
+const SuccessStoryDetailPage = lazy(() =>
+  import(
+    "../pages/SuccessStoriesPage/SuccessStoryDetailPage"
+  )
+);
+
+const ContactPage = lazy(() =>
+  import("../pages/ContactPage/ContactPage")
+);
+
+const AnnouncementDetailPage = lazy(() =>
+  import(
+    "../pages/AnnouncementPage/AnnouncementDetailPage"
+  )
+);
+
+const VillageLayout = lazy(() =>
+  import(
+    "../pages/VillagePortal/layout/VillageLayout"
+  )
+);
+
+const VillageInfoPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/VillageInfo/VillageInfoPage"
+  )
+);
+
+const DevelopmentPlanPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/DevelopmentPlan/DevelopmentPlanPage"
+  )
+);
+
+const DevelopmentPlanDetailPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/DevelopmentPlan/DevelopmentPlanDetailPage"
+  )
+);
+
+const EventsPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/Events/EventsPage"
+  )
+);
+
+const EventDetailPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/Events/EventDetailPage"
+  )
+);
+
+const VillageMapPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/VillageMap/VillageMapPage"
+  )
+);
+
+const PoliciesPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/Policies/PoliciesPage"
+  )
+);
+
+const IndicatorsPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/Indicators/IndicatorsPage"
+  )
+);
+
+const TechnologyMappingPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/TechnologyMapping/TechnologyMappingPage"
+  )
+);
+
+const FeedbackPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/Feedback/FeedbackPage"
+  )
+);
+
 const AppRoutes = () => {
   return (
+
+        <Suspense
+      fallback={<PageLoader />}>
     <Routes>
 
       {/* ================= ADMIN ================= */}
@@ -143,11 +263,6 @@ const AppRoutes = () => {
 />
 
   <Route
-    path="current-affairs"
-    element={<CurrentAffairsPage />}
-  />
-
-  <Route
     path="events"
     element={<EventsPage />}
   />
@@ -158,11 +273,6 @@ const AppRoutes = () => {
 />
 
   <Route
-    path="traditional-food"
-    element={<TraditionalFoodPage />}
-  />
-
-  <Route
     path="map"
     element={<VillageMapPage />}
   />
@@ -170,11 +280,6 @@ const AppRoutes = () => {
   <Route
     path="policies"
     element={<PoliciesPage />}
-  />
-
-  <Route
-    path="knowledge-hub"
-    element={<KnowledgeHubPage />}
   />
 
   <Route
@@ -194,6 +299,7 @@ const AppRoutes = () => {
      </Route>
 
     </Routes>
+    </Suspense>
   );
 };
 

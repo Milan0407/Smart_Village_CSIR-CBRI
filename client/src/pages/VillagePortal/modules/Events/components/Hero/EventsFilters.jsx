@@ -1,46 +1,24 @@
-import { useEffect, useState } from "react";
 import { Search, Filter } from "lucide-react";
 
+const DEFAULT_FILTERS = {
+  search: "",
+  type: "",
+  status: "",
+  page: 1,
+};
+
 const EventsFilters = ({
-  filters,
+  filters = DEFAULT_FILTERS,
   onChange,
 }) => {
-  const [search, setSearch] = useState(
-    filters.search || ""
-  );
-
-  // Keep local search synced if filters are reset externally
-  useEffect(() => {
-    setSearch(filters.search || "");
-  }, [filters.search]);
-
-  // Debounce search
-useEffect(() => {
-  const timer = setTimeout(() => {
-
-    if (search === filters.search) return;
+  const handleSelectChange = (field, value) => {
+    if (!onChange) return;
 
     onChange((prev) => ({
       ...prev,
-      search,
+      [field]: value,
       page: 1,
     }));
-
-  }, 500);
-
-  return () => clearTimeout(timer);
-
-}, [search]);
-
-  const handleSelectChange = (
-    field,
-    value
-  ) => {
-onChange((prev) => ({
-    ...prev,
-    [field]: value,
-    page:1,
-}));
   };
 
   return (
@@ -58,8 +36,6 @@ onChange((prev) => ({
 
       <div className="grid gap-4 lg:grid-cols-4">
 
-        {/* Search */}
-
         <div className="relative lg:col-span-2">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -69,18 +45,16 @@ onChange((prev) => ({
           <input
             type="text"
             placeholder="Search events..."
-            value={search}
+            value={filters.search ?? ""}
             onChange={(e) =>
-              setSearch(e.target.value)
+              handleSelectChange("search", e.target.value)
             }
             className="w-full rounded-xl border border-slate-300 py-3 pl-11 pr-4 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
         </div>
 
-        {/* Type */}
-
         <select
-          value={filters.type}
+          value={filters.type ?? ""}
           onChange={(e) =>
             handleSelectChange(
               "type",
@@ -89,23 +63,15 @@ onChange((prev) => ({
           }
           className="rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         >
-          <option value="">
-            All Types
-          </option>
-
-          <option value="EVENT">
-            Events
-          </option>
-
+          <option value="">All Types</option>
+          <option value="EVENT">Events</option>
           <option value="ACHIEVEMENT">
             Achievements
           </option>
         </select>
 
-        {/* Status */}
-
         <select
-          value={filters.status}
+          value={filters.status ?? ""}
           onChange={(e) =>
             handleSelectChange(
               "status",
@@ -114,18 +80,13 @@ onChange((prev) => ({
           }
           className="rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         >
-          <option value="">
-            All Status
-          </option>
-
+          <option value="">All Status</option>
           <option value="UPCOMING">
             Upcoming
           </option>
-
           <option value="ONGOING">
             Ongoing
           </option>
-
           <option value="COMPLETED">
             Completed
           </option>

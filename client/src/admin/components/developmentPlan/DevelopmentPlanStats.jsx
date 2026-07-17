@@ -1,9 +1,10 @@
 import {
   FileText,
-  Clock3,
-  CheckCircle2,
+  FlaskConical,
   Globe,
+  Layers3,
 } from "lucide-react";
+import { useMemo } from "react";
 
 const StatCard = ({
   icon,
@@ -12,65 +13,58 @@ const StatCard = ({
   iconBg,
   iconColor,
 }) => (
-  <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-
+  <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
     <div className="flex items-center justify-between">
-
       <div>
-
-        <p className="text-sm text-slate-500">
-          {title}
-        </p>
-
-        <h2 className="text-3xl font-bold mt-2">
-          {value}
-        </h2>
-
+        <p className="text-sm text-slate-500">{title}</p>
+        <h2 className="mt-2 text-3xl font-bold">{value}</h2>
       </div>
 
       <div
-        className={`w-14 h-14 rounded-xl flex items-center justify-center ${iconBg}`}
+        className={`flex h-14 w-14 items-center justify-center rounded-xl ${iconBg}`}
       >
-        <div className={iconColor}>
-          {icon}
-        </div>
+        <div className={iconColor}>{icon}</div>
       </div>
-
     </div>
-
   </div>
 );
 
-const DevelopmentPlanStats = ({
-  plans = [],
-}) => {
-
-  const total =
-    plans.length;
-
-  const inProgress =
-    plans.filter(
-      (plan) =>
-        plan.status ===
-        "IN_PROGRESS"
+const DevelopmentPlanStats = ({ plans = [] }) => {
+  const {
+    total,
+    sectors,
+    technologies,
+    published,
+  } = useMemo(() => {
+    const totalPlans = plans.length;
+    const sectorCount = plans.reduce(
+      (sum, plan) => sum + (plan.sectors?.length || 0),
+      0
+    );
+    const technologyCount = plans.reduce(
+      (sum, plan) =>
+        sum +
+        (plan.sectors || []).reduce(
+          (sectorSum, sector) =>
+            sectorSum + (sector.technologies?.length || 0),
+          0
+        ),
+      0
+    );
+    const publishedCount = plans.filter(
+      (plan) => plan.isPublished
     ).length;
 
-  const completed =
-    plans.filter(
-      (plan) =>
-        plan.status ===
-        "COMPLETED"
-    ).length;
-
-  const published =
-    plans.filter(
-      (plan) =>
-        plan.isPublished
-    ).length;
+    return {
+      total: totalPlans,
+      sectors: sectorCount,
+      technologies: technologyCount,
+      published: publishedCount,
+    };
+  }, [plans]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
         title="Total Plans"
         value={total}
@@ -80,19 +74,19 @@ const DevelopmentPlanStats = ({
       />
 
       <StatCard
-        title="In Progress"
-        value={inProgress}
-        icon={<Clock3 size={26} />}
-        iconBg="bg-yellow-100"
-        iconColor="text-yellow-600"
+        title="Sectors"
+        value={sectors}
+        icon={<Layers3 size={26} />}
+        iconBg="bg-emerald-100"
+        iconColor="text-emerald-600"
       />
 
       <StatCard
-        title="Completed"
-        value={completed}
-        icon={<CheckCircle2 size={26} />}
-        iconBg="bg-green-100"
-        iconColor="text-green-600"
+        title="Technologies"
+        value={technologies}
+        icon={<FlaskConical size={26} />}
+        iconBg="bg-amber-100"
+        iconColor="text-amber-600"
       />
 
       <StatCard
@@ -102,7 +96,6 @@ const DevelopmentPlanStats = ({
         iconBg="bg-indigo-100"
         iconColor="text-indigo-600"
       />
-
     </div>
   );
 };

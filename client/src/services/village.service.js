@@ -104,37 +104,10 @@ export const getTechnologyMapping =
     return response.data.data;
   };
 
-export const getKnowledgeHub =
-  async (slug) => {
-    const response = await axios.get(
-      `${API}/knowledge-hub/slug/${slug}`
-    );
-
-    return response.data.data;
-  };
-
-export const getCurrentAffairs =
-  async (slug) => {
-    const response = await axios.get(
-      `${API}/current-affairs/slug/${slug}`
-    );
-
-    return response.data.data;
-  };
-
 export const getVillageEvents =
   async (slug) => {
     const response = await axios.get(
       `${API}/events/slug/${slug}`
-    );
-
-    return response.data.data;
-  };
-
-export const getTraditionalFood =
-  async (slug) => {
-    const response = await axios.get(
-      `${API}/traditional-food/slug/${slug}`
     );
 
     return response.data.data;

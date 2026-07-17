@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import VillageProfileForm from "../components/villageProfile/VillageProfileForm";
@@ -14,22 +15,14 @@ import {
 export default function CreateVillageProfilePage() {
   const navigate = useNavigate();
 
-  const [villages, setVillages] = useState([]);
-
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadVillages();
-  }, []);
-
-  const loadVillages = async () => {
-    try {
-      const data = await getAllVillages();
-      setVillages(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const {
+    data: villages = [],
+  } = useQuery({
+    queryKey: ["admin-villages"],
+    queryFn: getAllVillages,
+  });
 
   const handleSubmit = async (formData) => {
     try {

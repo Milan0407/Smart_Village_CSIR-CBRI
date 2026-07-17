@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  useNavigate,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
   useParams,
 } from "react-router-dom";
 
 import DevelopmentPlanForm from "../components/developmentPlan/DevelopmentPlanForm";
+import SectorTechnologyManager from "../components/developmentPlan/SectorTechnologyManager";
 
 import {
   getDevelopmentPlanById,
@@ -12,47 +16,31 @@ import {
 } from "../services/developmentPlan.service";
 
 const EditDevelopmentPlanPage = () => {
-  const navigate = useNavigate();
-
   const { id } = useParams();
+  const queryClient = useQueryClient();
 
-  const [loading, setLoading] =
-    useState(true);
+  const [saving, setSaving] = useState(false);
+  const [localPlan, setLocalPlan] = useState(null);
 
-  const [plan, setPlan] =
-    useState(null);
+  const {
+    data: fetchedPlan,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["admin-development-plan", id],
+    queryFn: () => getDevelopmentPlanById(id),
+    enabled: !!id,
+  });
 
-  useEffect(() => {
-    loadDevelopmentPlan();
-  }, []);
-
-  const loadDevelopmentPlan =
-    async () => {
-      try {
-        const data =
-          await getDevelopmentPlanById(
-            id
-          );
-
-        setPlan(data);
-      } catch (error) {
-        console.error(error);
-
-        alert(
-          "Unable to load Development Plan."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const plan = localPlan || fetchedPlan;
 
   const handleSubmit = async (
     values
   ) => {
     try {
-      setLoading(true);
+      setSaving(true);
 
-      await updateDevelopmentPlan(
+      const updated = await updateDevelopmentPlan(
         id,
         values
       );
@@ -61,8 +49,22 @@ const EditDevelopmentPlanPage = () => {
         "Development Plan updated successfully."
       );
 
-      navigate(
-        "/admin/development-plans"
+      setLocalPlan(updated);
+      queryClient.setQueryData(
+        ["admin-development-plan", id],
+        updated
+      );
+      queryClient.setQueryData(
+        ["admin-development-plans"],
+        (current) =>
+          current
+            ? {
+                ...current,
+                plans: (current.plans || []).map((item) =>
+                  item._id === updated._id ? updated : item
+                ),
+              }
+            : current
       );
     } catch (error) {
       console.error(error);
@@ -72,7 +74,7 @@ const EditDevelopmentPlanPage = () => {
           "Update failed."
       );
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
@@ -80,6 +82,14 @@ const EditDevelopmentPlanPage = () => {
     return (
       <div className="flex justify-center items-center h-96">
         Loading...
+      </div>
+    );
+  }
+
+  if (error || !plan) {
+    return (
+      <div className="flex justify-center items-center h-96 text-red-600">
+        Unable to load Development Plan.
       </div>
     );
   }
@@ -102,7 +112,15 @@ const EditDevelopmentPlanPage = () => {
       <DevelopmentPlanForm
         initialValues={plan}
         onSubmit={handleSubmit}
+        loading={saving}
       />
+
+      <div className="mt-8">
+        <SectorTechnologyManager
+          plan={plan}
+          onPlanChange={setLocalPlan}
+        />
+      </div>
 
     </div>
   );

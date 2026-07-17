@@ -1,46 +1,28 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import {
-  getNavigation,
-} from "../services/navigation.service";
+import { getNavigation } from "../services/navigation.service";
 
 const useNavigation = () => {
-  const [items, setItems] =
-    useState([]);
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["navigation"],
+    queryFn: getNavigation,
 
-  const [loading, setLoading] =
-    useState(true);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-  const [error, setError] =
-    useState(null);
-
-  useEffect(() => {
-    const loadNavigation =
-      async () => {
-        try {
-          const data =
-            await getNavigation();
-
-          setItems(data);
-        } catch (err) {
-          setError(
-            err.message
-          );
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    loadNavigation();
-  }, []);
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   return {
-    items,
-    loading,
-    error,
+    items: data,
+    loading: isLoading,
+    error: error?.message || null,
   };
 };
 

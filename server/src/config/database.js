@@ -6,7 +6,7 @@ export const connectDB = async () => {
     const connectionInstance = await mongoose.connect(
       env.mongoUri,
       {
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 8000,
       }
     );
 

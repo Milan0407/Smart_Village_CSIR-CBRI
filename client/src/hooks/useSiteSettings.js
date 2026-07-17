@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import { getSiteSettings } from "../services/siteSettings.service";
 
 const defaultSettings = {
@@ -20,28 +21,23 @@ const defaultSettings = {
 };
 
 export default function useSiteSettings() {
-  const [settings, setSettings] = useState(defaultSettings);
-  const [loading, setLoading] = useState(true);
+  const {
+    data,
+    isLoading,
+  } = useQuery({
+    queryKey: ["site-settings"],
+    queryFn: getSiteSettings,
 
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const data = await getSiteSettings();
-        if (data) {
-          setSettings(data);
-        }
-      } catch (error) {
-        console.error("Failed to load site settings:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-    fetchSettings();
-  }, []);
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   return {
-    settings,
-    loading,
+    settings: data || defaultSettings,
+    loading: isLoading,
   };
 }

@@ -11,6 +11,12 @@ import {
   updateDevelopmentPlanSchema,
   developmentPlanIdSchema,
   villageSlugSchema,
+  sectorParamsSchema,
+  technologyParamsSchema,
+  createSectorSchema,
+  updateSectorSchema,
+  createTechnologySchema,
+  updateTechnologySchema,
 } from "./developmentPlan.validation.js";
 
 const router = Router();
@@ -64,6 +70,72 @@ router.post(
   authorize("SUPER_ADMIN", "ADMIN"),
   validate(createDevelopmentPlanSchema),
   developmentPlanController.create
+);
+
+/**
+ * Create sector
+ */
+router.post(
+  "/:id/sectors",
+  verifyJWT,
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(createSectorSchema),
+  developmentPlanController.addSector
+);
+
+/**
+ * Update sector
+ */
+router.patch(
+  "/:id/sectors/:sectorId",
+  verifyJWT,
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(updateSectorSchema),
+  developmentPlanController.editSector
+);
+
+/**
+ * Delete sector
+ */
+router.delete(
+  "/:id/sectors/:sectorId",
+  verifyJWT,
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(sectorParamsSchema),
+  developmentPlanController.removeSector
+);
+
+/**
+ * Create technology
+ */
+router.post(
+  "/:id/sectors/:sectorId/technologies",
+  verifyJWT,
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(createTechnologySchema),
+  developmentPlanController.addTechnology
+);
+
+/**
+ * Update technology
+ */
+router.patch(
+  "/:id/sectors/:sectorId/technologies/:technologyId",
+  verifyJWT,
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(updateTechnologySchema),
+  developmentPlanController.editTechnology
+);
+
+/**
+ * Delete technology
+ */
+router.delete(
+  "/:id/sectors/:sectorId/technologies/:technologyId",
+  verifyJWT,
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(technologyParamsSchema),
+  developmentPlanController.removeTechnology
 );
 
 /**

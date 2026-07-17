@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Menu, X, Languages } from "lucide-react";
+import {
+  Menu,
+  X,
+  Languages,
+  Shield,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 import useNavigation from "../../../hooks/useNavigation";
@@ -120,6 +125,32 @@ const Navbar = () => {
                 </button>
               </li>
 
+              <li>
+                <Link
+                  to="/admin/login"
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-md
+                    border
+                    border-blue-900/30
+                    px-3
+                    py-2
+                    text-sm
+                    font-semibold
+                    text-blue-900
+                    hover:bg-blue-900
+                    hover:text-white
+                    hover:border-blue-900
+                    transition-colors
+                  "
+                >
+                  <Shield size={16} />
+                  Admin Login
+                </Link>
+              </li>
+
             </ul>
           </nav>
 
@@ -202,6 +233,33 @@ const Navbar = () => {
                   <Languages size={18} />
                   Language
                 </button>
+              </li>
+
+              <li>
+                <Link
+                  to="/admin/login"
+                  onClick={() =>
+                    setMobileOpen(false)
+                  }
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                    py-3
+                    px-3
+                    rounded-lg
+                    border
+                    border-blue-900/30
+                    text-blue-900
+                    font-semibold
+                    hover:bg-blue-900
+                    hover:text-white
+                    transition-colors
+                  "
+                >
+                  <Shield size={18} />
+                  Admin Login
+                </Link>
               </li>
 
             </ul>

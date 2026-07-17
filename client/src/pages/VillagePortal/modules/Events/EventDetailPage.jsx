@@ -4,9 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Trophy,
-  CalendarDays,
-  MapPin,
-  User,
 } from "lucide-react";
 
 import * as eventService from "../../../../services/event.service";
@@ -15,6 +12,7 @@ import EventMeta from "./components/EventMeta";
 import EventGallery from "./components/EventGallery";
 import EventSidebar from "./components/EventSidebar";
 import EventCard from "./components/EventCard";
+import { getLocalizedText } from "./utils/eventText";
 
 const EventDetailPage = () => {
   const navigate = useNavigate();
@@ -86,7 +84,11 @@ const EventDetailPage = () => {
 
   const heroImage =
     event.coverImage?.url ||
+    event.coverImage?.secureUrl ||
     "https://placehold.co/1400x600?text=Event";
+  const title = getLocalizedText(event.title, "Event");
+  const summary = getLocalizedText(event.summary);
+  const description = getLocalizedText(event.description);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -97,7 +99,7 @@ const EventDetailPage = () => {
 
         <img
           src={heroImage}
-          alt={event.title}
+          alt={title}
           className="h-full w-full object-cover"
         />
 
@@ -124,7 +126,7 @@ const EventDetailPage = () => {
           </div>
 
           <h1 className="max-w-4xl text-5xl font-bold leading-tight">
-            {event.title}
+            {title}
           </h1>
 
           <EventMeta
@@ -146,7 +148,7 @@ const EventDetailPage = () => {
 
             {/* SUMMARY */}
 
-            {event.summary && (
+            {summary && (
               <div className="rounded-2xl bg-white p-8 shadow-sm">
 
                 <h2 className="mb-4 text-2xl font-bold text-slate-900">
@@ -154,7 +156,7 @@ const EventDetailPage = () => {
                 </h2>
 
                 <p className="text-lg leading-8 text-slate-700">
-                  {event.summary}
+                  {summary}
                 </p>
 
               </div>
@@ -170,7 +172,7 @@ const EventDetailPage = () => {
 
               <div className="space-y-6 text-lg leading-8 text-slate-700">
 
-                {event.description
+                {description
                   ?.split("\n")
                   .map((paragraph, index) => (
                     <p key={index}>

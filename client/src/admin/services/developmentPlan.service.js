@@ -145,3 +145,120 @@ export const togglePublishDevelopmentPlan =
 
     return response.data.data;
   };
+
+/*
+====================================================
+Sector Management
+====================================================
+*/
+
+export const createSector = async (
+  planId,
+  payload
+) => {
+  const response = await axios.post(
+    `${API_URL}/${planId}/sectors`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const updateSector = async (
+  planId,
+  sectorId,
+  payload
+) => {
+  const response = await axios.patch(
+    `${API_URL}/${planId}/sectors/${sectorId}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const deleteSector = async (
+  planId,
+  sectorId
+) => {
+  const response = await axios.delete(
+    `${API_URL}/${planId}/sectors/${sectorId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+/*
+====================================================
+Technology Management
+====================================================
+*/
+
+export const createTechnology = async (
+  planId,
+  sectorId,
+  payload
+) => {
+  const response = await axios.post(
+    `${API_URL}/${planId}/sectors/${sectorId}/technologies`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const updateTechnology = async (
+  planId,
+  sectorId,
+  technologyId,
+  payload
+) => {
+  const response = await axios.patch(
+    `${API_URL}/${planId}/sectors/${sectorId}/technologies/${technologyId}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const deleteTechnology = async (
+  planId,
+  sectorId,
+  technologyId
+) => {
+  const response = await axios.delete(
+    `${API_URL}/${planId}/sectors/${sectorId}/technologies/${technologyId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};

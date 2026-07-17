@@ -2,6 +2,131 @@ import VillageProfile from "../../models/VillageProfile.model.js";
 import Village from "../../models/Village.model.js";
 import ApiError from "../../utils/ApiError.js";
 
+const allowedProfileFields = [
+  "village",
+  "heroTitle",
+  "heroSubtitle",
+  "heroImage",
+  "overview",
+  "aboutHeading",
+  "aboutSubtitle",
+  "galleryImages",
+  "contactPersons",
+  "sortOrder",
+  "isPublished",
+];
+
+const legacyContactFields = [
+  "contactPerson",
+  "designation",
+  "phone",
+  "alternatePhone",
+  "email",
+  "officeAddress",
+  "gramPanchayat",
+  "block",
+  "district",
+  "state",
+  "pinCode",
+];
+
+const buildLegacyContactPerson = (payload = {}) => {
+  const hasLegacyContact = legacyContactFields.some((field) =>
+    Boolean(payload[field])
+  );
+
+  if (!hasLegacyContact) {
+    return null;
+  }
+
+  return {
+    name: payload.contactPerson || "",
+    designation: payload.designation || "",
+    phone: payload.phone || "",
+    alternatePhone: payload.alternatePhone || "",
+    email: payload.email || "",
+    officeAddress: payload.officeAddress || "",
+    gramPanchayat: payload.gramPanchayat || "",
+    block: payload.block || "",
+    district: payload.district || "",
+    state: payload.state || "",
+    pinCode: payload.pinCode || "",
+    displayOrder: 0,
+  };
+};
+
+const sanitizeProfilePayload = (payload = {}) => {
+  const cleanPayload = allowedProfileFields.reduce((clean, field) => {
+    if (Object.prototype.hasOwnProperty.call(payload, field)) {
+      clean[field] = payload[field];
+    }
+
+    return clean;
+  }, {});
+
+  if (Array.isArray(cleanPayload.galleryImages)) {
+    cleanPayload.galleryImages =
+      cleanPayload.galleryImages
+        .map((item, index) => {
+          if (typeof item === "string") {
+            return {
+              image: item,
+              caption: "",
+              sortOrder: index,
+            };
+          }
+
+          return {
+            image: item.image,
+            caption: item.caption || "",
+            sortOrder: Number.isFinite(Number(item.sortOrder))
+              ? Number(item.sortOrder)
+              : index,
+          };
+        })
+        .filter((item) => item.image);
+  }
+
+  if (Array.isArray(cleanPayload.contactPersons)) {
+    cleanPayload.contactPersons =
+      cleanPayload.contactPersons
+        .map((contact, index) => ({
+          name: contact.name || "",
+          designation: contact.designation || "",
+          phone: contact.phone || "",
+          alternatePhone: contact.alternatePhone || "",
+          email: contact.email || "",
+          officeAddress: contact.officeAddress || "",
+          gramPanchayat: contact.gramPanchayat || "",
+          block: contact.block || "",
+          district: contact.district || "",
+          state: contact.state || "",
+          pinCode: contact.pinCode || "",
+          displayOrder: Number.isFinite(Number(contact.displayOrder))
+            ? Number(contact.displayOrder)
+            : index,
+        }))
+        .filter((contact) =>
+          [
+            contact.name,
+            contact.designation,
+            contact.phone,
+            contact.alternatePhone,
+            contact.email,
+            contact.officeAddress,
+          ].some(Boolean)
+        );
+  } else {
+    const legacyContact = buildLegacyContactPerson(payload);
+
+    if (legacyContact) {
+      cleanPayload.contactPersons = [legacyContact];
+    }
+  }
+
+  return cleanPayload;
+};
+
 /*
 =====================================
 Create Village Profile
@@ -12,8 +137,10 @@ export const createVillageProfile = async (
   payload,
   adminId
 ) => {
+  const cleanPayload = sanitizeProfilePayload(payload);
+
   // Check if village exists
-  const village = await Village.findById(payload.village);
+  const village = await Village.findById(cleanPayload.village);
 
   if (!village) {
     throw new ApiError(404, "Village not found.");
@@ -21,7 +148,7 @@ export const createVillageProfile = async (
 
   // One profile per village
   const existingProfile = await VillageProfile.findOne({
-    village: payload.village,
+    village: cleanPayload.village,
   });
 
   if (existingProfile) {
@@ -32,7 +159,7 @@ export const createVillageProfile = async (
   }
 
   const profile = await VillageProfile.create({
-    ...payload,
+    ...cleanPayload,
     createdBy: adminId,
   });
 
@@ -47,7 +174,7 @@ export const createVillageProfile = async (
       path: "heroImage",
     },
     {
-      path: "galleryImages",
+      path: "galleryImages.image",
     },
   ]);
 };
@@ -68,7 +195,7 @@ export const getAllVillageProfiles =
         },
       })
       .populate("heroImage")
-      .populate("galleryImages")
+      .populate("galleryImages.image")
       .sort({
         sortOrder: 1,
         createdAt: 1,
@@ -91,7 +218,7 @@ export const getVillageProfile = async (id) => {
       },
     })
     .populate("heroImage")
-    .populate("galleryImages");
+    .populate("galleryImages.image");
 
   if (!profile) {
     throw new ApiError(
@@ -124,7 +251,7 @@ export const getVillageProfileByVillage =
           },
         })
         .populate("heroImage")
-        .populate("galleryImages");
+        .populate("galleryImages.image");
 
     if (!profile) {
       throw new ApiError(
@@ -175,6 +302,7 @@ export const updateVillageProfile =
     payload,
     adminId
   ) => {
+    const cleanPayload = sanitizeProfilePayload(payload);
     const profile =
       await VillageProfile.findById(id);
 
@@ -187,13 +315,13 @@ export const updateVillageProfile =
 
     // Prevent assigning the same village to two profiles
     if (
-      payload.village &&
-      payload.village.toString() !==
+      cleanPayload.village &&
+      cleanPayload.village.toString() !==
         profile.village.toString()
     ) {
       const duplicate =
         await VillageProfile.findOne({
-          village: payload.village,
+          village: cleanPayload.village,
           _id: { $ne: id },
         });
 
@@ -206,7 +334,7 @@ export const updateVillageProfile =
 
       const village =
         await Village.findById(
-          payload.village
+          cleanPayload.village
         );
 
       if (!village) {
@@ -217,7 +345,7 @@ export const updateVillageProfile =
       }
     }
 
-    Object.assign(profile, payload);
+    Object.assign(profile, cleanPayload);
 
     profile.updatedBy = adminId;
 
@@ -234,7 +362,7 @@ export const updateVillageProfile =
         path: "heroImage",
       },
       {
-        path: "galleryImages",
+        path: "galleryImages.image",
       },
     ]);
   };

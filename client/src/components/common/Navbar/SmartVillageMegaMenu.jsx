@@ -4,25 +4,29 @@ import { ChevronRight } from "lucide-react";
 
 export default function SmartVillageMegaMenu({
   states = [],
-  villages = {},
   loadVillages,
 }) {
-  const [activeState, setActiveState] =
-    useState(null);
+  const [activeState, setActiveState] = useState(null);
+  const [currentVillages, setCurrentVillages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-const handleStateHover = async (state) => {
-  console.log("Hovered State:", state);
+  const handleStateHover = async (state) => {
+    // Prevent unnecessary refetches
+    if (activeState === state.slug) return;
 
-  setActiveState(state.slug);
+    setActiveState(state.slug);
+    setLoading(true);
 
-  if (!villages[state.slug]) {
-    const data = await loadVillages(state.slug);
-
-    console.log("Loaded Villages:", data);
-  }
-
-  console.log("Current Villages:", villages);
-};
+    try {
+      const villages = await loadVillages(state.slug);
+      setCurrentVillages(villages || []);
+    } catch (error) {
+      console.error("Failed to load villages:", error);
+      setCurrentVillages([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -42,17 +46,14 @@ const handleStateHover = async (state) => {
         z-50
       "
     >
-      {/* States */}
+      {/* ================= STATES ================= */}
 
       <div className="w-64 border-r bg-slate-50">
-
         {states.map((state) => (
-
           <button
             key={state._id}
-            onMouseEnter={() =>
-              handleStateHover(state)
-            }
+            type="button"
+            onMouseEnter={() => handleStateHover(state)}
             className={`
               w-full
               flex
@@ -61,8 +62,8 @@ const handleStateHover = async (state) => {
               px-5
               py-3
               text-left
-              hover:bg-white
               transition
+              hover:bg-white
 
               ${
                 activeState === state.slug
@@ -75,47 +76,46 @@ const handleStateHover = async (state) => {
 
             <ChevronRight size={16} />
           </button>
-
         ))}
-
       </div>
 
-      {/* Villages */}
+      {/* ================= VILLAGES ================= */}
 
       <div className="w-80 bg-white">
-
         {!activeState && (
           <div className="p-8 text-slate-500">
             Select a state
           </div>
         )}
 
-        {activeState &&
-          (villages[
-            activeState
-          ] || []).map((village) => (
+        {loading && (
+          <div className="p-8 text-slate-500">
+            Loading villages...
+          </div>
+        )}
 
-<Link
-  key={village._id}
-  to={`/village/${village.slug}`}
-  className="block px-5 py-3 hover:bg-slate-100 transition"
->
-  {village.name?.en || village.name?.regional || "Unnamed Village"}
-</Link>
-
+        {!loading &&
+          currentVillages.map((village) => (
+            <Link
+              key={village._id}
+              to={`/village/${village.slug}`}
+              className="block px-5 py-3 transition hover:bg-slate-100"
+            >
+              {village.name?.en ||
+                village.name?.regional ||
+                village.name ||
+                "Unnamed Village"}
+            </Link>
           ))}
 
-        {activeState &&
-          villages[
-            activeState
-          ]?.length === 0 && (
+        {!loading &&
+          activeState &&
+          currentVillages.length === 0 && (
             <div className="p-8 text-slate-500">
               No villages available.
             </div>
           )}
-
       </div>
-
     </div>
   );
 }

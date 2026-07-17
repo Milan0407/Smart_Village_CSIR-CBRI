@@ -271,7 +271,7 @@ Each village gets a self-contained micro-portal with 11 sub-modules:
 
 | Module | Path | Description |
 |---|---|---|
-| Village Info | `/` (index) | Hero, overview, history, highlights, gallery |
+| Village Info | `/` (index) | Hero, overview, event-backed highlights, gallery, contact information |
 | Development Plan | `/development-plan` | List of ongoing/future plans |
 | Development Plan Detail | `/development-plan/:id` | Full plan details |
 | Current Affairs | `/current-affairs` | Local village announcements |
@@ -298,7 +298,7 @@ The platform uses **15+ Mongoose models** in MongoDB Atlas:
 |---|---|
 | **Admin** | username, email, password (bcrypt, 12 rounds), role (SUPER_ADMIN/ADMIN), assignedVillages[], refreshToken, loginAttempts, lockUntil |
 | **Village** | name (en/regional), slug, state (ref), district, block, gramPanchayat, pinCode, location (GeoJSON 2dsphere Point), coverImage, status (ACTIVE/INACTIVE/ARCHIVED) |
-| **VillageProfile** | village (ref, unique), heroTitle, heroSubtitle, heroImage, overview, history, geography, climate, culture, strengths, challenges, opportunities, highlights[], galleryImages[], contactPerson, contactNumber, email, website |
+| **VillageProfile** | village (ref, unique), heroTitle, heroSubtitle, heroImage, overview, galleryImages[], contactPerson, designation, phone, alternatePhone, email, officeAddress, gramPanchayat, block, district, state, pinCode |
 | **State** | name, code, region |
 | **News** | title, slug, summary, content (rich text), featuredImage, category (GENERAL/EVENT/ANNOUNCEMENT/SUCCESS_STORY/POLICY), status (DRAFT/PUBLISHED/ARCHIVED), isFeatured, publishedAt |
 | **SuccessStory** | title, slug, village (ref SuccessStoryVillage), summary, story, impact, beneficiaries, featuredImage, galleryImages[], videoUrl, isFeatured, status |

@@ -35,6 +35,7 @@ export const getEvents = async (query = {}) => {
     type,
     status,
     featured,
+    showOnVillageInfo,
     published,
     sortBy = "eventDate",
     sortOrder = "desc",
@@ -75,18 +76,31 @@ export const getEvents = async (query = {}) => {
     filter.isFeatured = featured === "true";
   }
 
+  if (showOnVillageInfo !== undefined) {
+    filter.showOnVillageInfo =
+      showOnVillageInfo === "true";
+  }
+
   if (published !== undefined) {
     filter.published = published === "true";
   }
 
   const skip = (Number(page) - 1) * Number(limit);
 
+  const sort =
+    showOnVillageInfo === "true"
+      ? {
+          highlightOrder: 1,
+          eventDate: -1,
+        }
+      : {
+          [sortBy]: sortOrder === "asc" ? 1 : -1,
+        };
+
   const [events, total] = await Promise.all([
     Event.find(filter)
       .populate("village", "name slug")
-      .sort({
-        [sortBy]: sortOrder === "asc" ? 1 : -1,
-      })
+      .sort(sort)
       .skip(skip)
       .limit(Number(limit))
       .lean(),

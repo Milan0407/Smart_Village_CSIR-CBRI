@@ -1,9 +1,5 @@
-import { Link } from "react-router-dom";
 import {
   MapPin,
-  ArrowRight,
-  Building2,
-  Landmark,
 } from "lucide-react";
 
 const VillageHero = ({
@@ -16,96 +12,44 @@ const VillageHero = ({
     "https://placehold.co/1600x600";
 
   const title =
-    profile?.heroTitle ||
     village?.name?.en ||
+    profile?.heroTitle ||
     "Village";
-
-  const subtitle =
-    profile?.heroSubtitle ||
-    "CSIR Smart Village";
 
   return (
     <>
-      <section className="relative h-[520px]">
+      <section className="relative min-h-[420px] overflow-hidden bg-slate-950 sm:min-h-[460px] lg:min-h-[500px]">
 
         {/* Background */}
 
         <img
           src={heroImage}
           alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
         {/* Overlay */}
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/18 via-transparent to-slate-950/35" />
 
         {/* Content */}
 
-        <div className="relative z-10 max-w-7xl mx-auto h-full px-6">
+        <div className="relative z-10 mx-auto min-h-[420px] max-w-7xl px-6 py-6 sm:min-h-[460px] lg:min-h-[500px]">
 
-          <div className="flex items-center h-full">
+          <div className="absolute right-6 top-6 rounded-full border border-white/25 bg-slate-950/45 px-4 py-2 text-white shadow-sm">
+            <div className="flex items-center gap-2 text-sm font-semibold">
 
-            <div className="max-w-3xl text-white">
+              <MapPin size={18} />
 
-              <span className="inline-flex items-center bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm mb-6">
+              <span>
 
-                CSIR Smart Village
+                {[village?.district, village?.state?.name]
+                  .filter(Boolean)
+                  .join(", ")}
 
               </span>
 
-              <h1 className="text-5xl font-bold leading-tight">
-
-                {title}
-
-              </h1>
-
-              <h2 className="mt-3 text-2xl text-slate-200">
-
-                {subtitle}
-
-              </h2>
-
-              <div className="flex items-center gap-2 mt-5">
-
-                <MapPin size={18} />
-
-                <span>
-
-                  {village?.district},{" "}
-                  {village?.state?.name}
-
-                </span>
-
-              </div>
-
-              <p className="mt-8 text-lg leading-8 text-slate-200">
-
-                {profile?.overview}
-
-              </p>
-
-              <div className="flex gap-4 mt-10">
-
-                <Link
-                  to={`/village/${village.slug}`}
-                  className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-lg font-medium flex items-center gap-2"
-                >
-                  Explore Village
-                  <ArrowRight size={18} />
-                </Link>
-
-                <Link
-                  to={`/village/${village.slug}/development-plan`}
-                  className="border border-white hover:bg-white hover:text-slate-900 transition px-6 py-3 rounded-lg font-medium"
-                >
-                  Development Plan
-                </Link>
-
-              </div>
-
             </div>
-
           </div>
 
         </div>

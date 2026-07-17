@@ -17,7 +17,7 @@ const cards = [
   },
   {
     title: "Village Profiles",
-    description: "Manage hero section, overview, history and gallery.",
+    description: "Manage hero, overview, event-backed highlights, gallery and contact information.",
     path: "/admin/village-profiles",
     icon: "📄",
     category: "Village Content",
@@ -47,13 +47,6 @@ const cards = [
     title: "Technology Mapping",
     description: "Manage technologies implemented in villages.",
     path: "/admin/technology-mapping",
-    icon: "⚙️",
-    category: "Development",
-  },
-  {
-    title: "Knowledge Hub",
-    description: "Reports, manuals, documents and resources.",
-    path: "/admin/knowledge-hub",
     icon: "📚",
     category: "Development",
   },
@@ -65,24 +58,10 @@ const cards = [
     category: "Development",
   },
   {
-    title: "Current Affairs",
-    description: "Village announcements and latest updates.",
-    path: "/admin/current-affairs",
-    icon: "📰",
-    category: "Development",
-  },
-  {
     title: "Events",
     description: "Village events and achievements.",
     path: "/admin/events",
     icon: "🎉",
-    category: "Development",
-  },
-  {
-    title: "Traditional Food",
-    description: "Manage local food and recipes.",
-    path: "/admin/traditional-food",
-    icon: "🍲",
     category: "Development",
   },
   {
@@ -140,7 +119,7 @@ export default function SmartVillageDashboard() {
                   to={card.path}
                   className="rounded-xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="text-4xl">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-lg font-bold text-blue-700">
                     {card.icon}
                   </div>
 

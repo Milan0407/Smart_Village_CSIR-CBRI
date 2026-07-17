@@ -40,6 +40,14 @@ export const eventFormSchema = z.object({
 
   isFeatured: z.boolean(),
 
+  showOnVillageInfo: z.boolean(),
+
+  highlightOrder: z
+    .coerce
+    .number()
+    .int()
+    .min(0, "Highlight order cannot be negative."),
+
   published: z.boolean(),
 
   seoTitle: z.string().optional(),

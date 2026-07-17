@@ -32,6 +32,8 @@ const defaultValues = {
   description: "",
 
   isFeatured: false,
+  showOnVillageInfo: false,
+  highlightOrder: 0,
   published: true,
 
   seoTitle: "",
@@ -120,8 +122,12 @@ const EventForm = ({
             className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {saving
-              ? "Creating Event..."
-              : "Create Event"}
+              ? isEdit
+                ? "Updating Event..."
+                : "Creating Event..."
+              : isEdit
+                ? "Update Event"
+                : "Create Event"}
           </button>
         </div>
       </form>

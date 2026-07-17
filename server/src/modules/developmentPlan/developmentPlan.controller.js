@@ -11,6 +11,12 @@ import {
   getDevelopmentPlansByVillage,
   getAllDevelopmentPlans,
   togglePublishStatus,
+  createSector,
+  updateSector,
+  deleteSector,
+  createTechnology,
+  updateTechnology,
+  deleteTechnology,
 } from "./developmentPlan.service.js";
 
 /*
@@ -180,3 +186,128 @@ export const togglePublish =
       )
     );
   });
+
+/*
+=====================================================
+Sector Management
+=====================================================
+*/
+
+export const addSector = asyncHandler(
+  async (req, res) => {
+    const plan = await createSector(
+      req.params.id,
+      req.body,
+      req.admin._id
+    );
+
+    return res.status(201).json(
+      new ApiResponse(
+        201,
+        plan,
+        "Sector created successfully."
+      )
+    );
+  }
+);
+
+export const editSector = asyncHandler(
+  async (req, res) => {
+    const plan = await updateSector(
+      req.params.id,
+      req.params.sectorId,
+      req.body,
+      req.admin._id
+    );
+
+    return res.json(
+      new ApiResponse(
+        200,
+        plan,
+        "Sector updated successfully."
+      )
+    );
+  }
+);
+
+export const removeSector = asyncHandler(
+  async (req, res) => {
+    const plan = await deleteSector(
+      req.params.id,
+      req.params.sectorId,
+      req.admin._id
+    );
+
+    return res.json(
+      new ApiResponse(
+        200,
+        plan,
+        "Sector deleted successfully."
+      )
+    );
+  }
+);
+
+/*
+=====================================================
+Technology Management
+=====================================================
+*/
+
+export const addTechnology = asyncHandler(
+  async (req, res) => {
+    const plan = await createTechnology(
+      req.params.id,
+      req.params.sectorId,
+      req.body,
+      req.admin._id
+    );
+
+    return res.status(201).json(
+      new ApiResponse(
+        201,
+        plan,
+        "Technology created successfully."
+      )
+    );
+  }
+);
+
+export const editTechnology = asyncHandler(
+  async (req, res) => {
+    const plan = await updateTechnology(
+      req.params.id,
+      req.params.sectorId,
+      req.params.technologyId,
+      req.body,
+      req.admin._id
+    );
+
+    return res.json(
+      new ApiResponse(
+        200,
+        plan,
+        "Technology updated successfully."
+      )
+    );
+  }
+);
+
+export const removeTechnology = asyncHandler(
+  async (req, res) => {
+    const plan = await deleteTechnology(
+      req.params.id,
+      req.params.sectorId,
+      req.params.technologyId,
+      req.admin._id
+    );
+
+    return res.json(
+      new ApiResponse(
+        200,
+        plan,
+        "Technology deleted successfully."
+      )
+    );
+  }
+);

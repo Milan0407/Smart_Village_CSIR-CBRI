@@ -26,6 +26,10 @@ export const mapEventFormToPayload = (formData) => {
 
     isFeatured: formData.isFeatured,
 
+    showOnVillageInfo: formData.showOnVillageInfo,
+
+    highlightOrder: Number(formData.highlightOrder || 0),
+
     published: formData.published,
 
     coverImage: formData.featuredImage,
@@ -70,6 +74,12 @@ export const mapEventToForm = (event) => {
     location: event.location || "",
 
     isFeatured: event.isFeatured ?? false,
+
+    showOnVillageInfo:
+      event.showOnVillageInfo ?? false,
+
+    highlightOrder:
+      event.highlightOrder ?? 0,
 
     published: event.published ?? true,
 

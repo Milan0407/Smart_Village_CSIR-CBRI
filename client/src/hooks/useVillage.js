@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   getVillageBySlug,
@@ -6,48 +6,43 @@ import {
 } from "../services/village.service";
 
 export default function useVillage(slug) {
-  const [village, setVillage] = useState(null);
-  const [profile, setProfile] = useState(null);
+  const villageQuery = useQuery({
+    queryKey: ["village", slug],
+    queryFn: () => getVillageBySlug(slug),
+    enabled: !!slug,
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-  useEffect(() => {
-    if (!slug) return;
+    refetchOnWindowFocus: false,
+  });
 
-    loadVillage();
-  }, [slug]);
+  const profileQuery = useQuery({
+    queryKey: ["village-profile", slug],
+    queryFn: () => getVillageProfile(slug),
+    enabled: !!slug,
 
-  const loadVillage = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-      const [villageData, profileData] =
-        await Promise.all([
-          getVillageBySlug(slug),
-          getVillageProfile(slug),
-        ]);
-
-      setVillage(villageData);
-      setProfile(profileData);
-    } catch (err) {
-      console.error(err);
-
-      setError(err);
-
-      setVillage(null);
-      setProfile(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+    refetchOnWindowFocus: false,
+  });
 
   return {
-    village,
-    profile,
-    loading,
-    error,
-    refresh: loadVillage,
+    village: villageQuery.data ?? null,
+    profile: profileQuery.data ?? null,
+
+    loading:
+      villageQuery.isLoading ||
+      profileQuery.isLoading,
+
+    error:
+      villageQuery.error ||
+      profileQuery.error,
+
+    refresh: () => {
+      villageQuery.refetch();
+      profileQuery.refetch();
+    },
   };
 }

@@ -1,52 +1,16 @@
 import { Search } from "lucide-react";
 
-const categories = [
-  "ALL",
-  "INFRASTRUCTURE",
-  "WATER",
-  "ENERGY",
-  "HEALTH",
-  "EDUCATION",
-  "AGRICULTURE",
-  "DIGITAL",
-  "SANITATION",
-  "SKILL_DEVELOPMENT",
-  "OTHER",
-];
-
-const statuses = [
-  "ALL",
-  "PLANNED",
-  "IN_PROGRESS",
-  "COMPLETED",
-  "ON_HOLD",
-  "CANCELLED",
-];
-
 const DevelopmentPlanFilters = ({
   search,
   setSearch,
-
   village,
   setVillage,
-
-  category,
-  setCategory,
-
-  status,
-  setStatus,
-
   villages = [],
 }) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-
-        {/* Search */}
-
-        <div className="relative">
-
+    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="relative lg:col-span-2">
           <Search
             size={18}
             className="absolute left-3 top-3 text-slate-400"
@@ -54,86 +18,30 @@ const DevelopmentPlanFilters = ({
 
           <input
             type="text"
-            placeholder="Search development plans..."
+            placeholder="Search technology deployment plans..."
             value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-            className="
-              w-full
-              border
-              rounded-lg
-              pl-10
-              pr-4
-              py-2.5
-            "
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-slate-300 py-2.5 pl-10 pr-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
-
         </div>
-
-        {/* Village */}
 
         <select
           value={village}
-          onChange={(e) =>
-            setVillage(e.target.value)
-          }
-          className="border rounded-lg px-3 py-2.5"
+          onChange={(e) => setVillage(e.target.value)}
+          className="rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         >
-          <option value="ALL">
-            All Villages
-          </option>
+          <option value="ALL">All Villages</option>
 
           {villages.map((item) => (
             <option
               key={item._id}
               value={item._id}
             >
-              {item.name.en}
+              {item.name?.en || item.name}
             </option>
           ))}
         </select>
-
-        {/* Category */}
-
-        <select
-          value={category}
-          onChange={(e) =>
-            setCategory(e.target.value)
-          }
-          className="border rounded-lg px-3 py-2.5"
-        >
-          {categories.map((item) => (
-            <option
-              key={item}
-              value={item}
-            >
-              {item.replaceAll("_", " ")}
-            </option>
-          ))}
-        </select>
-
-        {/* Status */}
-
-        <select
-          value={status}
-          onChange={(e) =>
-            setStatus(e.target.value)
-          }
-          className="border rounded-lg px-3 py-2.5"
-        >
-          {statuses.map((item) => (
-            <option
-              key={item}
-              value={item}
-            >
-              {item.replaceAll("_", " ")}
-            </option>
-          ))}
-        </select>
-
       </div>
-
     </div>
   );
 };

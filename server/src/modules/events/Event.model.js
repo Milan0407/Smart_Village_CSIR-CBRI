@@ -114,6 +114,18 @@ const EventSchema = new mongoose.Schema(
       index: true,
     },
 
+    showOnVillageInfo: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+
+    highlightOrder: {
+      type: Number,
+      default: 0,
+      index: true,
+    },
+
     published: {
       type: Boolean,
       default: true,
@@ -183,6 +195,13 @@ EventSchema.index({
 EventSchema.index({
   village: 1,
   isFeatured: 1,
+});
+
+EventSchema.index({
+  village: 1,
+  showOnVillageInfo: 1,
+  highlightOrder: 1,
+  eventDate: -1,
 });
 
 EventSchema.index({

@@ -1,87 +1,78 @@
-import { useCallback, useEffect, useState } from "react";
-
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import * as eventService from "../services/event.service";
 
-const usePublicEvents = () => {
-  const [events, setEvents] = useState([]);
-  const [featuredEvent, setFeaturedEvent] =
-    useState(null);
-
-  const [statistics, setStatistics] =
-    useState(null);
-
-  const [pagination, setPagination] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] = useState("");
-
-  const [filters, setFilters] = useState({
+const DEFAULT_FILTERS = {
   search: "",
   type: "",
   status: "",
   page: 1,
-});
+};
 
-const fetchEvents = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError("");
+const usePublicEvents = (initialFilters = {}) => {
+  const [filters, setFilters] = useState(() => ({
+    ...DEFAULT_FILTERS,
+    ...initialFilters,
+  }));
 
-      const [
-        eventsResponse,
-        featuredResponse,
-        statisticsResponse,
-      ] = await Promise.all([
-         eventService.getPublicEvents(filters),
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["public-events", filters],
 
-        eventService.getFeaturedEvent(),
+    queryFn: async () => {
+      const [eventsResponse, statisticsResponse] =
+        await Promise.all([
+          eventService.getPublicEvents(filters),
+          eventService.getEventStatistics(),
+        ]);
 
-        eventService.getEventStatistics(),
-      ]);
+      const eventsPayload = eventsResponse.data || {};
+      const events = eventsPayload.data || [];
+      const featuredEvent =
+        events.find((event) => event.isFeatured) || null;
 
-      setEvents(eventsResponse.data.data);
+      return {
+        events,
+        pagination:
+          eventsPayload.pagination || null,
 
-      setPagination(
-        eventsResponse.data.pagination
-      );
+        featuredEvent,
 
-      setFeaturedEvent(
-        featuredResponse.data.data
-      );
+        statistics:
+          statisticsResponse.data || {},
+      };
+    },
 
-      setStatistics(
-        statisticsResponse.data
-      );
-    } catch (err) {
-      console.error(err);
-
-
-      setError(
-        err?.response?.data?.message ||
-          "Failed to load events."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [filters]);
-
-  useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 30,
+    refetchOnWindowFocus: false,
+  });
 
   return {
-    events,
-    featuredEvent,
-    statistics,
-    pagination,
-    loading,
-    error,
+    events: data?.events || [],
+    featuredEvent:
+      data?.featuredEvent || null,
+
+    statistics:
+      data?.statistics || {},
+
+    pagination:
+      data?.pagination || null,
+
     filters,
     setFilters,
-    refresh: fetchEvents,
+
+    loading: isLoading,
+    error: error
+      ? error?.response?.data?.message ||
+        error.message ||
+        "Failed to load events."
+      : "",
+    refresh: refetch,
   };
 };
 

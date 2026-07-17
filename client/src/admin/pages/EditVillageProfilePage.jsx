@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
 import VillageProfileForm from "../components/villageProfile/VillageProfileForm";
@@ -17,34 +18,30 @@ export default function EditVillageProfilePage() {
 
   const navigate = useNavigate();
 
-  const [profile, setProfile] = useState(null);
-  const [villages, setVillages] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["admin-village-profile", id],
+    queryFn: async () => {
       const [villageList, profileData] = await Promise.all([
         getAllVillages(),
-        getVillageProfile(id)
+        getVillageProfile(id),
       ]);
 
-      setVillages(villageList);
-      setProfile(profileData);
-    } catch (error) {
-      console.error(error);
-      alert(
-        error.response?.data?.message ||
-          "Failed to load profile."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+      return {
+        villages: villageList,
+        profile: profileData,
+      };
+    },
+    enabled: !!id,
+  });
+
+  const villages = data?.villages || [];
+  const profile = data?.profile || null;
 
   const handleSubmit = async (formData) => {
     try {
@@ -74,6 +71,14 @@ export default function EditVillageProfilePage() {
     return (
       <div className="p-8 text-center">
         Loading...
+      </div>
+    );
+  }
+
+  if (error || !profile) {
+    return (
+      <div className="p-8 text-center text-red-600">
+        Failed to load profile.
       </div>
     );
   }

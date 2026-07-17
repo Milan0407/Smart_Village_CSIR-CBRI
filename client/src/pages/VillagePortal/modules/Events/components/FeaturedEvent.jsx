@@ -6,17 +6,26 @@ import {
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
+import {
+  getLocalizedText,
+  getVillageName,
+} from "../utils/eventText";
 
 const FeaturedEvent = ({ event }) => {
   if (!event) return null;
 
   const image =
+    event.coverImage?.url ||
+    event.coverImage?.secureUrl ||
     event.featuredImage?.url ||
     event.featuredImage?.secureUrl ||
     "https://placehold.co/1200x600?text=No+Image";
 
-  const village =
-    event.village?.name || "Unknown Village";
+  const title = getLocalizedText(event.title, "Featured Event");
+  const description = getLocalizedText(
+    event.shortDescription || event.summary
+  );
+  const village = getVillageName(event.village);
 
   const formattedDate = new Date(
     event.eventDate
@@ -47,7 +56,7 @@ const FeaturedEvent = ({ event }) => {
 
           <img
             src={image}
-            alt={event.title}
+            alt={title}
             className="h-full w-full object-cover transition duration-500 hover:scale-105"
           />
 
@@ -69,7 +78,7 @@ const FeaturedEvent = ({ event }) => {
         <div className="p-8">
 
           <h3 className="text-3xl font-bold text-slate-900">
-            {event.title}
+            {title}
           </h3>
 
           <div className="mt-5 flex flex-wrap items-center gap-6 text-sm text-slate-500">
@@ -87,11 +96,11 @@ const FeaturedEvent = ({ event }) => {
           </div>
 
           <p className="mt-6 line-clamp-3 text-lg leading-8 text-slate-600">
-            {event.shortDescription}
+            {description}
           </p>
 
           <Link
-            to={`/events/${event.slug}`}
+            to={`/village/${event.village?.slug}/events/${event.slug}`}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
           >
             Read More

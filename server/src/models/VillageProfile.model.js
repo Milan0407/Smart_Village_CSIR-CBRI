@@ -1,28 +1,116 @@
 import mongoose from "mongoose";
 
-const highlightSchema = new mongoose.Schema(
+const galleryItemSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    image: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Media",
       required: true,
-      trim: true,
-      maxlength: 100,
     },
 
-    value: {
+    caption: {
       type: String,
-      required: true,
+      default: "",
       trim: true,
       maxlength: 200,
     },
 
-    icon: {
-      type: String,
-      default: "",
+    sortOrder: {
+      type: Number,
+      default: 0,
     },
   },
   {
-    _id: false,
+    _id: true,
+  }
+);
+
+const contactPersonSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 120,
+    },
+
+    designation: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 120,
+    },
+
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 20,
+    },
+
+    alternatePhone: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 20,
+    },
+
+    email: {
+      type: String,
+      default: "",
+      trim: true,
+      lowercase: true,
+    },
+
+    officeAddress: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 500,
+    },
+
+    gramPanchayat: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 120,
+    },
+
+    block: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 120,
+    },
+
+    district: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 120,
+    },
+
+    state: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 120,
+    },
+
+    pinCode: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 6,
+    },
+
+    displayOrder: {
+      type: Number,
+      default: 0,
+    },
+  },
+  {
+    _id: true,
   }
 );
 
@@ -68,61 +156,23 @@ const villageProfileSchema = new mongoose.Schema(
       default: null,
     },
 
-    /*
-    =====================================
-    Village Information
-    =====================================
-    */
-
     overview: {
       type: String,
       default: "",
     },
 
-    history: {
+    aboutHeading: {
       type: String,
-      default: "",
+      default: "About Village",
+      trim: true,
+      maxlength: 200,
     },
 
-    geography: {
+    aboutSubtitle: {
       type: String,
       default: "",
-    },
-
-    climate: {
-      type: String,
-      default: "",
-    },
-
-    culture: {
-      type: String,
-      default: "",
-    },
-
-    strengths: {
-      type: String,
-      default: "",
-    },
-
-    challenges: {
-      type: String,
-      default: "",
-    },
-
-    opportunities: {
-      type: String,
-      default: "",
-    },
-
-    /*
-    =====================================
-    Highlights
-    =====================================
-    */
-
-    highlights: {
-      type: [highlightSchema],
-      default: [],
+      trim: true,
+      maxlength: 300,
     },
 
     /*
@@ -131,12 +181,10 @@ const villageProfileSchema = new mongoose.Schema(
     =====================================
     */
 
-    galleryImages: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Media",
-      },
-    ],
+    galleryImages: {
+      type: [galleryItemSchema],
+      default: [],
+    },
 
     /*
     =====================================
@@ -144,17 +192,32 @@ const villageProfileSchema = new mongoose.Schema(
     =====================================
     */
 
+    contactPersons: {
+      type: [contactPersonSchema],
+      default: [],
+    },
+
+    /*
+    Legacy single-contact fields retained only to read older documents.
+    New writes use contactPersons.
+    */
+
     contactPerson: {
       type: String,
       default: "",
     },
 
-    contactDesignation: {
+    designation: {
       type: String,
       default: "",
     },
 
-    contactNumber: {
+    phone: {
+      type: String,
+      default: "",
+    },
+
+    alternatePhone: {
       type: String,
       default: "",
     },
@@ -164,7 +227,32 @@ const villageProfileSchema = new mongoose.Schema(
       default: "",
     },
 
-    website: {
+    officeAddress: {
+      type: String,
+      default: "",
+    },
+
+    gramPanchayat: {
+      type: String,
+      default: "",
+    },
+
+    block: {
+      type: String,
+      default: "",
+    },
+
+    district: {
+      type: String,
+      default: "",
+    },
+
+    state: {
+      type: String,
+      default: "",
+    },
+
+    pinCode: {
       type: String,
       default: "",
     },

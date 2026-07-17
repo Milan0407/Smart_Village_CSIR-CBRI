@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import DevelopmentPlanForm from "../components/developmentPlan/DevelopmentPlanForm";
 
@@ -9,6 +10,7 @@ import {
 
 const CreateDevelopmentPlanPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [loading, setLoading] =
     useState(false);
@@ -19,7 +21,7 @@ const CreateDevelopmentPlanPage = () => {
     try {
       setLoading(true);
 
-      await createDevelopmentPlan(
+      const plan = await createDevelopmentPlan(
         values
       );
 
@@ -27,8 +29,12 @@ const CreateDevelopmentPlanPage = () => {
         "Development Plan created successfully."
       );
 
+      queryClient.invalidateQueries({
+        queryKey: ["admin-development-plans"],
+      });
+
       navigate(
-        "/admin/development-plans"
+        `/admin/development-plans/${plan._id}/edit`
       );
     } catch (error) {
       console.error(error);
@@ -52,7 +58,7 @@ const CreateDevelopmentPlanPage = () => {
         </h1>
 
         <p className="text-slate-500 mt-2">
-          Create a new development plan for a village.
+          Create the village-level CSIR technology deployment plan.
         </p>
 
       </div>

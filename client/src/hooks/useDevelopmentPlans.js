@@ -1,90 +1,69 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   getDevelopmentPlansByVillage,
   getDevelopmentPlan,
 } from "../services/developmentPlan.service";
 
-/*
-=========================================
-Get All Development Plans of a Village
-=========================================
-*/
+/* =========================================
+   Village Development Plans
+========================================= */
 
 const useDevelopmentPlans = (slug) => {
-  const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["development-plans", slug],
+    queryFn: () =>
+      getDevelopmentPlansByVillage(slug),
 
-  useEffect(() => {
-    if (!slug) return;
+    enabled: !!slug,
 
-    loadPlans();
-  }, [slug]);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-  const loadPlans = async () => {
-    try {
-      setLoading(true);
-
-      const data =
-        await getDevelopmentPlansByVillage(slug);
-
-      setPlans(data);
-    } catch (err) {
-      console.error(err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    refetchOnWindowFocus: false,
+  });
 
   return {
-    plans,
-    loading,
+    plans: data,
+    loading: isLoading,
     error,
-    reload: loadPlans,
+    reload: refetch,
   };
 };
 
 export default useDevelopmentPlans;
 
-/*
-=========================================
-Get Single Development Plan
-=========================================
-*/
+/* =========================================
+   Single Development Plan
+========================================= */
 
 export const useDevelopmentPlan = (id) => {
-  const [plan, setPlan] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["development-plan", id],
+    queryFn: () => getDevelopmentPlan(id),
 
-  useEffect(() => {
-    if (!id) return;
+    enabled: !!id,
 
-    loadPlan();
-  }, [id]);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-  const loadPlan = async () => {
-    try {
-      setLoading(true);
-
-      const data =
-        await getDevelopmentPlan(id);
-
-      setPlan(data);
-    } catch (err) {
-      console.error(err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    refetchOnWindowFocus: false,
+  });
 
   return {
-    plan,
-    loading,
+    plan: data,
+    loading: isLoading,
     error,
-    reload: loadPlan,
+    reload: refetch,
   };
 };

@@ -1,3 +1,4 @@
+import { useOutletContext } from "react-router-dom";
 import usePublicEvents from "../../../../hooks/usePublicEvents";
 
 import EventsHero from "./components/Hero/EventsHero";
@@ -12,6 +13,8 @@ import EventsSkeleton from "./components/Hero/EventsSkeleton";
 
 
 const EventsPage = () => {
+  const { village } = useOutletContext();
+
   const {
     events,
     featuredEvent,
@@ -21,7 +24,9 @@ const EventsPage = () => {
     setFilters,
     loading,
     error,
-  } = usePublicEvents();
+  } = usePublicEvents({
+    village: village?._id,
+  });
 
 if (loading) {
   return <EventsSkeleton />;
@@ -61,6 +66,7 @@ if (loading) {
         type: "",
         status: "",
         page: 1,
+        village: village?._id,
       })
     }
   />

@@ -1,47 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { getAllVillages } from "../admin/services/village.service";
 
 const useVillages = () => {
-  const [villages, setVillages] = useState([]);
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["villages"],
+    queryFn: getAllVillages,
 
-  const [loading, setLoading] =
-    useState(true);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-  const [error, setError] =
-    useState("");
-
-  const fetchVillages =
-    useCallback(async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const response =
-          await getAllVillages();
-
-        setVillages(response || []);
-      } catch (err) {
-        console.error(err);
-
-        setError(
-          err?.response?.data?.message ||
-            "Failed to load villages."
-        );
-      } finally {
-        setLoading(false);
-      }
-    }, []);
-
-  useEffect(() => {
-    fetchVillages();
-  }, [fetchVillages]);
+    refetchOnWindowFocus: false,
+  });
 
   return {
-    villages,
-    loading,
-    error,
-    refresh: fetchVillages,
+    villages: data,
+    loading: isLoading,
+    error: error?.message || "",
+    refresh: refetch,
   };
 };
 

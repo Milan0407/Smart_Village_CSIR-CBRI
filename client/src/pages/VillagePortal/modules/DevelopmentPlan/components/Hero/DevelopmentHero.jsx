@@ -1,4 +1,4 @@
-import { FolderKanban } from "lucide-react";
+import { Cpu } from "lucide-react";
 
 const DevelopmentHero = ({ village }) => {
   return (
@@ -12,15 +12,15 @@ const DevelopmentHero = ({ village }) => {
 
           <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm backdrop-blur">
 
-            <FolderKanban size={18} />
+            <Cpu size={18} />
 
-            Development Projects
+            CSIR Technology Deployment
 
           </div>
 
           <h1 className="mt-6 text-4xl lg:text-5xl font-bold leading-tight">
 
-            Development Plans for{" "}
+            Development Plan for{" "}
 
             <span className="text-yellow-300">
 
@@ -32,10 +32,9 @@ const DevelopmentHero = ({ village }) => {
 
           <p className="mt-6 text-lg leading-8 text-blue-100">
 
-            Explore ongoing, completed and upcoming development
-            initiatives that are transforming the village through
-            sustainable infrastructure, agriculture, education,
-            healthcare and digital innovation.
+            Explore sector-wise CSIR technologies deployed for{" "}
+            {village?.name?.en || village?.name}, with lab participation,
+            technology progress and current implementation status.
 
           </p>
 

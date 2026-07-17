@@ -1,13 +1,11 @@
 import {
-  Pencil,
-  Trash2,
   Eye,
   EyeOff,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 
-import StatusBadge from "./StatusBadge";
 import PublishBadge from "./PublishBadge";
-import ProgressCell from "./ProgressCell";
 
 const DevelopmentPlanTableRow = ({
   plan,
@@ -15,102 +13,57 @@ const DevelopmentPlanTableRow = ({
   onDelete,
   onTogglePublish,
 }) => {
+  const sectorCount = plan.sectors?.length || 0;
+  const technologyCount = (plan.sectors || []).reduce(
+    (sum, sector) =>
+      sum + (sector.technologies?.length || 0),
+    0
+  );
+
   return (
-    <tr className="border-b hover:bg-slate-50 transition-colors">
-
-      {/* Project */}
-
+    <tr className="border-b transition-colors hover:bg-slate-50">
       <td className="px-6 py-4">
         <div>
-
           <h3 className="font-semibold text-slate-800">
             {plan.title}
           </h3>
-
           <p className="text-sm text-slate-500">
-            {plan.description?.length > 70
-              ? `${plan.description.slice(0, 70)}...`
+            {plan.description?.length > 80
+              ? `${plan.description.slice(0, 80)}...`
               : plan.description}
           </p>
-
         </div>
       </td>
 
-      {/* Village */}
-
       <td className="px-6 py-4">
-        {plan.village?.name?.en}
+        {plan.village?.name?.en || plan.village?.name || "-"}
       </td>
-
-      {/* Category */}
-
-      <td className="px-6 py-4">
-        {plan.category.replaceAll("_", " ")}
-      </td>
-
-      {/* Budget */}
 
       <td className="px-6 py-4 font-medium">
-        ₹ {Number(plan.budget).toLocaleString("en-IN")}
+        {sectorCount}
       </td>
 
-      {/* Status */}
-
-      <td className="px-6 py-4">
-        <StatusBadge
-          status={plan.status}
-        />
+      <td className="px-6 py-4 font-medium">
+        {technologyCount}
       </td>
 
-      {/* Progress */}
-
       <td className="px-6 py-4">
-        <ProgressCell
-          progress={plan.progress}
-        />
+        <PublishBadge published={plan.isPublished} />
       </td>
 
-      {/* Publish */}
-
       <td className="px-6 py-4">
-        <PublishBadge
-          published={plan.isPublished}
-        />
-      </td>
-
-      {/* Actions */}
-
-      <td className="px-6 py-4">
-
-        <div className="flex items-center gap-2">
-
+        <div className="flex items-center justify-center gap-2">
           <button
-            onClick={() =>
-              onEdit(plan._id)
-            }
-            className="
-              p-2
-              rounded-lg
-              hover:bg-blue-50
-              text-blue-600
-            "
-            title="Edit"
+            onClick={() => onEdit(plan._id)}
+            className="rounded-lg p-2 text-blue-600 hover:bg-blue-50"
+            title="Edit sectors and technologies"
           >
             <Pencil size={18} />
           </button>
 
           <button
-            onClick={() =>
-              onTogglePublish(
-                plan._id
-              )
-            }
-            className="
-              p-2
-              rounded-lg
-              hover:bg-green-50
-              text-green-600
-            "
+            onClick={() => onTogglePublish(plan._id)}
+            className="rounded-lg p-2 text-green-600 hover:bg-green-50"
             title={
               plan.isPublished
                 ? "Unpublish"
@@ -125,24 +78,14 @@ const DevelopmentPlanTableRow = ({
           </button>
 
           <button
-            onClick={() =>
-              onDelete(plan._id)
-            }
-            className="
-              p-2
-              rounded-lg
-              hover:bg-red-50
-              text-red-600
-            "
+            onClick={() => onDelete(plan._id)}
+            className="rounded-lg p-2 text-red-600 hover:bg-red-50"
             title="Delete"
           >
             <Trash2 size={18} />
           </button>
-
         </div>
-
       </td>
-
     </tr>
   );
 };

@@ -95,3 +95,18 @@ export const getEventStatistics =
 
     return response.data;
   };
+
+export const getVillageInfoHighlights = async (
+  villageId
+) => {
+  const response = await axios.get(API_URL, {
+    params: {
+      village: villageId,
+      published: true,
+      showOnVillageInfo: true,
+      limit: 4,
+    },
+  });
+
+  return response.data.data?.data || [];
+};

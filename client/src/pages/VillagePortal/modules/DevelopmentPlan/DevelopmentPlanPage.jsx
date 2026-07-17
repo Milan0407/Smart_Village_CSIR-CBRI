@@ -3,15 +3,13 @@ import { useOutletContext } from "react-router-dom";
 
 import useDevelopmentPlans from "../../../../hooks/useDevelopmentPlans";
 
-import PlanCard from "./components/PlanCard";
-
 import DevelopmentHero from "./components/Hero/DevelopmentHero";
-import DevelopmentStats from "./components/Hero/DevelopmentStats";
-import DevelopmentFilters from "./components/Hero/DevelopmentFilters";
 import DevelopmentSkeleton from "./components/Hero/DevelopmentSkeleton";
+import SectorAccordion from "./components/SectorAccordion";
 
 const DevelopmentPlanPage = () => {
   const { village } = useOutletContext();
+  const [openSectorId, setOpenSectorId] = useState(null);
 
   const {
     plans,
@@ -19,95 +17,33 @@ const DevelopmentPlanPage = () => {
     error,
   } = useDevelopmentPlans(village.slug);
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState("");
-  const [sortBy, setSortBy] = useState("latest");
-
-  const filteredPlans = useMemo(() => {
-    let data = [...plans];
-
-    // Search
-    if (search.trim()) {
-      const keyword = search.toLowerCase();
-
-      data = data.filter(
-        (plan) =>
-          plan.title.toLowerCase().includes(keyword) ||
-          plan.description
-            ?.toLowerCase()
-            .includes(keyword)
-      );
-    }
-
-    // Category
-    if (category) {
-      data = data.filter(
-        (plan) => plan.category === category
-      );
-    }
-
-    // Status
-    if (status) {
-      data = data.filter(
-        (plan) => plan.status === status
-      );
-    }
-
-    // Sorting
-    switch (sortBy) {
-      case "progress":
-        data.sort(
-          (a, b) => b.progress - a.progress
-        );
-        break;
-
-      case "budget":
-        data.sort(
-          (a, b) => b.budget - a.budget
-        );
-        break;
-
-      case "targetDate":
-        data.sort(
-          (a, b) =>
-            new Date(a.targetDate) -
-            new Date(b.targetDate)
-        );
-        break;
-
-      default:
-        data.sort(
-          (a, b) =>
-            new Date(b.createdAt) -
-            new Date(a.createdAt)
-        );
-    }
-
-    return data;
-  }, [
-    plans,
-    search,
-    category,
-    status,
-    sortBy,
-  ]);
-
-if (loading) {
-  return (
-    <>
-      <DevelopmentHero village={village} />
-
-      <DevelopmentSkeleton />
-    </>
+  const sectors = useMemo(
+    () =>
+      plans
+        .flatMap((plan) =>
+          (plan.sectors || []).map((sector) => ({
+            ...sector,
+            planTitle: plan.title,
+          }))
+        )
+        .sort((a, b) => (a.order || 0) - (b.order || 0)),
+    [plans]
   );
-}
+
+  if (loading) {
+    return (
+      <>
+        <DevelopmentHero village={village} />
+        <DevelopmentSkeleton />
+      </>
+    );
+  }
 
   if (error) {
     return (
-      <div className="bg-white rounded-2xl border border-red-200 p-12 text-center">
+      <div className="rounded-2xl border border-red-200 bg-white p-12 text-center">
         <h2 className="text-xl font-semibold text-red-600">
-          Failed to load Development Plans
+          Failed to load Development Plan
         </h2>
       </div>
     );
@@ -115,73 +51,52 @@ if (loading) {
 
   return (
     <div className="space-y-8">
-
       <DevelopmentHero village={village} />
 
-      <DevelopmentStats plans={plans} />
+      <section className="rounded-3xl border border-blue-100 bg-white p-6 shadow-sm">
+        <div className="max-w-4xl">
+          <p className="text-sm font-semibold uppercase tracking-wide text-blue-700">
+            Development Plan
+          </p>
 
-      <DevelopmentFilters
-        search={search}
-        setSearch={setSearch}
-        category={category}
-        setCategory={setCategory}
-        status={status}
-        setStatus={setStatus}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-      />
+          <h2 className="mt-2 text-3xl font-bold text-slate-900">
+            CSIR Technology Deployment
+          </h2>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="mt-4 leading-8 text-slate-600">
+            Sector-wise technologies deployed for the village are listed below.
+            Sector progress is calculated by the backend from technology-level
+            progress.
+          </p>
+        </div>
+      </section>
 
-  <p className="text-slate-600">
-    Showing{" "}
-    <span className="font-semibold">
-      {filteredPlans.length}
-    </span>{" "}
-    project{filteredPlans.length !== 1 ? "s" : ""}
-  </p>
-
-  {(search || category || status) && (
-    <button
-      onClick={() => {
-        setSearch("");
-        setCategory("");
-        setStatus("");
-        setSortBy("latest");
-      }}
-      className="font-medium text-blue-600 transition hover:text-blue-700"
-    >
-      Clear Filters
-    </button>
-  )}
-
-</div>
-
-      {filteredPlans.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-
+      {sectors.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
           <h2 className="text-2xl font-bold text-slate-700">
-            No Development Plans Found
+            No Sectors Added
           </h2>
 
           <p className="mt-3 text-slate-500">
-            Try changing the search or filter options.
+            Technology deployment sectors will appear here once published.
           </p>
-
         </div>
       ) : (
-        <div className="grid gap-6">
-
-          {filteredPlans.map((plan) => (
-            <PlanCard
-              key={plan._id}
-              plan={plan}
+        <div className="space-y-5">
+          {sectors.map((sector) => (
+            <SectorAccordion
+              key={sector._id}
+              sector={sector}
+              isOpen={openSectorId === sector._id}
+              onToggle={() =>
+                setOpenSectorId((current) =>
+                  current === sector._id ? null : sector._id
+                )
+              }
             />
           ))}
-
         </div>
       )}
-
     </div>
   );
 };

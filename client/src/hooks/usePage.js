@@ -1,50 +1,27 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  getPageBySlug,
-} from "../services/cms.service";
+import { useQuery } from "@tanstack/react-query";
+import { getPageBySlug } from "../services/cms.service";
 
 const usePage = (slug) => {
-  const [page, setPage] =
-    useState(null);
+  const {
+    data,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["page", slug],
+    queryFn: () => getPageBySlug(slug),
+    enabled: !!slug,
 
-  const [loading, setLoading] =
-    useState(true);
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
 
-  const [error, setError] =
-    useState(null);
-
-  useEffect(() => {
-    const fetchPage =
-      async () => {
-        try {
-          setLoading(true);
-
-          const data =
-            await getPageBySlug(
-              slug
-            );
-
-          setPage(data);
-        } catch (err) {
-          setError(
-            err.message
-          );
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    fetchPage();
-  }, [slug]);
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 
   return {
-    page,
-    loading,
-    error,
+    page: data,
+    loading: isLoading,
+    error: error?.message || null,
   };
 };
 

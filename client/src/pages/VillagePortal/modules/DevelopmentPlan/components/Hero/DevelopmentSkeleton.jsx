@@ -29,18 +29,7 @@ const SkeletonCard = () => (
 
     </div>
 
-    <div className="grid md:grid-cols-2 gap-5 mt-8">
-
-      {[1, 2, 3, 4].map((item) => (
-        <div
-          key={item}
-          className="h-16 rounded-xl bg-slate-200"
-        />
-      ))}
-
-    </div>
-
-    <div className="mt-8 h-12 rounded-xl bg-slate-200" />
+    <div className="mt-8 h-36 rounded-xl bg-slate-200" />
 
   </div>
 );

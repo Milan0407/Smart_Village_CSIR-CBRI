@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { getAllMedia } from "../../services/media.service";
 
 import HeroSection from "./HeroSection";
 import InformationSection from "./InformationSection";
-import HighlightsSection from "./HighlightsSection";
 import GallerySection from "./GallerySection";
 import ContactSection from "./ContactSection";
 
@@ -15,29 +15,86 @@ const initialForm = {
   heroSubtitle: "",
   heroImage: "",
 
+  aboutHeading: "About Village",
+  aboutSubtitle: "",
   overview: "",
-  history: "",
-  geography: "",
-  climate: "",
-  culture: "",
-  strengths: "",
-  challenges: "",
-  opportunities: "",
-
-  highlights: [],
 
   galleryImages: [],
 
-  contactPerson: "",
-  contactDesignation: "",
-  contactNumber: "",
-  email: "",
-  website: "",
+  contactPersons: [],
 
   sortOrder: 0,
 
   isPublished: true,
 };
+
+const normalizeFormData = (data = {}) => ({
+  ...initialForm,
+  ...data,
+  village: data.village?._id || data.village || "",
+  heroImage:
+    data.heroImage?._id || data.heroImage || "",
+  galleryImages: Array.isArray(data.galleryImages)
+    ? data.galleryImages.map((item, index) => {
+        if (typeof item === "string") {
+          return {
+            image: item,
+            caption: "",
+            sortOrder: index,
+          };
+        }
+
+        return {
+          image:
+            item.image?._id ||
+            item.image ||
+            item._id ||
+            "",
+          caption: item.caption || "",
+          sortOrder:
+            item.sortOrder ?? index,
+        };
+      })
+    : [],
+  contactPersons: Array.isArray(data.contactPersons) &&
+    data.contactPersons.length > 0
+    ? data.contactPersons.map((contact, index) => ({
+        name: contact.name || "",
+        designation: contact.designation || "",
+        phone: contact.phone || "",
+        alternatePhone: contact.alternatePhone || "",
+        email: contact.email || "",
+        officeAddress: contact.officeAddress || "",
+        gramPanchayat: contact.gramPanchayat || "",
+        block: contact.block || "",
+        district: contact.district || "",
+        state: contact.state || "",
+        pinCode: contact.pinCode || "",
+        displayOrder: contact.displayOrder ?? index,
+      }))
+    : data.contactPerson ||
+        data.designation ||
+        data.phone ||
+        data.email ||
+        data.officeAddress
+      ? [
+          {
+            name: data.contactPerson || "",
+            designation: data.designation || "",
+            phone: data.phone || "",
+            alternatePhone: data.alternatePhone || "",
+            email: data.email || "",
+            officeAddress: data.officeAddress || "",
+            gramPanchayat: data.gramPanchayat || "",
+            block: data.block || "",
+            district: data.district || "",
+            state: data.state || "",
+            pinCode: data.pinCode || "",
+            displayOrder: 0,
+          },
+        ]
+      : [],
+});
 
 export default function VillageProfileForm({
   initialData = null,
@@ -45,31 +102,16 @@ export default function VillageProfileForm({
   onSubmit,
   loading = false,
 }) {
-  const [formData, setFormData] = useState(initialForm);
+  const [formData, setFormData] = useState(() =>
+    normalizeFormData(initialData)
+  );
 
-  const [media, setMedia] = useState([]);
-
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        ...initialForm,
-        ...initialData,
-      });
-    }
-  }, [initialData]);
-
-  useEffect(() => {
-    loadMedia();
-  }, []);
-
-  const loadMedia = async () => {
-    try {
-      const data = await getAllMedia();
-      setMedia(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const {
+    data: media = [],
+  } = useQuery({
+    queryKey: ["admin-media"],
+    queryFn: getAllMedia,
+  });
 
   const handleChange = (e) => {
     const { name, value, type, checked } =
@@ -86,7 +128,41 @@ export default function VillageProfileForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      galleryImages: formData.galleryImages
+        .filter((item) => item.image)
+        .map((item, index) => ({
+          image: item.image,
+          caption: item.caption || "",
+          sortOrder:
+            item.sortOrder === "" ||
+            item.sortOrder === null ||
+            item.sortOrder === undefined
+              ? index
+            : Number(item.sortOrder),
+        })),
+      contactPersons: formData.contactPersons
+        .filter((contact) =>
+          [
+            contact.name,
+            contact.designation,
+            contact.phone,
+            contact.alternatePhone,
+            contact.email,
+            contact.officeAddress,
+          ].some(Boolean)
+        )
+        .map((contact, index) => ({
+          ...contact,
+          displayOrder:
+            contact.displayOrder === "" ||
+            contact.displayOrder === null ||
+            contact.displayOrder === undefined
+              ? index
+              : Number(contact.displayOrder),
+        })),
+    });
   };
 
   return (
@@ -106,11 +182,6 @@ export default function VillageProfileForm({
         handleChange={handleChange}
       />
 
-      <HighlightsSection
-        formData={formData}
-        setFormData={setFormData}
-      />
-
       <GallerySection
         formData={formData}
         media={media}
@@ -119,7 +190,7 @@ export default function VillageProfileForm({
 
       <ContactSection
         formData={formData}
-        handleChange={handleChange}
+        setFormData={setFormData}
       />
 
       <div className="flex justify-end">

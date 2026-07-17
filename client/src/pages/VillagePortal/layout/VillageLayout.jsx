@@ -69,6 +69,7 @@ const VillageLayout = () => {
               context={{
                 village,
                 profile,
+                loading,
               }}
             />
 

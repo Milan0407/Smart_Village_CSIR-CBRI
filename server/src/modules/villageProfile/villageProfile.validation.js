@@ -1,23 +1,98 @@
 import { z } from "zod";
 
-const highlightSchema = z.object({
-  title: z
+const optionalText = (max = 300) =>
+  z
     .string()
     .trim()
-    .min(1, "Highlight title is required.")
-    .max(100),
-
-  value: z
-    .string()
-    .trim()
-    .min(1, "Highlight value is required.")
-    .max(200),
-
-  icon: z
-    .string()
-    .trim()
+    .max(max)
     .optional()
-    .default(""),
+    .default("");
+
+const optionalTextUpdate = (max = 300) =>
+  z.string().trim().max(max).optional();
+
+const phoneSchema = z
+  .string()
+  .trim()
+  .regex(/^[+\d\s-]*$/, "Phone number can only contain digits, spaces, + and -.")
+  .max(20)
+  .optional()
+  .default("");
+
+const phoneUpdateSchema = z
+  .string()
+  .trim()
+  .regex(/^[+\d\s-]*$/, "Phone number can only contain digits, spaces, + and -.")
+  .max(20)
+  .optional();
+
+const pinCodeSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{0,6}$/, "PIN code must contain up to 6 digits.")
+  .optional()
+  .default("");
+
+const pinCodeUpdateSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{0,6}$/, "PIN code must contain up to 6 digits.")
+  .optional();
+
+const galleryItemSchema = z.union([
+  z.string(),
+  z.object({
+    image: z.string().min(1, "Gallery image is required."),
+    caption: optionalText(200),
+    sortOrder: z.coerce.number().int().optional().default(0),
+  }),
+]);
+
+const galleryItemUpdateSchema = z.union([
+  z.string(),
+  z.object({
+    image: z.string().min(1, "Gallery image is required."),
+    caption: optionalTextUpdate(200),
+    sortOrder: z.coerce.number().int().optional(),
+  }),
+]);
+
+const contactPersonSchema = z.object({
+  name: optionalText(120),
+  designation: optionalText(120),
+  phone: phoneSchema,
+  alternatePhone: phoneSchema,
+  email: z
+    .string()
+    .email()
+    .optional()
+    .or(z.literal("")),
+  officeAddress: optionalText(500),
+  gramPanchayat: optionalText(120),
+  block: optionalText(120),
+  district: optionalText(120),
+  state: optionalText(120),
+  pinCode: pinCodeSchema,
+  displayOrder: z.coerce.number().int().optional().default(0),
+});
+
+const contactPersonUpdateSchema = z.object({
+  name: optionalTextUpdate(120),
+  designation: optionalTextUpdate(120),
+  phone: phoneUpdateSchema,
+  alternatePhone: phoneUpdateSchema,
+  email: z
+    .string()
+    .email()
+    .optional()
+    .or(z.literal("")),
+  officeAddress: optionalTextUpdate(500),
+  gramPanchayat: optionalTextUpdate(120),
+  block: optionalTextUpdate(120),
+  district: optionalTextUpdate(120),
+  state: optionalTextUpdate(120),
+  pinCode: pinCodeUpdateSchema,
+  displayOrder: z.coerce.number().int().optional(),
 });
 
 export const createVillageProfileSchema = z.object({
@@ -48,77 +123,19 @@ export const createVillageProfileSchema = z.object({
       .optional()
       .default(""),
 
-    history: z
-      .string()
-      .optional()
-      .default(""),
+    aboutHeading: optionalText(200).default("About Village"),
 
-    geography: z
-      .string()
-      .optional()
-      .default(""),
-
-    climate: z
-      .string()
-      .optional()
-      .default(""),
-
-    culture: z
-      .string()
-      .optional()
-      .default(""),
-
-    strengths: z
-      .string()
-      .optional()
-      .default(""),
-
-    challenges: z
-      .string()
-      .optional()
-      .default(""),
-
-    opportunities: z
-      .string()
-      .optional()
-      .default(""),
-
-    highlights: z
-      .array(highlightSchema)
-      .optional()
-      .default([]),
+    aboutSubtitle: optionalText(300),
 
     galleryImages: z
-      .array(z.string())
+      .array(galleryItemSchema)
       .optional()
       .default([]),
 
-    contactPerson: z
-      .string()
+    contactPersons: z
+      .array(contactPersonSchema)
       .optional()
-      .default(""),
-
-    contactDesignation: z
-      .string()
-      .optional()
-      .default(""),
-
-    contactNumber: z
-      .string()
-      .optional()
-      .default(""),
-
-    email: z
-      .string()
-      .email()
-      .optional()
-      .or(z.literal("")),
-
-    website: z
-      .string()
-      .url()
-      .optional()
-      .or(z.literal("")),
+      .default([]),
 
     sortOrder: z
       .number()
@@ -157,45 +174,17 @@ export const updateVillageProfileSchema = z.object({
 
     overview: z.string().optional(),
 
-    history: z.string().optional(),
+    aboutHeading: optionalTextUpdate(200),
 
-    geography: z.string().optional(),
-
-    climate: z.string().optional(),
-
-    culture: z.string().optional(),
-
-    strengths: z.string().optional(),
-
-    challenges: z.string().optional(),
-
-    opportunities: z.string().optional(),
-
-    highlights: z
-      .array(highlightSchema)
-      .optional(),
+    aboutSubtitle: optionalTextUpdate(300),
 
     galleryImages: z
-      .array(z.string())
+      .array(galleryItemUpdateSchema)
       .optional(),
 
-    contactPerson: z.string().optional(),
-
-    contactDesignation: z.string().optional(),
-
-    contactNumber: z.string().optional(),
-
-    email: z
-      .string()
-      .email()
-      .optional()
-      .or(z.literal("")),
-
-    website: z
-      .string()
-      .url()
-      .optional()
-      .or(z.literal("")),
+    contactPersons: z
+      .array(contactPersonUpdateSchema)
+      .optional(),
 
     sortOrder: z
       .number()

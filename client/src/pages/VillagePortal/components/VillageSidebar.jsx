@@ -3,12 +3,9 @@ import { NavLink } from "react-router-dom";
 import {
   Home,
   FolderKanban,
-  Newspaper,
   Trophy,
-  UtensilsCrossed,
   Map,
   ScrollText,
-  BookOpen,
   BarChart3,
   Cpu,
   MessageCircle,
@@ -35,22 +32,10 @@ const VillageSidebar = ({ village }) => {
       path: "development-plan",
     },
     {
-      label: "Current Affairs",
-      description: "News & updates",
-      icon: Newspaper,
-      path: "current-affairs",
-    },
-    {
       label: "Events & Achievements",
       description: "Community highlights",
       icon: Trophy,
       path: "events",
-    },
-    {
-      label: "Traditional Food",
-      description: "Local cuisine",
-      icon: UtensilsCrossed,
-      path: "traditional-food",
     },
     {
       label: "Village Map",
@@ -63,12 +48,6 @@ const VillageSidebar = ({ village }) => {
       description: "Government schemes",
       icon: ScrollText,
       path: "policies",
-    },
-    {
-      label: "Knowledge Hub",
-      description: "Learning resources",
-      icon: BookOpen,
-      path: "knowledge-hub",
     },
     {
       label: "Development Indicators",
