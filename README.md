@@ -800,7 +800,7 @@ This project is developed for the **CSIR-CBRI Smart Village Mission** under IIT 
 ## 👤 Author
 
 **Milan Chauhan**
-IIT Roorkee — Smart Village Mission Project
+CSIR-CBRI Roorkee — Smart Village Mission Project
 
 ---
 
