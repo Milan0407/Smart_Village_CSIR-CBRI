@@ -4,6 +4,8 @@ import {
   X,
   Languages,
   Shield,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -22,6 +24,14 @@ const Navbar = () => {
 } = useStates();
 
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileVillageOpen, setMobileVillageOpen] =
+    useState(false);
+  const [mobileActiveState, setMobileActiveState] =
+    useState(null);
+  const [mobileVillages, setMobileVillages] =
+    useState([]);
+  const [mobileVillagesLoading, setMobileVillagesLoading] =
+    useState(false);
 
   if (loading) {
     return null;
@@ -35,6 +45,34 @@ const Navbar = () => {
     items.filter(
       (item) => item.parentId === parentId
     );
+
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
+    setMobileVillageOpen(false);
+    setMobileActiveState(null);
+    setMobileVillages([]);
+  };
+
+  const handleMobileStateToggle = async (state) => {
+    if (mobileActiveState === state.slug) {
+      setMobileActiveState(null);
+      setMobileVillages([]);
+      return;
+    }
+
+    setMobileActiveState(state.slug);
+    setMobileVillagesLoading(true);
+
+    try {
+      const villages = await loadVillages(state.slug);
+      setMobileVillages(villages || []);
+    } catch (error) {
+      console.error("Failed to load villages:", error);
+      setMobileVillages([]);
+    } finally {
+      setMobileVillagesLoading(false);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
@@ -184,49 +222,223 @@ const Navbar = () => {
           <nav className="px-4 py-4">
             <ul className="space-y-1">
 
-              {parentItems.map((item) => (
-                <li key={item._id}>
-                  <Link
-                    to={item.path}
-                    onClick={() =>
-                      setMobileOpen(false)
-                    }
-                    className="
-                      block
-                      py-3
-                      px-3
-                      rounded-lg
-                      hover:bg-slate-100
-                      text-slate-700
-                      font-medium
-                    "
-                  >
-                    {item.label}
-                  </Link>
+              {parentItems.map((item) => {
+                const isSmartVillage =
+                  item.label === "CSIR Smart Village";
 
-                  {getChildren(item._id).map(
-                    (child) => (
-                      <Link
-                        key={child._id}
-                        to={child.path}
-                        className="
-                          block
-                          ml-6
-                          py-2
-                          px-3
-                          text-sm
-                          text-slate-600
-                        "
+                if (isSmartVillage) {
+                  return (
+                    <li key={item._id}>
+                      <button
+                        type="button"
                         onClick={() =>
-                          setMobileOpen(false)
+                          setMobileVillageOpen(
+                            !mobileVillageOpen
+                          )
                         }
+                        aria-expanded={mobileVillageOpen}
+                        aria-controls="mobile-smart-village-menu"
+                        className="
+                          flex
+                          w-full
+                          items-center
+                          justify-between
+                          py-3
+                          px-3
+                          rounded-lg
+                          hover:bg-slate-100
+                          focus-visible:outline
+                          focus-visible:outline-2
+                          focus-visible:outline-offset-2
+                          focus-visible:outline-blue-700
+                          text-slate-700
+                          font-medium
+                        "
                       >
-                        {child.label}
-                      </Link>
-                    )
-                  )}
-                </li>
-              ))}
+                        <span>{item.label}</span>
+
+                        <ChevronDown
+                          size={18}
+                          className={`transition-transform ${
+                            mobileVillageOpen
+                              ? "rotate-180"
+                              : ""
+                          }`}
+                        />
+                      </button>
+
+                      <div
+                        id="mobile-smart-village-menu"
+                        className={`overflow-hidden transition-all duration-300 ${
+                          mobileVillageOpen
+                            ? "max-h-[70vh] opacity-100"
+                            : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <div className="mt-1 space-y-1 border-l border-slate-200 pl-3">
+                          {states.map((state) => {
+                            const isActive =
+                              mobileActiveState ===
+                              state.slug;
+
+                            return (
+                              <div key={state._id}>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleMobileStateToggle(
+                                      state
+                                    )
+                                  }
+                                  aria-expanded={isActive}
+                                  aria-controls={`mobile-state-${state.slug}`}
+                                  className={`
+                                    flex
+                                    w-full
+                                    items-center
+                                    justify-between
+                                    rounded-lg
+                                    px-3
+                                    py-2.5
+                                    text-left
+                                    text-sm
+                                    font-medium
+                                    transition-colors
+                                    hover:bg-slate-100
+                                    focus-visible:outline
+                                    focus-visible:outline-2
+                                    focus-visible:outline-offset-2
+                                    focus-visible:outline-blue-700
+
+                                    ${
+                                      isActive
+                                        ? "bg-blue-50 text-blue-800"
+                                        : "text-slate-700"
+                                    }
+                                  `}
+                                >
+                                  <span>{state.name}</span>
+
+                                  {isActive ? (
+                                    <ChevronDown size={16} />
+                                  ) : (
+                                    <ChevronRight size={16} />
+                                  )}
+                                </button>
+
+                                <div
+                                  id={`mobile-state-${state.slug}`}
+                                  className={`overflow-hidden transition-all duration-300 ${
+                                    isActive
+                                      ? "max-h-96 opacity-100"
+                                      : "max-h-0 opacity-0"
+                                  }`}
+                                >
+                                  <div className="space-y-1 py-1 pl-5">
+                                    {isActive &&
+                                      mobileVillagesLoading && (
+                                        <p className="px-3 py-2 text-sm text-slate-500">
+                                          Loading villages...
+                                        </p>
+                                      )}
+
+                                    {isActive &&
+                                      !mobileVillagesLoading &&
+                                      mobileVillages.map(
+                                        (village) => (
+                                          <Link
+                                            key={village._id}
+                                            to={`/village/${village.slug}`}
+                                            onClick={
+                                              closeMobileMenu
+                                            }
+                                            className="
+                                              block
+                                              rounded-lg
+                                              px-3
+                                              py-2
+                                              text-sm
+                                              text-slate-600
+                                              transition-colors
+                                              hover:bg-slate-100
+                                              hover:text-blue-800
+                                              focus-visible:outline
+                                              focus-visible:outline-2
+                                              focus-visible:outline-offset-2
+                                              focus-visible:outline-blue-700
+                                            "
+                                          >
+                                            <span className="mr-2">
+                                              &bull;
+                                            </span>
+                                            {village.name?.en ||
+                                              village.name
+                                                ?.regional ||
+                                              village.name ||
+                                              "Unnamed Village"}
+                                          </Link>
+                                        )
+                                      )}
+
+                                    {isActive &&
+                                      !mobileVillagesLoading &&
+                                      mobileVillages.length ===
+                                        0 && (
+                                        <p className="px-3 py-2 text-sm text-slate-500">
+                                          No villages available.
+                                        </p>
+                                      )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={item._id}>
+                    <Link
+                      to={item.path}
+                      onClick={closeMobileMenu}
+                      className="
+                        block
+                        py-3
+                        px-3
+                        rounded-lg
+                        hover:bg-slate-100
+                        text-slate-700
+                        font-medium
+                      "
+                    >
+                      {item.label}
+                    </Link>
+
+                    {getChildren(item._id).map(
+                      (child) => (
+                        <Link
+                          key={child._id}
+                          to={child.path}
+                          className="
+                            block
+                            ml-6
+                            py-2
+                            px-3
+                            text-sm
+                            text-slate-600
+                          "
+                          onClick={closeMobileMenu}
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    )}
+                  </li>
+                );
+              })}
 
               <li>
                 <button className="w-full flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
@@ -238,9 +450,7 @@ const Navbar = () => {
               <li>
                 <Link
                   to="/admin/login"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
+                  onClick={closeMobileMenu}
                   className="
                     flex
                     items-center
