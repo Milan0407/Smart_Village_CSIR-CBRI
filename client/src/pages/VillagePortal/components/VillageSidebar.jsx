@@ -8,7 +8,6 @@ import {
   ScrollText,
   BarChart3,
   Cpu,
-  MessageCircle,
   MapPinned,
   Landmark,
   Trees,
@@ -60,12 +59,6 @@ const VillageSidebar = ({ village }) => {
       description: "Technology adoption",
       icon: Cpu,
       path: "technology-mapping",
-    },
-    {
-      label: "Feedback",
-      description: "Share your opinion",
-      icon: MessageCircle,
-      path: "feedback",
     },
   ];
 

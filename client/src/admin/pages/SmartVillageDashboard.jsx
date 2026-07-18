@@ -71,13 +71,6 @@ const cards = [
     icon: "🗺️",
     category: "Development",
   },
-  {
-    title: "Feedback",
-    description: "View suggestions and citizen feedback.",
-    path: "/admin/feedback",
-    icon: "💬",
-    category: "Development",
-  },
 ];
 
 const categories = [

@@ -143,12 +143,6 @@ const TechnologyMappingPage = lazy(() =>
   )
 );
 
-const FeedbackPage = lazy(() =>
-  import(
-    "../pages/VillagePortal/modules/Feedback/FeedbackPage"
-  )
-);
-
 const AppRoutes = () => {
   return (
 
@@ -292,10 +286,6 @@ const AppRoutes = () => {
     element={<TechnologyMappingPage />}
   />
 
-  <Route
-    path="feedback"
-    element={<FeedbackPage />}
-  />
      </Route>
 
     </Routes>
