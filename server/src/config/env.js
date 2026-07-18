@@ -23,4 +23,8 @@ export const env = {
   smtpPass: process.env.SMTP_PASS,
 
   contactReceiver: process.env.CONTACT_RECEIVER,
+
+  superAdminUsername: process.env.SUPER_ADMIN_USERNAME,
+  superAdminEmail: process.env.SUPER_ADMIN_EMAIL,
+  superAdminPassword: process.env.SUPER_ADMIN_PASSWORD,
 };

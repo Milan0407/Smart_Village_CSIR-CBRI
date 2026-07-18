@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 import { env } from "../config/env.js";
 import { connectDB } from "../config/database.js";
 
@@ -7,33 +5,49 @@ import Admin from "../models/Admin.model.js";
 
 const createSuperAdmin = async () => {
   try {
+    const {
+      superAdminUsername,
+      superAdminEmail,
+      superAdminPassword,
+    } = env;
+
+    if (
+      !superAdminUsername ||
+      !superAdminEmail ||
+      !superAdminPassword
+    ) {
+      throw new Error(
+        "SUPER_ADMIN_USERNAME, SUPER_ADMIN_EMAIL, and SUPER_ADMIN_PASSWORD must be set in the environment."
+      );
+    }
+
     await connectDB();
 
     const existingAdmin =
       await Admin.findOne({
-        username: "superadmin",
+        username: superAdminUsername,
       });
 
     if (existingAdmin) {
       console.log(
-        "⚠️ Super Admin already exists"
+        "Super Admin already exists"
       );
 
       process.exit(0);
     }
 
     const admin = await Admin.create({
-      username: "superadmin",
+      username: superAdminUsername,
 
-      email: "superadmin@cbri.in",
+      email: superAdminEmail,
 
-      password: "Admin@123",
+      password: superAdminPassword,
 
       role: "SUPER_ADMIN",
     });
 
     console.log(
-      "✅ Super Admin Created"
+      "Super Admin created"
     );
 
     console.log({
