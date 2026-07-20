@@ -171,7 +171,7 @@ const AppRoutes = () => {
         path="/about/dg-desk"
         element={<DGDeskPage />}
       />
-
+      
       <Route
         path="/about/director-desk"
         element={<DirectorDeskPage />}

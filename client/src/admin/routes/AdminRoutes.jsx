@@ -94,6 +94,14 @@ import EditDevelopmentPlanPage from "../pages/EditDevelopmentPlanPage";
 import EventsManagementPage from "../pages/EventsManagementPage";
 import CreateEventPage from "../pages/CreateEventPage";
 import EditEventPage from "../pages/EditEventPage";
+
+import PoliciesSchemesPage from "../pages/PoliciesSchemesPage";
+import CreatePoliciesSchemePage from "../pages/CreatePoliciesSchemePage";
+import EditPoliciesSchemePage from "../pages/EditPoliciesSchemePage";
+
+import VillageLocationsPage from "../pages/VillageLocationsPage";
+import CreateVillageLocationPage from "../pages/CreateVillageLocationPage";
+import EditVillageLocationPage from "../pages/EditVillageLocationPage";
 const ProtectedRoute = ({
   children,
 }) => {
@@ -230,6 +238,36 @@ const AdminRoutes = () => {
 <Route
     path="events/:id/edit"
     element={<EditEventPage />}
+/>
+
+<Route
+  path="policies-schemes"
+  element={<PoliciesSchemesPage />}
+/>
+
+<Route
+  path="policies-schemes/create"
+  element={<CreatePoliciesSchemePage />}
+/>
+
+<Route
+  path="policies-schemes/:id/edit"
+  element={<EditPoliciesSchemePage />}
+/>
+
+<Route
+  path="village-locations"
+  element={<VillageLocationsPage />}
+/>
+
+<Route
+  path="village-locations/create"
+  element={<CreateVillageLocationPage />}
+/>
+
+<Route
+  path="village-locations/:id/edit"
+  element={<EditVillageLocationPage />}
 />
 
 

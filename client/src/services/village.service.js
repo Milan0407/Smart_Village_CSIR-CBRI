@@ -121,3 +121,21 @@ export const getVillageMap =
 
     return response.data.data;
   };
+
+export const getPoliciesSchemesByVillage =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/policies-schemes/village/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getPoliciesSchemeBySlug =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/policies-schemes/${slug}`
+    );
+
+    return response.data.data;
+  };

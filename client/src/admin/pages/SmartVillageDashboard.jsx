@@ -51,9 +51,9 @@ const cards = [
     category: "Development",
   },
   {
-    title: "Policies",
+    title: "Policies & Schemes",
     description: "Government schemes and policies.",
-    path: "/admin/policies",
+    path: "/admin/policies-schemes",
     icon: "📜",
     category: "Development",
   },

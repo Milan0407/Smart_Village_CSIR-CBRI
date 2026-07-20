@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import "./index.css";
 import AppRoutes from "./routes/AppRoutes";
 import queryClient from "./lib/queryClient";
+import "leaflet/dist/leaflet.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>

@@ -1,155 +1,168 @@
 import { Outlet, NavLink } from "react-router-dom";
 
 const AdminLayout = () => {
-  const admin = JSON.parse(
-    localStorage.getItem("admin")
-  );
+  const admin = JSON.parse(localStorage.getItem("admin"));
 
   const handleLogout = () => {
-    localStorage.removeItem(
-      "accessToken"
-    );
-
-    localStorage.removeItem(
-      "admin"
-    );
-
-    window.location.href =
-      "/admin/login";
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("admin");
+    window.location.href = "/admin/login";
   };
 
   const navClass = ({ isActive }) =>
-    `block px-3 py-2 rounded-lg transition ${
+    `block rounded-lg px-3 py-2 transition ${
       isActive
         ? "bg-blue-600 text-white"
-        : "hover:bg-gray-100"
+        : "text-gray-700 hover:bg-gray-100"
     }`;
+
+  const menuSections = [
+    {
+      title: "Dashboard",
+      items: [
+        {
+          label: "Dashboard",
+          path: "/admin/dashboard",
+        },
+      ],
+    },
+
+    {
+      title: "CMS",
+      items: [
+        {
+          label: "Pages",
+          path: "/admin/pages",
+        },
+        {
+          label: "Navigation",
+          path: "/admin/navigation",
+        },
+        {
+          label: "Media Library",
+          path: "/admin/media",
+        },
+      ],
+    },
+
+    {
+      title: "Website Content",
+      items: [
+        {
+          label: "News",
+          path: "/admin/news",
+        },
+        {
+          label: "Announcements",
+          path: "/admin/announcements",
+        },
+        {
+          label: "Videos",
+          path: "/admin/videos",
+        },
+        {
+          label: "Home Sections",
+          path: "/admin/home-sections",
+        },
+        {
+          label: "Success Stories",
+          path: "/admin/success-stories",
+        },
+        {
+          label: "Success Story Villages",
+          path: "/admin/success-story-villages",
+        },
+      ],
+    },
+
+    {
+      title: "Smart Village",
+      items: [
+        {
+          label: "Villages",
+          path: "/admin/smart-village",
+        },
+        {
+          label: "Development Plans",
+          path: "/admin/development-plans",
+        },
+        {
+          label: "Village Locations",
+          path: "/admin/village-locations",
+        },
+        {
+          label: "Events & Achievements",
+          path: "/admin/events",
+        },
+        {
+          label: "Policies & Schemes",
+          path: "/admin/policies-schemes",
+        },
+      ],
+    },
+
+    {
+      title: "Administration",
+      items: [
+        {
+          label: "Laboratories",
+          path: "/admin/laboratories",
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r bg-white">
+      {/* Sidebar */}
 
+      <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r bg-white">
         <div className="flex-1 overflow-y-auto p-6">
-          <h2 className="font-bold text-2xl mb-2">
+          <h2 className="mb-2 text-2xl font-bold">
             CMS Admin
           </h2>
 
-          <p className="text-sm text-gray-500 mb-8">
+          <p className="mb-8 text-sm text-gray-500">
             {admin?.username}
           </p>
 
-          <nav className="space-y-2">
-
-            <NavLink
-              to="/admin/dashboard"
-              className={navClass}
+          {menuSections.map((section) => (
+            <div
+              key={section.title}
+              className="mb-8"
             >
-              Dashboard
-            </NavLink>
+              <h3 className="mb-3 border-b pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                {section.title}
+              </h3>
 
-            <NavLink
-              to="/admin/pages"
-              className={navClass}
-            >
-              Pages
-            </NavLink>
-
-            <NavLink
-              to="/admin/navigation"
-              className={navClass}
-            >
-              Navigation
-            </NavLink>
-
-            <NavLink to="/admin/media"
-             className={navClass}
-             >
-              Media Library
-            </NavLink>
-
-            <NavLink
-              to="/admin/news"
-              className={navClass}
-            >
-              News
-            </NavLink>
-
-            <NavLink
-  to="/admin/laboratories"
-  className={navClass}
->
-  Laboratories
-</NavLink>
-
-            <NavLink
-              to="/admin/announcements"
-              className={navClass}
-            >
-              Announcements
-            </NavLink>
-
-            <NavLink
-              to="/admin/success-stories"
-              className={navClass}
-            >
-              Success Stories
-            </NavLink>
-
-            <NavLink
-              to="/admin/success-story-villages"
-              className={navClass}
-            >
-              Success Story Villages
-            </NavLink>
-
-            <NavLink
-               to="/admin/videos"
-               className={navClass}
-            >
-               Videos
-            </NavLink>
-
-            <NavLink
-              to="/admin/home-sections"
-              className={navClass}
-            >
-              Home Sections
-             </NavLink>
-
-           <NavLink
-             to="/admin/smart-village"
-             className={navClass}
-           >
-             Smart Village
-           </NavLink>
-           
-           <NavLink
-             to="/admin/development-plans"
-             className={navClass}
-           >
-             Development Plans
-           </NavLink>
-
-           <NavLink
-             to="/admin/events"
-             className={navClass}
-           >
-             Events & Achievements
-           </NavLink>
-
-          </nav>
+              <nav className="space-y-2">
+                {section.items.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className={navClass}
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+              </nav>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-auto">
+        {/* Logout */}
+
+        <div className="border-t p-6">
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="w-full rounded-lg bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
           >
             Logout
           </button>
         </div>
-
       </aside>
+
+      {/* Main Content */}
 
       <main className="ml-64 p-8">
         <Outlet />

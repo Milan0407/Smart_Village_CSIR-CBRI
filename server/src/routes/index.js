@@ -46,6 +46,11 @@
   import developmentPlanRoutes from "../modules/developmentPlan/developmentPlan.routes.js";
 
   import eventRoutes from "../modules/events/event.routes.js";
+
+  import villageLocationRoutes
+  from "../modules/villageLocation/villageLocation.routes.js";
+
+  import policiesSchemeRoutes from "../modules/policiesSchemes/policiesScheme.routes.js";
   import {
   publicLimiter,
   adminLimiter,
@@ -139,9 +144,21 @@ router.use(
 );
 
 router.use(
+  "/village-locations",
+  publicLimiter,
+  villageLocationRoutes
+);
+
+router.use(
   "/events",
   publicLimiter,
   eventRoutes
+);
+
+router.use(
+  "/policies-schemes",
+  publicLimiter,
+  policiesSchemeRoutes
 );
 
 router.use(

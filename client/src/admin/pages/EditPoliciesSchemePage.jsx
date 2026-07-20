@@ -1,0 +1,100 @@
+import { useState } from "react";
+import {
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import PoliciesSchemeForm from "../components/policiesSchemes/PoliciesSchemeForm";
+
+import {
+  getPoliciesSchemeById,
+  updatePoliciesScheme,
+} from "../services/policiesScheme.service";
+
+const EditPoliciesSchemePage = () => {
+  const { id } = useParams();
+  const queryClient = useQueryClient();
+
+  const [saving, setSaving] = useState(false);
+
+  const {
+    data: scheme,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["admin-policies-scheme", id],
+    queryFn: () => getPoliciesSchemeById(id),
+    enabled: !!id,
+  });
+
+  const handleSubmit = async (values) => {
+    try {
+      setSaving(true);
+
+      const updated =
+        await updatePoliciesScheme(id, values);
+
+      toast.success(
+        "Policy or Scheme updated successfully."
+      );
+
+      queryClient.setQueryData(
+        ["admin-policies-scheme", id],
+        updated
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: ["admin-policies-schemes"],
+      });
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to update Policy or Scheme."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error || !scheme) {
+    return (
+      <div className="flex h-96 items-center justify-center text-red-600">
+        Unable to load Policy or Scheme.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-800">
+          Edit Policy or Scheme
+        </h1>
+
+        <p className="mt-2 text-slate-500">
+          Update an existing village policy or scheme.
+        </p>
+      </div>
+
+      <PoliciesSchemeForm
+        initialValues={scheme}
+        onSubmit={handleSubmit}
+        loading={saving}
+      />
+    </div>
+  );
+};
+
+export default EditPoliciesSchemePage;
