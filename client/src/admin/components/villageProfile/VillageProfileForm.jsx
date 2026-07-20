@@ -28,7 +28,10 @@ const initialForm = {
   isPublished: true,
 };
 
-const normalizeFormData = (data = {}) => ({
+const normalizeFormData = (data) => {
+  data = data ?? {};
+
+  return {
   ...initialForm,
   ...data,
   village: data.village?._id || data.village || "",
@@ -93,8 +96,9 @@ const normalizeFormData = (data = {}) => ({
             displayOrder: 0,
           },
         ]
-      : [],
-});
+            : [],
+  };
+};
 
 export default function VillageProfileForm({
   initialData = null,
