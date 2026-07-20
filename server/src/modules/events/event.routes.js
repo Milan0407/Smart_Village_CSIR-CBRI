@@ -27,6 +27,9 @@ router.get(
 
 router.get(
   "/statistics",
+  validate(eventQuerySchema.pick({
+    query: true,
+  })),
   eventController.getEventStatistics
 );
 

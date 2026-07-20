@@ -312,7 +312,17 @@ export const toggleFeatured = async (
  * Get Event Statistics
  */
 export const getEventStatistics =
-  async () => {
+  async (query = {}) => {
+    const { village } = query;
+    const baseFilter = {
+      published: true,
+      isDeleted: false,
+    };
+
+    if (village) {
+      baseFilter.village = village;
+    }
+
     const [
       total,
       upcoming,
@@ -320,32 +330,25 @@ export const getEventStatistics =
       achievements,
       featured,
     ] = await Promise.all([
-      Event.countDocuments({
-        published: true,
-        isDeleted: false,
-      }),
+      Event.countDocuments(baseFilter),
 
       Event.countDocuments({
-        published: true,
-        isDeleted: false,
+        ...baseFilter,
         status: "UPCOMING",
       }),
 
       Event.countDocuments({
-        published: true,
-        isDeleted: false,
+        ...baseFilter,
         status: "COMPLETED",
       }),
 
       Event.countDocuments({
-        published: true,
-        isDeleted: false,
+        ...baseFilter,
         type: "ACHIEVEMENT",
       }),
 
       Event.countDocuments({
-        published: true,
-        isDeleted: false,
+        ...baseFilter,
         isFeatured: true,
       }),
     ]);

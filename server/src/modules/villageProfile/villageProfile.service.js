@@ -64,6 +64,16 @@ const sanitizeProfilePayload = (payload = {}) => {
     return clean;
   }, {});
 
+  if (cleanPayload.heroImage === "") {
+    cleanPayload.heroImage = null;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(cleanPayload, "sortOrder")) {
+    cleanPayload.sortOrder = Number.isFinite(Number(cleanPayload.sortOrder))
+      ? Number(cleanPayload.sortOrder)
+      : 0;
+  }
+
   if (Array.isArray(cleanPayload.galleryImages)) {
     cleanPayload.galleryImages =
       cleanPayload.galleryImages

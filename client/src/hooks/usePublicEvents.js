@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import * as eventService from "../services/event.service";
 
@@ -15,6 +15,22 @@ const usePublicEvents = (initialFilters = {}) => {
     ...initialFilters,
   }));
 
+  useEffect(() => {
+    if (!initialFilters.village) {
+      return;
+    }
+
+    setFilters((prev) =>
+      prev.village === initialFilters.village
+        ? prev
+        : {
+            ...prev,
+            village: initialFilters.village,
+            page: 1,
+          }
+    );
+  }, [initialFilters.village]);
+
   const {
     data,
     isLoading,
@@ -27,7 +43,7 @@ const usePublicEvents = (initialFilters = {}) => {
       const [eventsResponse, statisticsResponse] =
         await Promise.all([
           eventService.getPublicEvents(filters),
-          eventService.getEventStatistics(),
+          eventService.getEventStatistics(filters),
         ]);
 
       const eventsPayload = eventsResponse.data || {};

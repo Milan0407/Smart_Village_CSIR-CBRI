@@ -48,6 +48,13 @@ const galleryItemSchema = z.union([
   }),
 ]);
 
+const optionalObjectId = z
+  .string()
+  .trim()
+  .optional()
+  .nullable()
+  .transform((value) => (value === "" ? null : value));
+
 const galleryItemUpdateSchema = z.union([
   z.string(),
   z.object({
@@ -113,10 +120,7 @@ export const createVillageProfileSchema = z.object({
       .optional()
       .default(""),
 
-    heroImage: z
-      .string()
-      .nullable()
-      .optional(),
+    heroImage: optionalObjectId,
 
     overview: z
       .string()
@@ -138,6 +142,7 @@ export const createVillageProfileSchema = z.object({
       .default([]),
 
     sortOrder: z
+      .coerce
       .number()
       .int()
       .nonnegative()
@@ -167,10 +172,7 @@ export const updateVillageProfileSchema = z.object({
       .trim()
       .optional(),
 
-    heroImage: z
-      .string()
-      .nullable()
-      .optional(),
+    heroImage: optionalObjectId,
 
     overview: z.string().optional(),
 
@@ -187,6 +189,7 @@ export const updateVillageProfileSchema = z.object({
       .optional(),
 
     sortOrder: z
+      .coerce
       .number()
       .int()
       .nonnegative()

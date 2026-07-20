@@ -38,6 +38,7 @@ export default function CreateVillageProfilePage() {
 
       alert(
         error.response?.data?.message ||
+          error.response?.data?.error?.message ||
           "Something went wrong."
       );
     } finally {

@@ -29,6 +29,14 @@ router.get(
 );
 
 /**
+ * Get village profile by village id
+ */
+router.get(
+  "/village/:villageId",
+  villageProfileController.getVillageProfileByVillage
+);
+
+/**
  * Get village profile by profile id
  */
 router.get(
@@ -36,14 +44,6 @@ router.get(
   verifyJWT,
   authorize("SUPER_ADMIN"),
   villageProfileController.getVillageProfile
-);
-
-/**
- * Get village profile by village id
- */
-router.get(
-  "/village/:villageId",
-  villageProfileController.getVillageProfileByVillage
 );
 
 /*

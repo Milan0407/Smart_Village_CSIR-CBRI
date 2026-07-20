@@ -145,7 +145,9 @@ export const toggleFeatured = asyncHandler(async (req, res) => {
 export const getEventStatistics = asyncHandler(
   async (req, res) => {
     const statistics =
-      await eventService.getEventStatistics();
+      await eventService.getEventStatistics(
+        req.query
+      );
 
     return res.status(200).json(
       new ApiResponse(

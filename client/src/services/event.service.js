@@ -88,9 +88,18 @@ export const getRelatedEvents = async (
 };
 
 export const getEventStatistics =
-  async () => {
+  async (filters = {}) => {
+    const params = {};
+
+    if (filters.village) {
+      params.village = filters.village;
+    }
+
     const response = await axios.get(
-      `${API_URL}/statistics`
+      `${API_URL}/statistics`,
+      {
+        params,
+      }
     );
 
     return response.data;
