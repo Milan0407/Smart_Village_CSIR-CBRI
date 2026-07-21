@@ -1,4 +1,9 @@
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   ChevronDown,
@@ -153,6 +158,8 @@ const TechnologyModal = ({
   onSubmit,
   saving,
 }) => {
+  const modalRef = useRef(null);
+  const firstInputRef = useRef(null);
   const [values, setValues] = useState({
     ...emptyTechnology,
     ...initialValue,
@@ -170,118 +177,241 @@ const TechnologyModal = ({
     onSubmit(values);
   };
 
+  useEffect(() => {
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    firstInputRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (
+        event.key !== "Tab" ||
+        !modalRef.current
+      ) {
+        return;
+      }
+
+      const focusableElements = [
+        ...modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ),
+      ].filter(
+        (element) =>
+          !element.disabled &&
+          element.getAttribute("aria-hidden") !==
+            "true"
+      );
+
+      if (!focusableElements.length) {
+        return;
+      }
+
+      const firstElement =
+        focusableElements[0];
+      const lastElement =
+        focusableElements[
+          focusableElements.length - 1
+        ];
+
+      if (
+        event.shiftKey &&
+        document.activeElement === firstElement
+      ) {
+        event.preventDefault();
+        lastElement.focus();
+      }
+
+      if (
+        !event.shiftKey &&
+        document.activeElement === lastElement
+      ) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+      document.body.style.overflow =
+        previousOverflow;
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/40 p-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-3 backdrop-blur-sm sm:p-5"
+      role="presentation"
+    >
       <form
+        ref={modalRef}
         onSubmit={handleSubmit}
-        className="my-8 w-full max-w-3xl rounded-xl bg-white p-6 shadow-xl"
+        className="flex max-h-[90vh] w-[95vw] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:w-[85vw] lg:max-w-[950px]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="technology-modal-title"
       >
-        <h3 className="text-xl font-semibold text-slate-800">
-          {initialValue?._id
-            ? "Edit Technology"
-            : "Create Technology"}
-        </h3>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <input
-            value={values.labName}
-            onChange={(e) =>
-              handleChange("labName", e.target.value)
-            }
-            className="rounded-lg border border-slate-300 px-4 py-2.5"
-            placeholder="Lab Name"
-            required
-          />
-
-          <input
-            value={values.technologyName}
-            onChange={(e) =>
-              handleChange("technologyName", e.target.value)
-            }
-            className="rounded-lg border border-slate-300 px-4 py-2.5"
-            placeholder="Technology Name"
-            required
-          />
-
-          <textarea
-            value={values.description}
-            onChange={(e) =>
-              handleChange("description", e.target.value)
-            }
-            className="rounded-lg border border-slate-300 px-4 py-2.5 md:col-span-2"
-            placeholder="Description"
-            rows={4}
-          />
-
-          <div className="md:col-span-2">
-            <MediaUploader
-              label="Technology Image"
-              value={values.image}
-              onChange={(image) =>
-                handleChange("image", image)
-              }
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
-              Progress: {values.progress}%
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={values.progress}
-              onChange={(e) =>
-                handleChange(
-                  "progress",
-                  Number(e.target.value)
-                )
-              }
-              className="w-full"
-            />
-          </div>
-
-          <select
-            value={values.status}
-            onChange={(e) =>
-              handleChange("status", e.target.value)
-            }
-            className="rounded-lg border border-slate-300 px-4 py-2.5"
+        <div className="border-b border-slate-200 px-6 py-5 sm:px-8">
+          <h3
+            id="technology-modal-title"
+            className="text-xl font-semibold text-slate-900"
           >
-            {statusOptions.map((status) => (
-              <option
-                key={status}
-                value={status}
-              >
-                {status.replaceAll("_", " ")}
-              </option>
-            ))}
-          </select>
+            {initialValue?._id
+              ? "Edit Technology"
+              : "Create Technology"}
+          </h3>
 
-          <input
-            type="number"
-            value={values.order}
-            onChange={(e) =>
-              handleChange("order", Number(e.target.value))
-            }
-            className="rounded-lg border border-slate-300 px-4 py-2.5"
-            placeholder="Display Order"
-          />
+          <p className="mt-1 text-sm text-slate-500">
+            Configure lab technology details for this development plan sector.
+          </p>
         </div>
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Lab Name
+              </label>
+              <input
+                ref={firstInputRef}
+                value={values.labName}
+                onChange={(e) =>
+                  handleChange("labName", e.target.value)
+                }
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                placeholder="Lab Name"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Technology Name
+              </label>
+              <input
+                value={values.technologyName}
+                onChange={(e) =>
+                  handleChange("technologyName", e.target.value)
+                }
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                placeholder="Technology Name"
+                required
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Description
+              </label>
+              <textarea
+                value={values.description}
+                onChange={(e) =>
+                  handleChange("description", e.target.value)
+                }
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                placeholder="Description"
+                rows={5}
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <MediaUploader
+                label="Technology Image"
+                value={values.image}
+                onChange={(image) =>
+                  handleChange("image", image)
+                }
+                className="border-blue-100 bg-blue-50/40 p-6"
+                uploadAreaClassName="min-h-52 border-blue-200 shadow-inner hover:shadow-sm"
+                previewImageClassName="h-44"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Progress: {values.progress}%
+              </label>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={values.progress}
+                  onChange={(e) =>
+                    handleChange(
+                      "progress",
+                      Number(e.target.value)
+                    )
+                  }
+                  className="w-full accent-blue-600"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Status
+              </label>
+              <select
+                value={values.status}
+                onChange={(e) =>
+                  handleChange("status", e.target.value)
+                }
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              >
+                {statusOptions.map((status) => (
+                  <option
+                    key={status}
+                    value={status}
+                  >
+                    {status.replaceAll("_", " ")}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Sort Order
+              </label>
+              <input
+                type="number"
+                value={values.order}
+                onChange={(e) =>
+                  handleChange("order", Number(e.target.value))
+                }
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                placeholder="Display Order"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="sticky bottom-0 flex justify-end gap-3 border-t border-slate-200 bg-white px-6 py-4 shadow-[0_-10px_30px_rgba(15,23,42,0.06)] sm:px-8">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-slate-300 px-4 py-2"
+            className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-50"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+            className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
           >
             {saving ? "Saving..." : "Save Technology"}
           </button>

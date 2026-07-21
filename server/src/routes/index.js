@@ -47,6 +47,8 @@
 
   import eventRoutes from "../modules/events/event.routes.js";
 
+  import homeRoutes from "../modules/home/home.routes.js";
+
   import villageLocationRoutes
   from "../modules/villageLocation/villageLocation.routes.js";
 
@@ -153,6 +155,12 @@ router.use(
   "/events",
   publicLimiter,
   eventRoutes
+);
+
+router.use(
+  "/home",
+  publicLimiter,
+  homeRoutes
 );
 
 router.use(

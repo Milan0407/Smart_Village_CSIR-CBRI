@@ -7,6 +7,9 @@ const MediaUploader = ({
   multiple = false,
   value = [],
   onChange,
+  className = "",
+  uploadAreaClassName = "",
+  previewImageClassName = "",
 }) => {
   const inputRef = useRef(null);
 const [uploading, setUploading] = useState(false);
@@ -65,7 +68,9 @@ const handleSelect = async (e) => {
   };
 
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6">
+    <div
+      className={`rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 ${className}`}
+    >
 
       {/* Header */}
 
@@ -84,7 +89,7 @@ const handleSelect = async (e) => {
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        className="flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white p-10 transition hover:border-blue-500 hover:bg-blue-50"
+        className={`flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white p-10 transition hover:border-blue-500 hover:bg-blue-50 ${uploadAreaClassName}`}
       >
           {uploading ? (
   <Loader2
@@ -133,7 +138,7 @@ const handleSelect = async (e) => {
               <img
                 src={image.url}
                 alt=""
-                className="h-36 w-full object-cover"
+                className={`h-36 w-full object-cover ${previewImageClassName}`}
               />
 
               <button
