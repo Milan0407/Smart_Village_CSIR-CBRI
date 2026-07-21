@@ -9,14 +9,53 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import FacilityPopup from "./FacilityPopup";
+import {
+  getFacilityMarkerStyle,
+  villageMarkerStyle,
+} from "./markerStyles";
 
-const markerIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+const createMapMarkerIcon = ({
+  color,
+  isVillage = false,
+}) =>
+  L.divIcon({
+    className: "",
+    html: `
+      <div style="
+        width: ${isVillage ? 34 : 28}px;
+        height: ${isVillage ? 34 : 28}px;
+        border-radius: 9999px 9999px 9999px 0;
+        background: ${color};
+        border: 3px solid white;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
+        transform: rotate(-45deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <span style="
+          width: ${isVillage ? 12 : 9}px;
+          height: ${isVillage ? 12 : 9}px;
+          border-radius: 9999px;
+          background: white;
+          display: block;
+        "></span>
+      </div>
+    `,
+    iconSize: isVillage ? [34, 34] : [28, 28],
+    iconAnchor: isVillage ? [17, 34] : [14, 28],
+    popupAnchor: [0, -28],
+  });
+
+const villageMarkerIcon = createMapMarkerIcon({
+  color: villageMarkerStyle.color,
+  isVillage: true,
 });
+
+const getFacilityMarkerIcon = (category) =>
+  createMapMarkerIcon({
+    color: getFacilityMarkerStyle(category).color,
+  });
 
 const VillageMapContainer = ({
   villageLocation,
@@ -68,7 +107,7 @@ const villageCoordinates =
           {/* Village Marker */}
           <Marker
             position={center}
-            icon={markerIcon}
+            icon={villageMarkerIcon}
           >
             <Popup>
               <div className="space-y-2">
@@ -109,7 +148,9 @@ const villageCoordinates =
                   coordinates[1],
                   coordinates[0],
                 ]}
-                icon={markerIcon}
+                icon={getFacilityMarkerIcon(
+                  facility.category
+                )}
               >
                 <Popup>
                   <FacilityPopup

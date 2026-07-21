@@ -1,16 +1,69 @@
 import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
   Building2,
   MapPin,
   Phone,
 } from "lucide-react";
 
 import DirectionsButton from "./DirectionsButton";
+import { getFacilityMarkerStyle } from "./markerStyles";
 
 const FacilityCard = ({
   facility,
   onSelect,
 }) => {
+  const descriptionRef = useRef(null);
+  const [isDescriptionOpen, setIsDescriptionOpen] =
+    useState(false);
+  const [canExpandDescription, setCanExpandDescription] =
+    useState(false);
+  const [descriptionHeight, setDescriptionHeight] =
+    useState(0);
+
+  useEffect(() => {
+    const description = descriptionRef.current;
+
+    if (!description) {
+      setCanExpandDescription(false);
+      return undefined;
+    }
+
+    const measureDescription = () => {
+      setDescriptionHeight(
+        description.scrollHeight
+      );
+
+      if (isDescriptionOpen) {
+        return;
+      }
+
+      setCanExpandDescription(
+        description.scrollHeight >
+          description.clientHeight + 1
+      );
+    };
+
+    measureDescription();
+    window.addEventListener(
+      "resize",
+      measureDescription
+    );
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        measureDescription
+      );
+  }, [facility?.description, isDescriptionOpen]);
+
   if (!facility) return null;
+
+  const markerStyle =
+    getFacilityMarkerStyle(facility.category);
 
   const coordinates =
     facility?.location?.coordinates || [];
@@ -33,7 +86,9 @@ const FacilityCard = ({
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-emerald-100 p-3 text-emerald-600">
+          <div
+            className={`rounded-lg p-3 ${markerStyle.bg} ${markerStyle.text}`}
+          >
             <Building2 size={22} />
           </div>
 
@@ -43,7 +98,9 @@ const FacilityCard = ({
             </h3>
 
             {facility.category && (
-              <span className="mt-1 inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              <span
+                className={`mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${markerStyle.bg} ${markerStyle.text}`}
+              >
                 {facility.category}
               </span>
             )}
@@ -53,9 +110,48 @@ const FacilityCard = ({
 
       {/* Description */}
       {facility.description && (
-        <p className="mt-4 text-sm leading-6 text-slate-600">
-          {facility.description}
-        </p>
+        <div className="mt-4">
+          <div
+            className="overflow-hidden transition-all duration-300 ease-out"
+            style={{
+              maxHeight: isDescriptionOpen
+                ? `${descriptionHeight}px`
+                : "4.5rem",
+            }}
+          >
+            <p
+              ref={descriptionRef}
+              className="overflow-hidden text-sm leading-6 text-slate-600"
+              style={{
+                display: isDescriptionOpen
+                  ? "block"
+                  : "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp:
+                  isDescriptionOpen ? "unset" : 3,
+              }}
+            >
+              {facility.description}
+            </p>
+          </div>
+
+          {canExpandDescription && (
+            <button
+              type="button"
+              onClick={() =>
+                setIsDescriptionOpen(
+                  (current) => !current
+                )
+              }
+              className="mt-2 text-sm font-semibold text-emerald-700 transition hover:text-emerald-900"
+              aria-expanded={isDescriptionOpen}
+            >
+              {isDescriptionOpen
+                ? "Read Less"
+                : "Read More"}
+            </button>
+          )}
+        </div>
       )}
 
       {/* Address */}

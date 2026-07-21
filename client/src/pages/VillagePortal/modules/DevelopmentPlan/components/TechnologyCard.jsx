@@ -120,7 +120,7 @@ const TechnologyCard = ({ technology }) => {
               <img
                 src={image}
                 alt={technology.technologyName}
-                className="h-full w-full cursor-pointer object-cover object-center transition duration-500 group-hover:scale-105"
+                className="h-full w-full cursor-pointer object-contain object-center transition duration-500 group-hover:scale-105"
               />
             </div>
           </button>

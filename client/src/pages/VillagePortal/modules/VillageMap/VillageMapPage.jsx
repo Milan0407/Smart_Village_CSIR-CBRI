@@ -22,13 +22,6 @@ const [category, setCategory] = useState("all");
     error,
   } = useVillageLocation(slug);
 
-  console.log({
-  villageLocation,
-  isLoading,
-  isError,
-  error,
-});
-
   const facilities =
   villageLocation?.nearbyFacilities ?? [];
 
@@ -107,6 +100,7 @@ const filteredFacilities = useMemo(() => {
         <div className="mt-8">
           <Legend
   facilityCount={filteredFacilities.length}
+  facilities={filteredFacilities}
 />
 </div>
 
