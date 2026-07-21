@@ -13,6 +13,8 @@ import EventGallery from "./components/EventGallery";
 import EventSidebar from "./components/EventSidebar";
 import EventCard from "./components/EventCard";
 import { getLocalizedText } from "./utils/eventText";
+import SmartTextRenderer
+  from "../../../../components/common/SmartTextRenderer";
 
 const EventDetailPage = () => {
   const navigate = useNavigate();
@@ -155,9 +157,7 @@ const EventDetailPage = () => {
                   Overview
                 </h2>
 
-                <p className="text-lg leading-8 text-slate-700">
-                  {summary}
-                </p>
+                <SmartTextRenderer text={summary} />
 
               </div>
             )}
@@ -170,17 +170,7 @@ const EventDetailPage = () => {
                 Description
               </h2>
 
-              <div className="space-y-6 text-lg leading-8 text-slate-700">
-
-                {description
-                  ?.split("\n")
-                  .map((paragraph, index) => (
-                    <p key={index}>
-                      {paragraph}
-                    </p>
-                  ))}
-
-              </div>
+              <SmartTextRenderer text={description} />
 
             </div>
 

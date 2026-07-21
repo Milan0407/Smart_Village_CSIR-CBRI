@@ -10,6 +10,8 @@ import {
   getLocalizedText,
   getVillageName,
 } from "../utils/eventText";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const FeaturedEvent = ({ event }) => {
   if (!event) return null;
@@ -95,9 +97,10 @@ const FeaturedEvent = ({ event }) => {
 
           </div>
 
-          <p className="mt-6 line-clamp-3 text-lg leading-8 text-slate-600">
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="mt-6 max-w-none"
+          />
 
           <Link
             to={`/village/${event.village?.slug}/events/${event.slug}`}

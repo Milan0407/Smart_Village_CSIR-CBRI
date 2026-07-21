@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 
 import useSiteSettings from "../../hooks/useSiteSettings";
+import SmartTextRenderer from "./SmartTextRenderer";
 
 // Official Logos
 import CBRILogo from "../../assets/logos/CSIRCBRI-Logo.jpg";
@@ -137,15 +138,13 @@ const Footer = () => {
 
           {/* Description */}
 
-          <p className="mt-6 text-slate-600 leading-8 max-w-lg">
-
-            {settings?.footerDescription ||
-
+          <SmartTextRenderer
+            text={
+              settings?.footerDescription ||
               "Empowering rural communities through sustainable technologies, scientific research, digital innovation and collaborative development under the CSIR Smart Village Initiative."
-
             }
-
-          </p>
+            className="mt-6 max-w-lg"
+          />
 
           {/* Official Website */}
 

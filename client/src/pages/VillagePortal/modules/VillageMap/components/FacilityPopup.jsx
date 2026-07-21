@@ -1,6 +1,8 @@
 import { MapPin, Phone } from "lucide-react";
 
 import DirectionsButton from "./DirectionsButton";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const FacilityPopup = ({ facility }) => {
   if (!facility) return null;
@@ -32,9 +34,10 @@ const FacilityPopup = ({ facility }) => {
       </div>
 
       {facility.description && (
-        <p className="text-sm leading-6 text-slate-600">
-          {facility.description}
-        </p>
+        <SmartTextRenderer
+          text={facility.description}
+          className="max-w-none text-sm [&_p]:text-sm [&_p]:leading-6 [&_p]:mb-0"
+        />
         
       )}
       

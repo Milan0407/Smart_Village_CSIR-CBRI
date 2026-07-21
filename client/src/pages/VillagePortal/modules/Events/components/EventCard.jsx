@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import EventMeta from "./EventMeta";
 import { getLocalizedText } from "../utils/eventText";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const EventCard = ({ event }) => {
   if (!event) return null;
@@ -63,9 +65,10 @@ const EventCard = ({ event }) => {
           className="mt-4"
         />
 
-        <p className="mt-4 line-clamp-3 text-slate-600">
-          {summary}
-        </p>
+        <SmartTextRenderer
+          text={summary}
+          className="mt-4 max-w-none space-y-0 [&_p]:mb-0 [&_p]:line-clamp-3 [&_p]:text-base [&_p]:leading-7 [&_p]:text-slate-600 [&_p]:text-left"
+        />
 
         <Link
           to={eventUrl}

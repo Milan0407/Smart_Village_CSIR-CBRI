@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const CSIRLabsHero = ({
   data = {},
 }) => {
@@ -9,12 +12,13 @@ const CSIRLabsHero = ({
           {data.heading}
         </h2>
 
-        <p className="mt-4 text-slate-600">
-          {
+        <SmartTextRenderer
+          text={
             data.description ||
             data.subHeading
           }
-        </p>
+          className="mt-4 max-w-4xl"
+        />
 
       </div>
     </section>

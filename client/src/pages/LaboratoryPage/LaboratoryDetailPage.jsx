@@ -6,6 +6,10 @@ import {
 } from "../../services/laboratory.service";
 
 import MainLayout from "../../layouts/MainLayout";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+import { normalizeDisplayList }
+  from "../../utils/listText";
 
 const LaboratoryDetailPage = () => {
   const { slug } =
@@ -61,6 +65,15 @@ const LaboratoryDetailPage = () => {
     );
   }
 
+  const researchAreas =
+    normalizeDisplayList(
+      laboratory.researchAreas
+    );
+  const contributions =
+    normalizeDisplayList(
+      laboratory.contributions
+    );
+
 return (
   <>
   <MainLayout>
@@ -95,9 +108,10 @@ return (
           About Laboratory
         </h2>
 
-        <p className="text-slate-700 leading-8">
-          {laboratory.overview}
-        </p>
+        <SmartTextRenderer
+          text={laboratory.overview}
+          className="max-w-none"
+        />
       </div>
 
       <div className="mb-12">
@@ -105,15 +119,23 @@ return (
           Research Areas
         </h2>
 
-        <ul className="list-disc pl-6 space-y-2">
-          {laboratory.researchAreas?.map(
+        <ol className="grid gap-3 sm:grid-cols-2">
+          {researchAreas.map(
             (item, index) => (
-              <li key={index}>
+              <li
+                key={index}
+                className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 leading-7 text-slate-700"
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-700 text-sm font-bold text-white">
+                  {index + 1}
+                </span>
+                <span>
                 {item}
+                </span>
               </li>
             )
           )}
-        </ul>
+        </ol>
       </div>
 
       <div className="mb-12">
@@ -121,15 +143,23 @@ return (
           Key Contributions
         </h2>
 
-        <ul className="list-disc pl-6 space-y-2">
-          {laboratory.contributions?.map(
+        <ol className="space-y-3">
+          {contributions.map(
             (item, index) => (
-              <li key={index}>
+              <li
+                key={index}
+                className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 leading-7 text-slate-700"
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-700 text-sm font-bold text-white">
+                  {index + 1}
+                </span>
+                <span>
                 {item}
+                </span>
               </li>
             )
           )}
-        </ul>
+        </ol>
       </div>
 
       <div className="mb-12">

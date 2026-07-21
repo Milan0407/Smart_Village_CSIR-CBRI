@@ -1,5 +1,7 @@
 import { useNavigate }
   from "react-router-dom";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const VillagesSection = ({
   data = {},
@@ -34,9 +36,10 @@ const VillagesSection = ({
             {heading}
           </h2>
 
-          <p className="text-slate-600 max-w-3xl mx-auto mt-4">
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="mt-4 max-w-3xl"
+          />
 
         </div>
 

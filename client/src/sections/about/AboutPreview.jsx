@@ -1,5 +1,7 @@
 import { Link }
   from "react-router-dom";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const AboutPreview = ({
   data = {},
@@ -30,9 +32,10 @@ const AboutPreview = ({
           {heading}
         </h2>
 
-        <p className="text-lg text-slate-600 leading-relaxed mb-10">
-          {description}
-        </p>
+        <SmartTextRenderer
+          text={description}
+          className="mb-10"
+        />
 
         <Link
           to={buttonLink}

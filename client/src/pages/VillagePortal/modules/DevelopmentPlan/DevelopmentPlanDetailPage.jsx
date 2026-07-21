@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 import { useDevelopmentPlan } from "../../../../hooks/useDevelopmentPlans";
+import SmartTextRenderer
+  from "../../../../components/common/SmartTextRenderer";
 
 import DevelopmentSkeleton from "./components/Hero/DevelopmentSkeleton";
 import SectorAccordion from "./components/SectorAccordion";
@@ -57,9 +59,10 @@ const DevelopmentPlanDetailPage = () => {
         </h1>
 
         {plan.description && (
-          <p className="mt-5 max-w-4xl text-lg leading-8 text-blue-50">
-            {plan.description}
-          </p>
+          <SmartTextRenderer
+            text={plan.description}
+            className="mt-5 max-w-4xl text-blue-50 [&_*]:text-blue-50"
+          />
         )}
       </section>
 

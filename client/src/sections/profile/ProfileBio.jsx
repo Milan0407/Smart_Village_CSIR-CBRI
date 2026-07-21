@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const ProfileBio = ({
   data,
 }) => {
@@ -39,15 +42,10 @@ const ProfileBio = ({
             shadow-sm
           "
         >
-          <p
-            className="
-              text-slate-600
-              leading-relaxed
-              text-lg
-            "
-          >
-            {data?.description}
-          </p>
+          <SmartTextRenderer
+            text={data?.description}
+            className="max-w-none"
+          />
         </div>
 
       </div>

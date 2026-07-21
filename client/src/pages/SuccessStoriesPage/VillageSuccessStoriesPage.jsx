@@ -11,6 +11,8 @@ import MainLayout from "../../layouts/MainLayout";
 import {
   getStoriesByVillageSlug,
 } from "../../services/successStory.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const VillageSuccessStoriesPage = () => {
   const { villageSlug } = useParams();
@@ -131,9 +133,12 @@ const VillageSuccessStoriesPage = () => {
                 About {village.name}’s transformation
               </h1>
 
-              <p className="mt-6 text-slate-700 text-sm md:text-base leading-relaxed whitespace-pre-line border-l-2 border-slate-200 pl-5">
-                {displayedDescription}
-              </p>
+              <div className="mt-6 border-l-2 border-slate-200 pl-5">
+                <SmartTextRenderer
+                  text={displayedDescription}
+                  className="max-w-none"
+                />
+              </div>
 
               {shouldShowReadMore && (
                 <button
@@ -225,9 +230,10 @@ const VillageSuccessStoriesPage = () => {
                         {story.title}
                       </h3>
 
-                      <p className="text-slate-600 text-sm mt-2 leading-relaxed line-clamp-3">
-                        {story.summary}
-                      </p>
+                      <SmartTextRenderer
+                        text={story.summary}
+                        className="mt-2 max-w-none space-y-0 [&_p]:mb-0 [&_p]:line-clamp-3 [&_p]:text-sm [&_p]:leading-relaxed [&_p]:text-slate-600 [&_p]:text-left"
+                      />
                     </div>
                   </div>
 

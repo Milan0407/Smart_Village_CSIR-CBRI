@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const PoliciesSection = ({
   data = {},
 }) => {
@@ -28,9 +31,10 @@ const PoliciesSection = ({
             {heading}
           </h2>
 
-          <p className="text-slate-600 max-w-3xl mx-auto mt-4">
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="mt-4 max-w-3xl"
+          />
 
         </div>
 
@@ -62,11 +66,10 @@ const PoliciesSection = ({
                   {policy.title}
                 </h3>
 
-                <p className="text-slate-600">
-                  {
-                    policy.description
-                  }
-                </p>
+                <SmartTextRenderer
+                  text={policy.description}
+                  className="max-w-none"
+                />
 
               </div>
             )

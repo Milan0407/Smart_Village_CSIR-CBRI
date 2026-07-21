@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const AboutOverview = ({
   data,
 }) => {
@@ -32,16 +35,9 @@ const AboutOverview = ({
 
         </div>
 
-        <div
-          className="
-            text-lg
-            text-slate-600
-            leading-relaxed
-            text-center
-          "
-        >
-          {data?.description}
-        </div>
+        <SmartTextRenderer
+          text={data?.description}
+        />
 
       </div>
 

@@ -2,6 +2,8 @@ import { ChevronDown, Cpu, Layers3 } from "lucide-react";
 import { useMemo } from "react";
 
 import TechnologyCard, { ProgressBar } from "./TechnologyCard";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const SectorAccordion = ({
   sector,
@@ -35,9 +37,10 @@ const SectorAccordion = ({
               </h3>
 
               {sector.description && (
-                <p className="mt-2 max-w-3xl leading-7 text-slate-600">
-                  {sector.description}
-                </p>
+                <SmartTextRenderer
+                  text={sector.description}
+                  className="mt-2 max-w-3xl"
+                />
               )}
 
               <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">

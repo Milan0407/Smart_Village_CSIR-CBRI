@@ -26,17 +26,7 @@ const EditLaboratoryPage = () => {
           const data =
             await getLaboratoryById(id);
 
-          setLaboratory({
-            ...data,
-
-            researchAreas:
-              data.researchAreas?.join(", ") ||
-              "",
-
-            contributions:
-              data.contributions?.join(", ") ||
-              "",
-          });
+          setLaboratory(data);
         } catch (error) {
           console.error(error);
         } finally {
@@ -50,25 +40,7 @@ const EditLaboratoryPage = () => {
   const handleUpdate =
     async (formData) => {
       try {
-        await updateLaboratory(id, {
-          ...formData,
-
-          researchAreas:
-            formData.researchAreas
-              ?.split(",")
-              .map((item) =>
-                item.trim()
-              )
-              .filter(Boolean),
-
-          contributions:
-            formData.contributions
-              ?.split(",")
-              .map((item) =>
-                item.trim()
-              )
-              .filter(Boolean),
-        });
+        await updateLaboratory(id, formData);
 
         navigate(
           "/admin/laboratories"

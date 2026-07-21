@@ -11,6 +11,8 @@ import {
 
 import DirectionsButton from "./DirectionsButton";
 import { getFacilityMarkerStyle } from "./markerStyles";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const FacilityCard = ({
   facility,
@@ -119,9 +121,9 @@ const FacilityCard = ({
                 : "4.5rem",
             }}
           >
-            <p
+            <div
               ref={descriptionRef}
-              className="overflow-hidden text-sm leading-6 text-slate-600"
+              className="overflow-hidden"
               style={{
                 display: isDescriptionOpen
                   ? "block"
@@ -131,8 +133,11 @@ const FacilityCard = ({
                   isDescriptionOpen ? "unset" : 3,
               }}
             >
-              {facility.description}
-            </p>
+              <SmartTextRenderer
+                text={facility.description}
+                className="max-w-none [&_p]:mb-0 [&_p]:text-sm [&_p]:leading-6"
+              />
+            </div>
           </div>
 
           {canExpandDescription && (

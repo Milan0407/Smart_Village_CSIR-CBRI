@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { sendContactMessage } from "../../services/contact.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const ContactForm = ({ data = {} }) => {
   const [formData, setFormData] = useState({
@@ -57,9 +59,10 @@ setError(
         </h2>
 
         {data.description && (
-          <p className="mb-6 text-gray-600">
-            {data.description}
-          </p>
+          <SmartTextRenderer
+            text={data.description}
+            className="mb-6 max-w-none"
+          />
         )}
 
         {success && (

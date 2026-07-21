@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
+
 const AboutSkeleton = () => (
   <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div className="space-y-5 p-6 sm:p-8 lg:p-10">
@@ -41,10 +44,13 @@ const AboutSection = ({ profile, loading = false }) => {
             </p>
           ) : null}
 
-          <p className="mt-6 whitespace-pre-line text-base leading-8 text-slate-700">
-            {description ||
-              "Village profile information will be updated soon."}
-          </p>
+          <SmartTextRenderer
+            text={
+              description ||
+              "Village profile information will be updated soon."
+            }
+            className="mt-6 max-w-none"
+          />
         </div>
       </div>
     </section>

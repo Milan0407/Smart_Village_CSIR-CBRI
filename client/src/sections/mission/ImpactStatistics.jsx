@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 
 import { getHomeStats } from "../../services/home.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const CountUpNumber = ({
   value = 0,
@@ -174,9 +176,10 @@ const ImpactStatistics = ({
             {heading}
           </h2>
 
-          <p className="text-blue-100 mt-5 max-w-3xl mx-auto text-lg">
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="mt-5 max-w-3xl text-blue-100 [&_*]:text-blue-100"
+          />
 
         </div>
 

@@ -13,6 +13,8 @@ import MainLayout
 import {
   getNewsBySlug,
 } from "../../services/news.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const NewsDetailPage =
   () => {
@@ -99,13 +101,15 @@ const NewsDetailPage =
             ).toLocaleDateString()}
           </p>
 
-          <p className="mt-8 text-xl text-slate-600">
-            {article.summary}
-          </p>
+          <SmartTextRenderer
+            text={article.summary}
+            className="mt-8"
+          />
 
-          <div className="mt-10 text-slate-700 leading-8">
-            {article.content}
-          </div>
+          <SmartTextRenderer
+            text={article.content}
+            className="mt-10"
+          />
 
         </div>
 

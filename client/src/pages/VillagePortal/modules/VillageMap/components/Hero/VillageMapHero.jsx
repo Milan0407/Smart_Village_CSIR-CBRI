@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { MapPin, Navigation, Building2 } from "lucide-react";
+import SmartTextRenderer
+  from "../../../../../../components/common/SmartTextRenderer";
 
 const VillageMapHero = ({ villageLocation }) => {
   const village = villageLocation?.village;
@@ -54,9 +56,10 @@ const VillageMapHero = ({ villageLocation }) => {
               {villageName}
             </h1>
 
-            <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50 md:text-lg">
-              {overview}
-            </p>
+            <SmartTextRenderer
+              text={overview}
+              className="mt-5 max-w-3xl text-emerald-50 [&_*]:text-emerald-50"
+            />
 
             {villageLocation?.googleMapsLink && (
               <a

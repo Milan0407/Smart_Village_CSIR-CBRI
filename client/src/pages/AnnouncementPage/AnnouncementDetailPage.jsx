@@ -11,6 +11,8 @@ import {
 import {
   getAnnouncementBySlug,
 } from "../../services/announcement.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const AnnouncementDetailPage = () => {
   const { slug } = useParams();
@@ -184,30 +186,17 @@ const AnnouncementDetailPage = () => {
                 mb-8
               "
             >
-              <p
-                className="
-                  text-lg
-                  text-slate-700
-                  leading-relaxed
-                "
-              >
-                {announcement.summary}
-              </p>
+              <SmartTextRenderer
+                text={announcement.summary}
+              />
             </div>
           )}
 
           {/* Content */}
 
-          <div
-            className="
-              text-slate-700
-              leading-8
-              whitespace-pre-line
-              text-lg
-            "
-          >
-            {announcement.content}
-          </div>
+          <SmartTextRenderer
+            text={announcement.content}
+          />
 
           {/* Actions */}
 

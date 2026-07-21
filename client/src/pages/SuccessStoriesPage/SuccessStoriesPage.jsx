@@ -16,6 +16,8 @@ import {
 import {
   getPageBySlug,
 } from "../../services/cms.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 const SuccessStoriesPage = () => {
   const [villages, setVillages] = useState([]);
   const [pageData, setPageData] = useState(null);
@@ -179,9 +181,10 @@ const SuccessStoriesPage = () => {
                 {heroTitle}
               </h1>
 
-              <p className="mt-6 text-base md:text-lg text-slate-200 leading-relaxed max-w-2xl">
-                {heroDescription}
-              </p>
+              <SmartTextRenderer
+                text={heroDescription}
+                className="mt-6 max-w-2xl text-slate-200 [&_*]:text-slate-200"
+              />
             </div>
           </div>
         </section>

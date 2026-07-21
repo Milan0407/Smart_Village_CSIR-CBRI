@@ -27,6 +27,8 @@ import {
 
 import "swiper/css";
 import "swiper/css/pagination";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const LatestUpdates = ({
   data = {},
@@ -131,16 +133,10 @@ const LatestUpdates = ({
             {heading}
           </h2>
 
-          <p
-            className="
-              text-slate-600
-              max-w-3xl
-              mx-auto
-              mt-4
-            "
-          >
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="mt-4 max-w-3xl"
+          />
 
         </div>
 

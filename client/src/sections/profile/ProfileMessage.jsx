@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const ProfileMessage = ({
   data,
 }) => {
@@ -82,15 +85,10 @@ const ProfileMessage = ({
             "Science, innovation and community participation are the foundations of sustainable rural development."
           </div>
 
-          <div
-            className="
-              text-slate-600
-              leading-relaxed
-              text-lg
-            "
-          >
-            {data?.message}
-          </div>
+          <SmartTextRenderer
+            text={data?.message}
+            className="max-w-none"
+          />
 
         </div>
 

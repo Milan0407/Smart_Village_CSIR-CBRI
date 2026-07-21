@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const ObjectivesContent = ({
   data,
 }) => {
@@ -36,18 +39,13 @@ const ObjectivesContent = ({
             bg-slate-50
             rounded-2xl
             p-10
-            text-center
+            text-left
           "
         >
-          <p
-            className="
-              text-lg
-              text-slate-700
-              leading-relaxed
-            "
-          >
-            {data?.description}
-          </p>
+          <SmartTextRenderer
+            text={data?.description}
+            className="max-w-4xl"
+          />
         </div>
 
       </div>

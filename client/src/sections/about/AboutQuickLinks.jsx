@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 
 const AboutQuickLinks = ({
   data,
@@ -81,14 +83,10 @@ const AboutQuickLinks = ({
                   {item.title}
                 </h3>
 
-                <p
-                  className="
-                    text-slate-600
-                    mt-3
-                  "
-                >
-                  {item.description}
-                </p>
+                <SmartTextRenderer
+                  text={item.description}
+                  className="mt-3 max-w-none"
+                />
 
                 <div
                   className="

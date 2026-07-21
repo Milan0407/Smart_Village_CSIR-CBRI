@@ -1,6 +1,8 @@
 import {
   Link,
 } from "react-router-dom";
+import SmartTextRenderer
+  from "../../../components/common/SmartTextRenderer";
 
 const FeaturedAnnouncement = ({
   announcement,
@@ -38,14 +40,10 @@ const FeaturedAnnouncement = ({
         {announcement.title}
       </h2>
 
-      <p
-        className="
-          mt-4
-          text-slate-600
-        "
-      >
-        {announcement.summary}
-      </p>
+      <SmartTextRenderer
+        text={announcement.summary}
+        className="mt-4 max-w-none"
+      />
 
       <Link
         to={`/announcements/${announcement.slug}`}

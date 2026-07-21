@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const ObjectivesFocusAreas = ({
   data,
 }) => {
@@ -79,13 +82,10 @@ const ObjectivesFocusAreas = ({
                   {item.title}
                 </h3>
 
-                <p
-                  className="
-                    text-slate-600
-                  "
-                >
-                  {item.description}
-                </p>
+                <SmartTextRenderer
+                  text={item.description}
+                  className="max-w-none"
+                />
 
               </div>
             )

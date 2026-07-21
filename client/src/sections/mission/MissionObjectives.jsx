@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const MissionObjectives = ({
   data = {},
 }) => {
@@ -25,9 +28,10 @@ const MissionObjectives = ({
             {heading}
           </h2>
 
-          <p className="text-slate-600 max-w-3xl mx-auto mt-4">
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="mt-4 max-w-3xl"
+          />
 
         </div>
 
@@ -60,9 +64,10 @@ const MissionObjectives = ({
                   {objective.title}
                 </h3>
 
-                <p className="text-slate-600 leading-relaxed">
-                  {objective.description}
-                </p>
+                <SmartTextRenderer
+                  text={objective.description}
+                  className="max-w-none"
+                />
 
               </div>
             )

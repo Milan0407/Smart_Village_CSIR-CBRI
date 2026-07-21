@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const AboutVision = ({
   data = {},
 }) => {
@@ -21,9 +24,7 @@ const AboutVision = ({
           {heading}
         </h2>
 
-        <p className="text-lg text-slate-600 leading-relaxed">
-          {description}
-        </p>
+        <SmartTextRenderer text={description} />
 
       </div>
     </section>

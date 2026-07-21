@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const AboutHistory = ({
   data,
 }) => {
@@ -102,14 +105,10 @@ const AboutHistory = ({
                       {item.title}
                     </p>
 
-                    <p
-                      className="
-                        mt-3
-                        text-slate-600
-                      "
-                    >
-                      {item.description}
-                    </p>
+                    <SmartTextRenderer
+                      text={item.description}
+                      className="mt-3 max-w-none"
+                    />
 
                   </div>
 

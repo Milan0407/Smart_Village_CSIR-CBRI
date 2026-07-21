@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const AboutMission = ({
   data = {},
 }) => {
@@ -24,9 +27,10 @@ const AboutMission = ({
             {heading}
           </h2>
 
-          <p className="text-slate-600 max-w-3xl mx-auto">
-            {description}
-          </p>
+          <SmartTextRenderer
+            text={description}
+            className="max-w-3xl"
+          />
 
         </div>
 
@@ -52,11 +56,10 @@ const AboutMission = ({
                   }
                 </h3>
 
-                <p className="text-slate-600">
-                  {
-                    feature.description
-                  }
-                </p>
+                <SmartTextRenderer
+                  text={feature.description}
+                  className="max-w-none"
+                />
               </div>
             )
           )}

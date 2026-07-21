@@ -1073,12 +1073,318 @@ const isHeroSection =
   </div>
 )}
 
-{![
+{formData.sectionType ===
+  "OBJECTIVES_FOCUS_AREAS" && (
+  <div className="space-y-6 mb-6">
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Heading
+      </label>
+
+      <input
+        type="text"
+        value={
+          formData.content?.heading || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              heading:
+                e.target.value,
+            },
+          })
+        }
+        className="w-full border rounded p-3"
+      />
+    </div>
+
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-xl font-semibold">
+          Focus Area Items
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Add each focus area with a clear title and short description.
+        </p>
+      </div>
+
+      {(formData.content?.items || []).map(
+        (item, index) => (
+          <div
+            key={index}
+            className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-4"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="font-semibold text-slate-800">
+                Focus Area {index + 1}
+              </h3>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const updated =
+                    (
+                      formData.content
+                        ?.items || []
+                    ).filter(
+                      (_, itemIndex) =>
+                        itemIndex !== index
+                    );
+
+                  setFormData({
+                    ...formData,
+                    content: {
+                      ...formData.content,
+                      items:
+                        updated,
+                    },
+                  });
+                }}
+                className="text-sm font-medium text-red-600 hover:text-red-700"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
+                Title
+              </label>
+
+              <input
+                type="text"
+                placeholder="Digital Inclusion"
+                value={item.title || ""}
+                onChange={(e) => {
+                  const updated = [
+                    ...(formData.content
+                      ?.items || []),
+                  ];
+
+                  updated[index] = {
+                    ...updated[index],
+                    title:
+                      e.target.value,
+                  };
+
+                  setFormData({
+                    ...formData,
+                    content: {
+                      ...formData.content,
+                      items:
+                        updated,
+                    },
+                  });
+                }}
+                className="w-full border rounded p-3"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
+                Description
+              </label>
+
+              <textarea
+                rows="4"
+                placeholder="Describe this focus area in simple language."
+                value={
+                  item.description || ""
+                }
+                onChange={(e) => {
+                  const updated = [
+                    ...(formData.content
+                      ?.items || []),
+                  ];
+
+                  updated[index] = {
+                    ...updated[index],
+                    description:
+                      e.target.value,
+                  };
+
+                  setFormData({
+                    ...formData,
+                    content: {
+                      ...formData.content,
+                      items:
+                        updated,
+                    },
+                  });
+                }}
+                className="w-full border rounded p-3 leading-7"
+              />
+            </div>
+          </div>
+        )
+      )}
+
+      <button
+        type="button"
+        onClick={() => {
+          const updated = [
+            ...(formData.content
+              ?.items || []),
+            {
+              title: "",
+              description: "",
+            },
+          ];
+
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              items:
+                updated,
+            },
+          });
+        }}
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+      >
+        Add Focus Area
+      </button>
+    </div>
+
+  </div>
+)}
+
+{formData.sectionType ===
+  "OBJECTIVES_OUTCOMES" && (
+  <div className="space-y-6 mb-6">
+
+    <div>
+      <label className="block mb-2 font-medium">
+        Heading
+      </label>
+
+      <input
+        type="text"
+        value={
+          formData.content?.heading || ""
+        }
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              heading:
+                e.target.value,
+            },
+          })
+        }
+        className="w-full border rounded p-3"
+      />
+    </div>
+
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-xl font-semibold">
+          Outcome Items
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Add each expected outcome as a separate point.
+        </p>
+      </div>
+
+      {(formData.content?.items || []).map(
+        (item, index) => (
+          <div
+            key={index}
+            className="flex gap-3"
+          >
+            <textarea
+              rows="2"
+              placeholder="Expected outcome"
+              value={item || ""}
+              onChange={(e) => {
+                const updated = [
+                  ...(formData.content
+                    ?.items || []),
+                ];
+
+                updated[index] =
+                  e.target.value;
+
+                setFormData({
+                  ...formData,
+                  content: {
+                    ...formData.content,
+                    items:
+                      updated,
+                  },
+                });
+              }}
+              className="w-full border rounded p-3 leading-7"
+            />
+
+            <button
+              type="button"
+              onClick={() => {
+                const updated =
+                  (
+                    formData.content
+                      ?.items || []
+                  ).filter(
+                    (_, itemIndex) =>
+                      itemIndex !== index
+                  );
+
+                setFormData({
+                  ...formData,
+                  content: {
+                    ...formData.content,
+                    items:
+                      updated,
+                  },
+                });
+              }}
+              className="self-start rounded border border-red-200 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50"
+            >
+              Remove
+            </button>
+          </div>
+        )
+      )}
+
+      <button
+        type="button"
+        onClick={() => {
+          const updated = [
+            ...(formData.content
+              ?.items || []),
+            "",
+          ];
+
+          setFormData({
+            ...formData,
+            content: {
+              ...formData.content,
+              items:
+                updated,
+            },
+          });
+        }}
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+      >
+        Add Outcome
+      </button>
+    </div>
+
+  </div>
+)}
+
+{![ 
   "ABOUT_GALLERY",
   "ABOUT_OVERVIEW",
   "ABOUT_HISTORY", 
   "ABOUT_QUICK_LINKS", 
   "OBJECTIVES_CONTENT",
+  "OBJECTIVES_FOCUS_AREAS",
+  "OBJECTIVES_OUTCOMES",
 ].includes(
   formData.sectionType
 ) && (

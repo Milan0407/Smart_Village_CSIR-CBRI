@@ -61,7 +61,7 @@ const AboutGallery = ({
                   className="
                     rounded-2xl
                     overflow-hidden
-                    shadow-lg
+                    shadow-none
                   "
                 >
                   <img
@@ -72,7 +72,7 @@ const AboutGallery = ({
                     className="
                       w-full
                       h-[300px]
-                      object-cover
+                      object-contain
                     "
                   />
                 </div>

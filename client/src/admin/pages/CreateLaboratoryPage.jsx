@@ -17,25 +17,7 @@ const CreateLaboratoryPage =
     const handleCreate =
       async (data) => {
 
-        await createLaboratory({
-          ...data,
-
-          researchAreas:
-            data.researchAreas
-              ?.split(",")
-              .map(
-                (item) =>
-                  item.trim()
-              ) || [],
-
-          contributions:
-            data.contributions
-              ?.split(",")
-              .map(
-                (item) =>
-                  item.trim()
-              ) || [],
-        });
+        await createLaboratory(data);
 
         navigate(
           "/admin/laboratories"
@@ -57,8 +39,8 @@ const CreateLaboratoryPage =
             heroImage: "",
             directorName: "",
             overview: "",
-            researchAreas: "",
-            contributions: "",
+            researchAreas: [""],
+            contributions: [""],
             address: "",
             phone: "",
             email: "",

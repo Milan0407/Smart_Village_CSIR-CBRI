@@ -4,6 +4,8 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const categoryLabels = {
   CENTRAL: "Central Government",
@@ -82,18 +84,15 @@ const PolicyCard = ({
           </div>
 
           <div className="space-y-5">
-            <p className="text-base leading-7 text-slate-700">
-              {scheme.shortDescription}
-            </p>
+            <SmartTextRenderer
+              text={scheme.shortDescription}
+              className="max-w-none"
+            />
 
-            <div className="space-y-4 text-base leading-8 text-slate-700">
-              {(scheme.detailedDescription || "")
-                .split("\n")
-                .filter(Boolean)
-                .map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-            </div>
+            <SmartTextRenderer
+              text={scheme.detailedDescription}
+              className="max-w-none"
+            />
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">

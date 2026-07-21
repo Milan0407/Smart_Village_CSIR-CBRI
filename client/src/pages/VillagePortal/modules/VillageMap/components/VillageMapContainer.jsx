@@ -13,6 +13,8 @@ import {
   getFacilityMarkerStyle,
   villageMarkerStyle,
 } from "./markerStyles";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const createMapMarkerIcon = ({
   color,
@@ -124,9 +126,10 @@ const villageCoordinates =
       </p>
 
                 {villageLocation?.overview && (
-                  <p className="text-sm text-slate-600">
-                    {villageLocation.overview}
-                  </p>
+                  <SmartTextRenderer
+                    text={villageLocation.overview}
+                    className="max-w-none [&_p]:mb-0 [&_p]:text-sm [&_p]:leading-6"
+                  />
                 )}
               </div>
             </Popup>

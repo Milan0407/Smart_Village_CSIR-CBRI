@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
+
 const AboutHero = ({
   data,
 }) => {
@@ -29,18 +32,10 @@ const AboutHero = ({
           {data?.heading}
         </h1>
 
-        <p
-          className="
-            text-lg
-            text-slate-600
-            mt-6
-            max-w-3xl
-            mx-auto
-            leading-relaxed
-          "
-        >
-          {data?.description}
-        </p>
+        <SmartTextRenderer
+          text={data?.description}
+          className="mt-6 max-w-3xl"
+        />
 
         <div
           className="

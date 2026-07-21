@@ -1,5 +1,7 @@
 import { Link }
   from "react-router-dom";
+import SmartTextRenderer
+  from "../../../components/common/SmartTextRenderer";
 
 const NewsCard = ({
   article,
@@ -23,9 +25,10 @@ const NewsCard = ({
         {article.title}
       </h3>
 
-      <p className="text-slate-600 mt-3">
-        {article.summary}
-      </p>
+      <SmartTextRenderer
+        text={article.summary}
+        className="mt-3 max-w-none space-y-0 [&_p]:mb-0 [&_p]:line-clamp-3 [&_p]:text-base [&_p]:leading-7 [&_p]:text-slate-600 [&_p]:text-left"
+      />
 
       <Link
         to={`/news/${article.slug}`}

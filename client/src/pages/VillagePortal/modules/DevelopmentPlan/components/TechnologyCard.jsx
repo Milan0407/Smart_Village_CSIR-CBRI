@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const statusStyles = {
   PLANNED: "bg-slate-100 text-slate-700",
@@ -155,9 +157,9 @@ const TechnologyCard = ({ technology }) => {
                         : "3.5rem",
                   }}
                 >
-                  <p
+                  <div
                     ref={descriptionRef}
-                    className="overflow-hidden leading-7 text-slate-600"
+                    className="overflow-hidden"
                     style={{
                       display: isDescriptionOpen
                         ? "block"
@@ -169,8 +171,11 @@ const TechnologyCard = ({ technology }) => {
                           : 2,
                     }}
                   >
-                    {technology.description}
-                  </p>
+                    <SmartTextRenderer
+                      text={technology.description}
+                      className="max-w-none [&_p]:mb-0 [&_p]:leading-7"
+                    />
+                  </div>
                 </div>
 
                 {canExpandDescription && (

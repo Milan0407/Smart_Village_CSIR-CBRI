@@ -1,3 +1,6 @@
+import SmartTextRenderer
+  from "../../../components/common/SmartTextRenderer";
+
 const FeaturedNews = ({
   article,
 }) => {
@@ -23,9 +26,10 @@ const FeaturedNews = ({
         {article.title}
       </h2>
 
-      <p className="mt-4 text-slate-600">
-        {article.summary}
-      </p>
+      <SmartTextRenderer
+        text={article.summary}
+        className="mt-4 max-w-none"
+      />
 
     </section>
   );

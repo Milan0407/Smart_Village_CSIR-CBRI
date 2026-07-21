@@ -14,6 +14,8 @@ import MainLayout
 import {
   getSuccessStoryBySlug,
 } from "../../services/successStory.service";
+import SmartTextRenderer
+  from "../../components/common/SmartTextRenderer";
 const SuccessStoryDetailPage = () => {
   const { villageSlug, storySlug } = useParams();
   const [story, setStory] = useState(null);
@@ -117,9 +119,12 @@ const SuccessStoryDetailPage = () => {
               </div>
 
               {story.summary && (
-                <p className="mt-6 text-base md:text-lg text-slate-650 leading-relaxed border-l-2 border-slate-200 pl-5">
-                  {story.summary}
-                </p>
+                <div className="mt-6 border-l-2 border-slate-200 pl-5">
+                  <SmartTextRenderer
+                    text={story.summary}
+                    className="max-w-none"
+                  />
+                </div>
               )}
             </div>
 
@@ -145,16 +150,18 @@ const SuccessStoryDetailPage = () => {
           <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start">
             <div className="prose prose-slate max-w-none bg-white p-6 md:p-8 rounded-xl border border-slate-200/70 shadow-sm">
               <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Project Narrative</h2>
-              <div className="whitespace-pre-line text-slate-700 text-sm md:text-base leading-relaxed">
-                {story.story || "Story content will be added soon."}
-              </div>
+              <SmartTextRenderer
+                text={story.story || "Story content will be added soon."}
+                className="max-w-none"
+              />
 
               {story.impact && (
                 <>
                   <h2 className="text-xl font-bold text-slate-900 mt-10 mb-4 pb-2 border-b border-slate-100">Project Impact & Outcomes</h2>
-                  <div className="whitespace-pre-line text-slate-700 text-sm md:text-base leading-relaxed">
-                    {story.impact}
-                  </div>
+                  <SmartTextRenderer
+                    text={story.impact}
+                    className="max-w-none"
+                  />
                 </>
               )}
             </div>

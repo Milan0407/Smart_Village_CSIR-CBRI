@@ -7,6 +7,8 @@ import {
 import { Link } from "react-router-dom";
 
 import { getVillageInfoHighlights } from "../../../../../services/event.service";
+import SmartTextRenderer
+  from "../../../../../components/common/SmartTextRenderer";
 
 const imageFallback =
   "https://placehold.co/800x500?text=Village+Highlight";
@@ -90,9 +92,10 @@ const HighlightCard = ({ event }) => {
           {title}
         </h3>
 
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
-          {summary}
-        </p>
+        <SmartTextRenderer
+          text={summary}
+          className="mt-2 max-w-none space-y-0 [&_p]:mb-0 [&_p]:line-clamp-2 [&_p]:text-sm [&_p]:leading-6 [&_p]:text-slate-600 [&_p]:text-left"
+        />
 
         <Link
           to={href}
