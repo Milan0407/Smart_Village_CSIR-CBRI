@@ -1,168 +1,206 @@
-import {
-  Swiper,
-  SwiperSlide,
-} from "swiper/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 import {
-  Autoplay,
-  Pagination,
-  Navigation,
-} from "swiper/modules";
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
-const HeroSection = ({
-  data = {},
-}) => {
+const HeroSection = ({ data = {} }) => {
   const {
-    heading =
-      "Smart Village Management Portal",
+    heading = "Smart Village Management Portal",
 
     subHeading =
       "Empowering Rural Communities Through Technology and Sustainable Development",
 
-    buttonText =
-      "Explore Villages",
+    buttonText = "Explore Villages",
 
-    buttonLink =
-      "/villages",
-
-    backgroundImage,
+    buttonLink = "/villages",
 
     heroImages = [],
   } = data;
 
+  /* --------------------------------------- */
+
+  const autoplay = useMemo(
+    () =>
+      Autoplay({
+        delay: 3000,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+      }),
+    []
+  );
+
+  const [emblaRef, emblaApi] =
+    useEmblaCarousel(
+      {
+        loop: true,
+        align: "center",
+        duration: 30,
+      },
+      [autoplay]
+    );
+
+  /* --------------------------------------- */
+
+  const [selectedIndex, setSelectedIndex] =
+    useState(0);
+
+  const [scrollSnaps, setScrollSnaps] =
+    useState([]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+
+    setSelectedIndex(
+      emblaApi.selectedScrollSnap()
+    );
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    setScrollSnaps(
+      emblaApi.scrollSnapList()
+    );
+
+    onSelect();
+
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  /* --------------------------------------- */
+
+  const scrollPrev = useCallback(() => {
+    emblaApi?.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    emblaApi?.scrollNext();
+  }, [emblaApi]);
+
+  const scrollTo = useCallback(
+    (index) => {
+      emblaApi?.scrollTo(index);
+    },
+    [emblaApi]
+  );
+
+  if (!heroImages.length) return null;
+
   return (
     <section
       className="
-        relative
-        w-full
-        h-[550px]
-        overflow-hidden
-      "
+      relative
+      overflow-hidden
+      bg-slate-950
+      py-10
+    "
     >
-      {heroImages.length > 0 ? (
+      {/* Background */}
 
-        <Swiper
-          modules={[
-            Autoplay,
-            Pagination,
-            Navigation,
-          ]}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={true}
-          loop={true}
-          className="
-            absolute
-            inset-0
-            w-full
-            h-full
-          "
-        >
-          {heroImages.map(
-            (image) => (
-              <SwiperSlide
-                key={image._id}
-              >
-                <img
-                  src={image.url}
-                  alt={
-                    image.originalName
-                  }
-                  className="
-                    w-full
-                    h-full
-                    object-cover
-                  "
-                />
-              </SwiperSlide>
-            )
-          )}
-        </Swiper>
-
-      ) : backgroundImage ? (
-
-        <img
-          src={backgroundImage}
-          alt="Hero"
-          className="
-            absolute
-            inset-0
-            w-full
-            h-full
-            object-cover
-          "
-        />
-
-      ) : null}
-
-      {/* Dark Overlay */}
       <div
-  className="
-    absolute
-    inset-0
-    bg-black/45
-    z-10
-    pointer-events-none
-  "
-/>
+        className="
+        absolute
+        inset-0
+        bg-gradient-to-br
+        from-slate-800
+        via-slate-800
+        to-blue-900
+      "
+      />
 
-      {/* Content Card */}
+      {/* Blur */}
+
       <div
-  className="
-    absolute
-    inset-0
-    z-20
-    flex
-    items-center
-    pointer-events-none
-  "
->
+        className="
+        absolute
+        -left-32
+        top-20
+        h-80
+        w-80
+        rounded-full
+        bg-blue-500/20
+        blur-[140px]
+      "
+      />
+
+      <div
+        className="
+        absolute
+        -right-32
+        bottom-10
+        h-80
+        w-80
+        rounded-full
+        bg-cyan-500/20
+        blur-[140px]
+      "
+      />
+
+      <div
+        className="
+        relative
+        z-20
+        mx-auto
+        max-w-[1800px]
+      "
+      >
+                {/* ===========================
+            Fixed Glass Content Card
+        ============================ */}
+
         <div
           className="
-            max-w-7xl
-            mx-auto
-            w-full
-            px-6
+            pointer-events-none
+            absolute
+            left-8
+            top-1/2
+            z-40
+            w-[520px]
+            -translate-y-1/2
+            lg:left-16
           "
         >
-          <div
-  className="
-    max-w-xl
-    bg-black/20
-    rounded-2xl
-    p-8
-    text-white
-    shadow-xl
-  "
->
+          <div className="
+rounded-3xl
+border
+border-white/15
+bg-black/45
+p-8
+text-white
+shadow-[0_20px_45px_rgba(0,0,0,0.4)]
+backdrop-blur-[3px]
+"
+          >
             <p
               className="
-                uppercase
-                tracking-[0.25em]
-                text-blue-200
-                text-sm
                 mb-4
+                text-lg
+                font-bold
+                uppercase
+                tracking-[0.35em]
+                text-cyan-300
               "
             >
-              CSIR-CBRI Roorkee
+              CSIR-CBRI, Roorkee
             </p>
 
             <h1
               className="
                 text-4xl
-                text-4xl md:text-5xl
                 font-bold
                 leading-tight
-                mb-6
+                md:text-5xl
               "
             >
               {heading}
@@ -170,35 +208,235 @@ const HeroSection = ({
 
             <p
               className="
+                mt-6
                 text-lg
-                md:text-xl
-                text-slate-100
-                mb-8
+                leading-8
+                text-slate-200
               "
             >
               {subHeading}
             </p>
 
-            <a
-              href={buttonLink}
-              className="
-                inline-flex
-                items-center
-                px-6
-                py-3
-                bg-white
-                text-blue-900
-                font-semibold
-                rounded-lg
-                hover:bg-slate-100
-                transition
-              "
-            >
-              {buttonText}
-            </a>
           </div>
         </div>
+
+        {/* ===========================
+              Embla Viewport
+        ============================ */}
+
+        <div
+          className="overflow-hidden"
+          ref={emblaRef}
+        >
+          <div className="flex">
+
+            {heroImages.map((image, index) => {
+
+              const active =
+                index === selectedIndex;
+
+              return (
+
+                <div
+                  key={image._id || index}
+                  className="
+                    min-w-0
+                    flex-[0_0_88%]
+                    pl-4
+                    pr-4
+
+                    md:flex-[0_0_82%]
+
+                    lg:flex-[0_0_78%]
+
+                    xl:flex-[0_0_76%]
+                  "
+                >
+
+                  <div
+                    className={`
+                      relative
+                      h-[640px]
+                      overflow-hidden
+                      rounded-[32px]
+                      transition-all
+                      duration-700
+                      ${active
+                        ? "scale-100"
+                        : "scale-[0.92]"
+                      }
+                    `}
+                  >
+
+                    {/* Image */}
+
+                    <img
+                      src={image.url}
+                      alt={
+                        image.originalName ||
+                        "Hero"
+                      }
+                      className={`
+                        h-full
+                        w-full
+                        object-cover
+                        transition-all
+                        duration-[6000ms]
+                        ease-linear
+                        ${
+                          active
+                            ? "scale-110"
+                            : "scale-100"
+                        }
+                      `}
+                    />
+
+                    {/* Overlay */}
+
+                    <div
+                      className={`
+                        absolute
+                        inset-0
+                        transition-all
+                        duration-700
+
+                        ${
+                          active
+                            ? "bg-gradient-to-t from-black/55 via-black/15 to-transparent"
+                            : "bg-black/55"
+                        }
+                      `}
+                    />
+
+                    {/* Active Border */}
+
+                    <div
+                      className={`
+                        absolute
+                        inset-0
+                        rounded-[32px]
+                        border
+
+                        ${
+                          active
+                            ? "border-white/20"
+                            : "border-white/5"
+                        }
+                      `}
+                    />
+
+                  </div>
+
+                </div>
+
+              );
+
+            })}
+
+          </div>
+        </div>
+                {/* ===========================
+            Navigation Buttons
+        ============================ */}
+
+        <button
+          onClick={scrollPrev}
+          aria-label="Previous Slide"
+          className="
+            absolute
+            left-6
+            top-1/2
+            z-50
+            hidden
+            h-14
+            w-14
+            -translate-y-1/2
+            items-center
+            justify-center
+            rounded-full
+            border
+            border-white/20
+            bg-white/10
+            text-white
+            shadow-xl
+            backdrop-blur-xl
+            transition-all
+            duration-300
+            hover:scale-110
+            hover:bg-white
+            hover:text-slate-900
+            lg:flex
+          "
+        >
+          <ChevronLeft size={24} />
+        </button>
+
+        <button
+          onClick={scrollNext}
+          aria-label="Next Slide"
+          className="
+            absolute
+            right-6
+            top-1/2
+            z-50
+            hidden
+            h-14
+            w-14
+            -translate-y-1/2
+            items-center
+            justify-center
+            rounded-full
+            border
+            border-white/20
+            bg-white/10
+            text-white
+            shadow-xl
+            backdrop-blur-xl
+            transition-all
+            duration-300
+            hover:scale-110
+            hover:bg-white
+            hover:text-slate-900
+            lg:flex
+          "
+        >
+          <ChevronRight size={24} />
+        </button>
+
+        {/* ===========================
+              Pagination
+        ============================ */}
+
+        <div
+          className="
+            mt-8
+            flex
+            justify-center
+            gap-3
+          "
+        >
+          {scrollSnaps.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollTo(index)}
+              aria-label={`Go to slide ${index + 1}`}
+              className={`
+                h-2.5
+                rounded-full
+                transition-all
+                duration-500
+                ${
+                  selectedIndex === index
+                    ? "w-12 bg-white"
+                    : "w-2.5 bg-white/40 hover:bg-white/80"
+                }
+              `}
+            />
+          ))}
+        </div>
+
       </div>
+
     </section>
   );
 };
