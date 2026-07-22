@@ -2,7 +2,8 @@ import { Outlet, useParams } from "react-router-dom";
 
 import useVillage from "../../../hooks/useVillage";
 
-import VillageHeader from "../components/VillageHeader";
+import Header from "../../../components/common/Header/Header";
+import Navbar from "../../../components/common/Navbar/Navbar";
 import VillageHero from "../components/VillageHero";
 import VillageSidebar from "../components/VillageSidebar";
 import VillageFooter from "../components/VillageFooter";
@@ -40,9 +41,9 @@ const VillageLayout = () => {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      <VillageHeader
-        village={village}
-      />
+      <Header />
+
+      <Navbar />
 
       <VillageHero
         village={village}
@@ -51,11 +52,11 @@ const VillageLayout = () => {
 
       <div className="mx-auto max-w-[1700px] px-6 py-10">
 
-        <div className="grid grid-cols-12 gap-6 xl:gap-8">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)] xl:gap-8">
 
           {/* Sidebar */}
 
-          <aside className="col-span-12 lg:col-span-3 xl:col-span-2">
+          <aside className="min-w-0">
             <VillageSidebar
               village={village}
             />
@@ -63,7 +64,7 @@ const VillageLayout = () => {
 
           {/* Page Content */}
 
-          <main className="col-span-12 lg:col-span-9 xl:col-span-10">
+          <main className="min-w-0">
 
             <Outlet
               context={{

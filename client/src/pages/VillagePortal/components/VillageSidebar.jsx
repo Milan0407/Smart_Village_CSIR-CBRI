@@ -101,7 +101,7 @@ const VillageSidebar = ({ village }) => {
 
 {/* ================= Navigation ================= */}
 
-<div className="max-h-[calc(100vh-8rem)] overflow-y-auto p-3">
+<div className="p-4">
 
   {menuItems.map((item) => {
     const Icon = item.icon;
@@ -116,11 +116,13 @@ const VillageSidebar = ({ village }) => {
           group
           mb-2
           flex
+          w-full
           items-center
           justify-between
+          gap-3
           rounded-xl
           px-4
-          py-3
+          py-3.5
           transition-all
           duration-300
 
@@ -134,13 +136,14 @@ const VillageSidebar = ({ village }) => {
       >
         {({ isActive }) => (
           <>
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-3">
 
               <div
                 className={`
                   flex
                   h-10
                   w-10
+                  shrink-0
                   items-center
                   justify-center
                   rounded-xl
@@ -163,10 +166,10 @@ const VillageSidebar = ({ village }) => {
                 />
               </div>
 
-              <div>
+              <div className="min-w-0">
 
                 <h4
-                  className={`text-sm font-semibold ${
+                  className={`text-sm font-semibold leading-snug ${
                     isActive
                       ? "text-white"
                       : "text-slate-800"
@@ -176,7 +179,7 @@ const VillageSidebar = ({ village }) => {
                 </h4>
 
                 <p
-                  className={`mt-1 text-xs ${
+                  className={`mt-1 text-xs leading-snug ${
                     isActive
                       ? "text-blue-100"
                       : "text-slate-500"
@@ -190,11 +193,13 @@ const VillageSidebar = ({ village }) => {
             </div>
 
             <ChevronRight
-              size={16}
+              size={18}
               className={
-                isActive
-                  ? "text-white"
-                  : "text-slate-400 group-hover:text-blue-600"
+                `shrink-0 ${
+                  isActive
+                    ? "text-white"
+                    : "text-slate-400 group-hover:text-blue-600"
+                }`
               }
             />
 

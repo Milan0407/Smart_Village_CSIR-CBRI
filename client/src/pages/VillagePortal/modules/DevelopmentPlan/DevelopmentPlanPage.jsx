@@ -30,6 +30,8 @@ const DevelopmentPlanPage = () => {
     [plans]
   );
 
+  const primaryPlan = plans[0];
+
   if (loading) {
     return (
       <>
@@ -51,25 +53,7 @@ const DevelopmentPlanPage = () => {
 
   return (
     <div className="space-y-8">
-      <DevelopmentHero village={village} />
-
-      <section className="rounded-3xl border border-blue-100 bg-white p-6 shadow-sm">
-        <div className="max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-blue-700">
-            Development Plan
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-slate-900">
-            CSIR Technology Deployment
-          </h2>
-
-          <p className="mt-4 leading-8 text-slate-600">
-            Sector-wise technologies deployed for the village are listed below.
-            Sector progress is calculated by the backend from technology-level
-            progress.
-          </p>
-        </div>
-      </section>
+      <DevelopmentHero village={village} plan={primaryPlan} />
 
       {sectors.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">

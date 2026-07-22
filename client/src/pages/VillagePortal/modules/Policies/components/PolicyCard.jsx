@@ -1,11 +1,8 @@
 import {
-  ChevronDown,
-  ExternalLink,
   ShieldCheck,
   Users,
+  ArrowRight,
 } from "lucide-react";
-import SmartTextRenderer
-  from "../../../../../components/common/SmartTextRenderer";
 
 const categoryLabels = {
   CENTRAL: "Central Government",
@@ -14,118 +11,80 @@ const categoryLabels = {
 
 const PolicyCard = ({
   scheme,
-  isOpen,
-  onToggle,
+  onOpen,
 }) => {
   const imageUrl = scheme.featuredImage?.url;
-  const officialUrl = scheme.officialWebsiteUrl;
+  const hasMoreContent =
+    Boolean(scheme.detailedDescription) ||
+    String(scheme.shortDescription || "").length > 220;
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpen();
+    }
+  };
 
   return (
-    <article className="border-b border-slate-200 last:border-b-0">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        className="flex w-full flex-col gap-4 px-5 py-5 text-left transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-700 md:flex-row md:items-center md:justify-between md:px-7"
-      >
-        <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-bold text-slate-900 md:text-xl">
-            {scheme.schemeName}
-          </h3>
-
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700">
-              <ShieldCheck size={15} />
-              {categoryLabels[scheme.category] ||
-                scheme.category}
-            </span>
-
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
-              <Users size={16} />
-              {Number(
-                scheme.beneficiariesCount || 0
-              ).toLocaleString()}{" "}
-              Beneficiaries
-            </span>
-          </div>
-        </div>
-
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-700">
-          <ChevronDown
-            size={20}
-            className={`transition-transform duration-300 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </span>
-      </button>
-
+    <article
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={handleKeyDown}
+      aria-label={`Read more about ${scheme.schemeName}`}
+      className="group grid cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 md:grid-cols-[280px_minmax(0,1fr)]"
+    >
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen
-            ? "max-h-[1200px] opacity-100"
-            : "max-h-0 opacity-0"
-        }`}
+        className="flex h-48 items-center justify-center border-b border-slate-100 bg-slate-50 p-3 md:h-full md:min-h-[250px] md:border-b-0 md:border-r"
       >
-        <div className="grid gap-6 px-5 pb-7 md:grid-cols-[280px_1fr] md:px-7">
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={scheme.featuredImage?.alt || scheme.schemeName}
-                loading="lazy"
-                className="h-60 w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-60 w-full items-center justify-center bg-gradient-to-br from-blue-50 to-emerald-50 px-6 text-center text-sm font-semibold text-slate-600">
-                Policies & Schemes
-              </div>
-            )}
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={scheme.featuredImage?.alt || scheme.schemeName}
+            loading="lazy"
+            className="h-full w-full object-contain object-center transition duration-300 group-hover:scale-[1.02]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-emerald-50 px-6 text-center text-sm font-semibold text-slate-600">
+            Policies & Schemes
           </div>
+        )}
+      </div>
 
-          <div className="space-y-5">
-            <SmartTextRenderer
-              text={scheme.shortDescription}
-              className="max-w-none"
-            />
+      <div className="flex min-h-[250px] flex-col p-5 sm:p-6">
+        <h3 className="line-clamp-2 text-lg font-bold leading-snug text-slate-950">
+          {scheme.schemeName}
+        </h3>
 
-            <SmartTextRenderer
-              text={scheme.detailedDescription}
-              className="max-w-none"
-            />
+        <div className="mt-3 flex flex-wrap gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-blue-700">
+            <ShieldCheck size={14} />
+            {categoryLabels[scheme.category] ||
+              scheme.category}
+          </span>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
-                <Users size={17} />
-                {Number(
-                  scheme.beneficiariesCount || 0
-                ).toLocaleString()}{" "}
-                Beneficiaries
-              </span>
-
-              {officialUrl ? (
-                <a
-                  href={officialUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-800"
-                >
-                  Visit Official Scheme
-                  <ExternalLink size={16} />
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  disabled
-                  className="inline-flex items-center gap-2 rounded-xl bg-slate-200 px-5 py-3 text-sm font-bold text-slate-500 shadow-sm"
-                >
-                  Visit Official Scheme
-                  <ExternalLink size={16} />
-                </button>
-              )}
-            </div>
-          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <Users size={14} />
+            {Number(
+              scheme.beneficiariesCount || 0
+            ).toLocaleString()}{" "}
+            Beneficiaries
+          </span>
         </div>
+
+        <p className="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">
+          {scheme.shortDescription}
+        </p>
+
+        {hasMoreContent && (
+          <span className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-bold text-blue-700 transition group-hover:text-blue-900">
+            Read More
+            <ArrowRight
+              size={16}
+              className="transition group-hover:translate-x-1"
+            />
+          </span>
+        )}
       </div>
     </article>
   );

@@ -1,6 +1,14 @@
 import { Cpu } from "lucide-react";
 
-const DevelopmentHero = ({ village }) => {
+const DevelopmentHero = ({ village, plan }) => {
+  const villageName = village?.name?.en || village?.name;
+  const title =
+    plan?.title ||
+    `Development Plan for ${villageName || "Village"}`;
+  const description =
+    plan?.description ||
+    `Explore sector-wise CSIR technologies deployed for ${villageName || "this village"}, with lab participation, technology progress and current implementation status.`;
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 text-white">
 
@@ -20,21 +28,13 @@ const DevelopmentHero = ({ village }) => {
 
           <h1 className="mt-6 text-4xl lg:text-5xl font-bold leading-tight">
 
-            Development Plan for{" "}
-
-            <span className="text-yellow-300">
-
-              {village?.name?.en || village?.name}
-
-            </span>
+            {title}
 
           </h1>
 
           <p className="mt-6 text-lg leading-8 text-blue-100">
 
-            Explore sector-wise CSIR technologies deployed for{" "}
-            {village?.name?.en || village?.name}, with lab participation,
-            technology progress and current implementation status.
+            {description}
 
           </p>
 

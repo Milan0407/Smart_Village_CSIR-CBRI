@@ -18,28 +18,28 @@ const VillageHero = ({
 
   return (
     <>
-      <section className="relative min-h-[420px] overflow-hidden bg-slate-950 sm:min-h-[460px] lg:min-h-[500px]">
+      <section className="relative aspect-[16/9] overflow-hidden bg-white sm:aspect-auto sm:min-h-[460px] sm:bg-slate-950 lg:min-h-[500px]">
 
         {/* Background */}
 
         <img
           src={heroImage}
           alt={title}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-contain object-left sm:object-cover sm:object-center"
         />
 
         {/* Overlay */}
 
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/18 via-transparent to-slate-950/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/20 sm:from-slate-950/18 sm:to-slate-950/35" />
 
         {/* Content */}
 
-        <div className="relative z-10 mx-auto min-h-[420px] max-w-7xl px-6 py-6 sm:min-h-[460px] lg:min-h-[500px]">
+        <div className="relative z-10 mx-auto h-full max-w-7xl px-3 py-3 sm:min-h-[460px] sm:px-6 sm:py-6 lg:min-h-[500px]">
 
-          <div className="absolute right-6 top-6 rounded-full border border-white/25 bg-slate-950/45 px-4 py-2 text-white shadow-sm">
-            <div className="flex items-center gap-2 text-sm font-semibold">
+          <div className="absolute right-3 top-3 max-w-[calc(100%-1.5rem)] rounded-full border border-white/25 bg-slate-950/55 px-3 py-1.5 text-white shadow-sm sm:right-6 sm:top-6 sm:px-4 sm:py-2">
+            <div className="flex items-center gap-1.5 text-xs font-semibold sm:gap-2 sm:text-sm">
 
-              <MapPin size={18} />
+              <MapPin size={16} className="shrink-0 sm:size-[18px]" />
 
               <span>
 
