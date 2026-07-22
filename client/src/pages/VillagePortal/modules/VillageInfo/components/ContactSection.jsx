@@ -106,7 +106,7 @@ const normalizeContacts = (profile) => {
     profile.contactPerson,
     profile.designation,
     profile.phone,
-    profile.alternatePhone,
+    // profile.alternatePhone,
     profile.email,
     profile.officeAddress,
   ].some(Boolean);
@@ -120,14 +120,14 @@ const normalizeContacts = (profile) => {
       name: profile.contactPerson || "",
       designation: profile.designation || "",
       phone: profile.phone || "",
-      alternatePhone: profile.alternatePhone || "",
+      // alternatePhone: profile.alternatePhone || "",
       email: profile.email || "",
       officeAddress: profile.officeAddress || "",
-      gramPanchayat: profile.gramPanchayat || "",
-      block: profile.block || "",
-      district: profile.district || "",
-      state: profile.state || "",
-      pinCode: profile.pinCode || "",
+      // gramPanchayat: profile.gramPanchayat || "",
+      // block: profile.block || "",
+      // district: profile.district || "",
+      // state: profile.state || "",
+      // pinCode: profile.pinCode || "",
       displayOrder: 0,
     },
   ];
@@ -165,7 +165,7 @@ const ContactPersonCard = ({ contact }) => (
         }
       />
 
-      <ContactLine
+      {/* <ContactLine
         icon={Phone}
         value={contact.alternatePhone}
         href={
@@ -173,7 +173,7 @@ const ContactPersonCard = ({ contact }) => (
             ? `tel:${sanitizePhone(contact.alternatePhone)}`
             : null
         }
-      />
+      /> */}
 
       <ContactLine
         icon={Mail}
@@ -187,7 +187,7 @@ const ContactPersonCard = ({ contact }) => (
       />
     </div>
 
-    <dl className="mt-6 space-y-3 rounded-xl bg-slate-50 p-4">
+    {/* <dl className="mt-6 space-y-3 rounded-xl bg-slate-50 p-4">
       <DetailRow
         label="Gram Panchayat"
         value={contact.gramPanchayat}
@@ -208,7 +208,7 @@ const ContactPersonCard = ({ contact }) => (
         label="PIN"
         value={contact.pinCode}
       />
-    </dl>
+    </dl> */}
   </article>
 );
 

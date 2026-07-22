@@ -94,6 +94,10 @@ const AdminLayout = () => {
           label: "Events & Achievements",
           path: "/admin/events",
         },
+            {
+      label: "Survey Management",
+      path: "/admin/surveys",
+    },
         {
           label: "Policies & Schemes",
           path: "/admin/policies-schemes",

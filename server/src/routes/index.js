@@ -44,6 +44,7 @@
   import villageProfileRoutes from "../modules/villageProfile/villageProfile.routes.js";
 
   import developmentPlanRoutes from "../modules/developmentPlan/developmentPlan.routes.js";
+  import surveyRoutes from "../modules/survey/survey.routes.js";
 
   import eventRoutes from "../modules/events/event.routes.js";
 
@@ -144,6 +145,8 @@ router.use(
   publicLimiter,
   developmentPlanRoutes
 );
+
+router.use("/", surveyRoutes);
 
 router.use(
   "/village-locations",

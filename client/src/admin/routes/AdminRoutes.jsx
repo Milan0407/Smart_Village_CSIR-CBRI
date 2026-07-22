@@ -102,6 +102,8 @@ import EditPoliciesSchemePage from "../pages/EditPoliciesSchemePage";
 import VillageLocationsPage from "../pages/VillageLocationsPage";
 import CreateVillageLocationPage from "../pages/CreateVillageLocationPage";
 import EditVillageLocationPage from "../pages/EditVillageLocationPage";
+
+import SurveyManagementPage from "../pages/SurveyManagementPage";
 const ProtectedRoute = ({
   children,
 }) => {
@@ -222,6 +224,11 @@ const AdminRoutes = () => {
 <Route
   path="development-plans/:id/edit"
   element={<EditDevelopmentPlanPage />}
+/>
+
+<Route
+  path="surveys"
+  element={<SurveyManagementPage />}
 />
 
 

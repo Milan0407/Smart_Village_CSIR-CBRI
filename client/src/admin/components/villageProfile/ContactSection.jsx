@@ -14,14 +14,8 @@ const createContact = (displayOrder = 0) => ({
   name: "",
   designation: "",
   phone: "",
-  alternatePhone: "",
   email: "",
   officeAddress: "",
-  gramPanchayat: "",
-  block: "",
-  district: "",
-  state: "",
-  pinCode: "",
   displayOrder,
 });
 
@@ -239,15 +233,7 @@ export default function ContactSection({
                         placeholder="+91 XXXXX XXXXX"
                       />
 
-                      <Field
-                        label="Alternate Phone"
-                        type="tel"
-                        value={contact.alternatePhone}
-                        onChange={(e) =>
-                          updateContact(index, "alternatePhone", e.target.value)
-                        }
-                        placeholder="+91 XXXXX XXXXX"
-                      />
+
 
                       <Field
                         label="Email"
@@ -259,14 +245,6 @@ export default function ContactSection({
                         placeholder="official@example.com"
                       />
 
-                      <Field
-                        label="PIN Code"
-                        value={contact.pinCode}
-                        onChange={(e) =>
-                          updateContact(index, "pinCode", e.target.value)
-                        }
-                        placeholder="754211"
-                      />
 
                       <div className="md:col-span-2">
                         <Field
@@ -280,41 +258,7 @@ export default function ContactSection({
                         />
                       </div>
 
-                      <Field
-                        label="Gram Panchayat"
-                        value={contact.gramPanchayat}
-                        onChange={(e) =>
-                          updateContact(index, "gramPanchayat", e.target.value)
-                        }
-                        placeholder="Kusunpur"
-                      />
 
-                      <Field
-                        label="Block"
-                        value={contact.block}
-                        onChange={(e) =>
-                          updateContact(index, "block", e.target.value)
-                        }
-                        placeholder="Rajnagar"
-                      />
-
-                      <Field
-                        label="District"
-                        value={contact.district}
-                        onChange={(e) =>
-                          updateContact(index, "district", e.target.value)
-                        }
-                        placeholder="Kendrapara"
-                      />
-
-                      <Field
-                        label="State"
-                        value={contact.state}
-                        onChange={(e) =>
-                          updateContact(index, "state", e.target.value)
-                        }
-                        placeholder="Odisha"
-                      />
 
                       <Field
                         label="Display Order"

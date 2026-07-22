@@ -32,71 +32,68 @@ const normalizeFormData = (data) => {
   data = data ?? {};
 
   return {
-  ...initialForm,
-  ...data,
-  village: data.village?._id || data.village || "",
-  heroImage:
-    data.heroImage?._id || data.heroImage || "",
-  galleryImages: Array.isArray(data.galleryImages)
-    ? data.galleryImages.map((item, index) => {
-        if (typeof item === "string") {
-          return {
-            image: item,
-            caption: "",
-            sortOrder: index,
-          };
-        }
+    ...initialForm,
+    ...data,
 
-        return {
-          image:
-            item.image?._id ||
-            item.image ||
-            item._id ||
-            "",
-          caption: item.caption || "",
-          sortOrder:
-            item.sortOrder ?? index,
-        };
-      })
-    : [],
-  contactPersons: Array.isArray(data.contactPersons) &&
-    data.contactPersons.length > 0
-    ? data.contactPersons.map((contact, index) => ({
-        name: contact.name || "",
-        designation: contact.designation || "",
-        phone: contact.phone || "",
-        alternatePhone: contact.alternatePhone || "",
-        email: contact.email || "",
-        officeAddress: contact.officeAddress || "",
-        gramPanchayat: contact.gramPanchayat || "",
-        block: contact.block || "",
-        district: contact.district || "",
-        state: contact.state || "",
-        pinCode: contact.pinCode || "",
-        displayOrder: contact.displayOrder ?? index,
-      }))
-    : data.contactPerson ||
-        data.designation ||
-        data.phone ||
-        data.email ||
-        data.officeAddress
-      ? [
-          {
-            name: data.contactPerson || "",
-            designation: data.designation || "",
-            phone: data.phone || "",
-            alternatePhone: data.alternatePhone || "",
-            email: data.email || "",
-            officeAddress: data.officeAddress || "",
-            gramPanchayat: data.gramPanchayat || "",
-            block: data.block || "",
-            district: data.district || "",
-            state: data.state || "",
-            pinCode: data.pinCode || "",
-            displayOrder: 0,
-          },
-        ]
-            : [],
+    village: data.village?._id || data.village || "",
+
+    heroImage:
+      data.heroImage?._id ||
+      data.heroImage ||
+      "",
+
+    galleryImages: Array.isArray(data.galleryImages)
+      ? data.galleryImages.map((item, index) => {
+          if (typeof item === "string") {
+            return {
+              image: item,
+              caption: "",
+              sortOrder: index,
+            };
+          }
+
+          return {
+            image:
+              item.image?._id ||
+              item.image ||
+              item._id ||
+              "",
+            caption: item.caption || "",
+            sortOrder:
+              item.sortOrder ?? index,
+          };
+        })
+      : [],
+
+    contactPersons:
+      Array.isArray(data.contactPersons) &&
+      data.contactPersons.length > 0
+        ? data.contactPersons.map((contact, index) => ({
+            name: contact.name || "",
+            designation: contact.designation || "",
+            phone: contact.phone || "",
+            email: contact.email || "",
+            officeAddress: contact.officeAddress || "",
+            displayOrder:
+              contact.displayOrder ?? index,
+          }))
+        : data.contactPerson ||
+          data.designation ||
+          data.phone ||
+          data.email ||
+          data.officeAddress
+        ? [
+            {
+              name: data.contactPerson || "",
+              designation: data.designation || "",
+              phone: data.phone || "",
+              email: data.email || "",
+              officeAddress:
+                data.officeAddress || "",
+              displayOrder: 0,
+            },
+          ]
+        : [],
   };
 };
 
@@ -110,9 +107,7 @@ export default function VillageProfileForm({
     normalizeFormData(initialData)
   );
 
-  const {
-    data: media = [],
-  } = useQuery({
+  const { data: media = [] } = useQuery({
     queryKey: ["admin-media"],
     queryFn: getAllMedia,
   });
@@ -132,8 +127,10 @@ export default function VillageProfileForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     onSubmit({
       ...formData,
+
       galleryImages: formData.galleryImages
         .filter((item) => item.image)
         .map((item, index) => ({
@@ -144,15 +141,15 @@ export default function VillageProfileForm({
             item.sortOrder === null ||
             item.sortOrder === undefined
               ? index
-            : Number(item.sortOrder),
+              : Number(item.sortOrder),
         })),
+
       contactPersons: formData.contactPersons
         .filter((contact) =>
           [
             contact.name,
             contact.designation,
             contact.phone,
-            contact.alternatePhone,
             contact.email,
             contact.officeAddress,
           ].some(Boolean)

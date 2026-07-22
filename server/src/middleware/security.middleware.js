@@ -1,6 +1,12 @@
 import helmet from "helmet";
-// import mongoSanitize from "express-mongo-sanitize";
 
+// Configure helmet to allow cross-origin requests from the frontend.
+// CORS is handled separately (see app.js), so we disable the CSP and
+// cross-origin policies that would block browser CORS requests.
 export const securityMiddleware = [
-  helmet(),
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "unsafe-none" },
+    contentSecurityPolicy: false,
+  }),
 ];

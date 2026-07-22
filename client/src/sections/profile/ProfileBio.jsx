@@ -11,17 +11,6 @@ const ProfileBio = ({
 
         <div className="text-center mb-12">
 
-          <span
-            className="
-              text-blue-600
-              uppercase
-              tracking-widest
-              font-semibold
-            "
-          >
-            Biography
-          </span>
-
           <h2
             className="
               text-4xl
