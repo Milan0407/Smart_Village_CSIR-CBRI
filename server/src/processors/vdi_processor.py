@@ -315,6 +315,30 @@ def parse_number(value):
         return None
 
 
+def extract_my_score(ws):
+    """Read the VDI sheet's My Score column and return the last numeric value."""
+    rows = list(ws.iter_rows(values_only=True))
+    for row_idx, row in enumerate(rows):
+        for col_idx, value in enumerate(row):
+            if value is None:
+                continue
+            text = nrm(str(value))
+            if text in {"myscore", "my score"}:
+                score_col = col_idx
+                values = []
+                for data_row in rows[row_idx + 1:]:
+                    if score_col >= len(data_row):
+                        continue
+                    cell = data_row[score_col]
+                    if cell in (None, ""):
+                        continue
+                    num = parse_number(cell)
+                    if num is not None:
+                        values.append(num)
+                return values[-1] if values else None
+    return None
+
+
 def extract_population_summary(gp_rows):
     targets = [
         ("Total Population", "totalPopulation"),
@@ -495,72 +519,33 @@ def cat_socioeconomic(rows, total):
 
 
 def cat_education(rows, total):
-    """
-    Education category with exactly 2 parameters:
-      1. Total Literate Members – sum of "No. of Literate members in household (above 5th grade) who can read and write"
-      2. Dropout Rate (Reverse Indicator) – percentage from the corresponding column
-    """
-    graph_data = []
-
-    # ── 1. Total Literate Members ──────────────────────────────────────────
-    lit_vals = find_col(rows,
-        "no of literate members", "literate members", "no of literate",
-        "number of literate", "literate household", "literate count",
-        "above 5th grade", "can read and write", "total literate",
-        "literate", "literacy")
-    total_literate = 0
+    counts = Counter()
+    lit_vals = find_col(rows, "literacy", "literate", "read write",
+                        "literacy status", "can read", "sakshar")
     if lit_vals:
-        for v in lit_vals:
-            try:
-                total_literate += int(float(str(v).strip()))
-            except (ValueError, TypeError):
-                pass
+        y = sum(1 for v in lit_vals if is_yes(v) or
+                any(w in str(v).lower() for w in ("literate","read","sakshar","yes")))
+        n = sum(1 for v in lit_vals if is_no(v) or
+                any(w in str(v).lower() for w in ("illiterate","nirakshar","no")))
+        if y: counts["Literate"] = y
+        if n: counts["Illiterate"] = n
 
-    if total_literate > 0:
-        graph_data.append({
-            "indicator":    "Total Literate Members",
-            "value":        total_literate,
-            "count":        total_literate,
-            "displayValue": f"{total_literate} Members",
-        })
+    edu_vals = find_col(rows, "education level", "qualification", "highest education",
+                        "max education", "education qualification", "education",
+                        "educational qualification")
+    if edu_vals:
+        for v in edu_vals:
+            lbl = map_education(v)
+            if lbl and lbl not in ("Literate (others)",):
+                counts[lbl] += 1
 
-    # ── 2. Dropout Rate (Reverse Indicator) ─────────────────────────────────
-    drop_vals = find_col(rows,
-        "dropout rate", "dropout", "drop out rate", "drop out",
-        "school dropout", "education dropout")
-    dropout_pct = None
-    if drop_vals:
-        numeric_vals = []
-        for v in drop_vals:
-            try:
-                num = float(str(v).strip().replace("%", ""))
-                numeric_vals.append(num)
-            except (ValueError, TypeError):
-                pass
-        if numeric_vals:
-            # If values are already percentages (<1 treated as fraction), average them
-            avg = sum(numeric_vals) / len(numeric_vals)
-            # Ensure it's displayed as a percentage (0-100 scale)
-            if avg <= 1:
-                avg = avg * 100
-            dropout_pct = round(avg, 1)
+    sch_vals = find_col(rows, "school going", "school attendance", "attending school",
+                        "child school", "children school")
+    if sch_vals:
+        y = sum(1 for v in sch_vals if is_yes(v))
+        if y: counts["School Going Children"] = y
 
-    if dropout_pct is not None:
-        graph_data.append({
-            "indicator":    "Dropout Rate (Reverse Indicator)",
-            "value":        dropout_pct,
-            "count":        int(round(dropout_pct)),  # approximate count equivalent
-            "displayValue": f"{dropout_pct}%",
-        })
-
-    if not graph_data:
-        return None
-
-    return {
-        "category": "Education",
-        "type":     "bar",
-        "graphData": graph_data,
-    }
+    return make_cat("Education", "bar", build_cat_data(counts, total))
 
 
 def cat_transport(rows, total):
@@ -690,19 +675,53 @@ def cat_health(rows, total):
 
 def cat_agriculture(rows, total):
     counts = Counter()
-    # Main occupation mapped to agriculture buckets
-    occ_vals = find_col(rows, "main occupation","occupation","occupation of head",
-                        "primary occupation","livelihood","source of income")
-    land_vals = find_col(rows, "land holding","land type","agr type","land use",
-                         "agriculture type","farm type","farming type","type of land")
-    for v in (occ_vals or []) + (land_vals or []):
-        lbl = map_occupation(v)
-        if lbl in ("Agriculture Only","Agriculture + Other","Labour","Business",
-                   "Service","Retired/Pensioner","Homemaker","Student","Other"):
-            counts[lbl] += 1
+
+    def normalize_income_source(value):
+        if value is None:
+            return None
+        text = str(value).strip().lower()
+        if not text:
+            return None
+
+        parts = []
+        for part in re.split(r"\s*\+\s*", text):
+            cleaned = re.split(r"\s*[\/&,]\s*", part.strip())
+            parts.extend([p for p in cleaned if p.strip()])
+
+        for part in parts:
+            p = re.sub(r"[^a-z]+", "", part.lower())
+            if not p:
+                continue
+            if p in {"agri", "agriculture", "farming", "farm", "cultivation"}:
+                return "Agriculture"
+            if p in {"govtjob", "govt", "governmentjob", "government", "sarkari", "service", "job", "govtjobservice"}:
+                return "Government Job"
+            if p in {"pvt", "private", "privatejob", "pvtjob"}:
+                return "Private Job"
+            if p in {"labour", "labor", "dailywage", "manual", "mazdoor"}:
+                return "Labour"
+            if p in {"business", "selfemployed", "selfempd", "selfemployment", "shop", "trade", "entrepreneur", "businessselfempd"}:
+                return "Business / Self Employed"
+
+        return "Other"
+
+    income_vals = find_col(rows, "main source of income", "source of income", "main occupation",
+                           "occupation of head", "primary occupation", "livelihood",
+                           "income source", "occupation")
+    if income_vals:
+        for v in income_vals:
+            if v is None:
+                continue
+            raw_parts = [p.strip() for p in str(v).split("+") if p.strip()]
+            for part in raw_parts:
+                label = normalize_income_source(part)
+                if label:
+                    counts[label] += 1
+
     if not counts:
         return None
-    return make_cat("Agriculture / Horticulture", "hbar", build_cat_data(counts, total))
+
+    return make_cat("Household Source of Income", "hbar", build_cat_data(counts, total))
 
 
 def cat_livestock(rows, total):
@@ -804,6 +823,12 @@ def process(filename):
 
     total = len(hh_rows)
     population_summary = extract_population_summary(gp_rows)
+    my_score = None
+    try:
+        vdi_sheet = worksheet(wb, "VDI")
+        my_score = extract_my_score(vdi_sheet)
+    except Exception:
+        pass
 
     cats = []
     for fn in [
@@ -830,6 +855,8 @@ def process(filename):
             pass  # never crash on a single category
 
     result = {"categories": cats}
+    if my_score is not None:
+        result["summary"] = {"myScore": my_score}
     if population_summary:
         result["population"] = population_summary
         result["populationSummary"] = population_summary

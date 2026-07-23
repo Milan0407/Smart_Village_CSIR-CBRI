@@ -27,7 +27,7 @@ const ANALYTIC_CATEGORIES = [
   ["Electricity", "hbar", [["Electricity Connection", ["electricity connection", "electric connection"]], ["Meter Installed", ["meter installed", "electric meter"]], ["Supply Hours", ["supply hours", "electricity hours"]]]],
   ["Clean Fuel", "pie", [["LPG", ["lpg"]], ["Firewood", ["firewood"]], ["Biogas", ["biogas"]], ["Electricity", ["electric cooking"]], ["Other Fuel", ["other fuel"]]]],
   ["Health & Nutrition", "hbar", [["Vaccination", ["vaccination", "immunization"]], ["Health Insurance", ["health insurance"]], ["Institutional Delivery", ["institutional delivery"]], ["Anganwadi", ["anganwadi"]], ["Toilet Usage", ["toilet usage"]]]],
-  ["Agriculture / Horticulture", "hbar", [["Agriculture Only", ["agriculture only"]], ["Agriculture + Other Income", ["agriculture other income"]], ["Labour", ["labour", "labor"]], ["Business", ["business"]], ["Others", ["occupation other"]]]],
+  ["Household Source of Income", "hbar", [["Agriculture", ["agriculture"]], ["Government Job", ["government job"]], ["Private Job", ["private job"]], ["Labour", ["labour", "labor"]], ["Business / Self Employed", ["business", "self employed"]], ["Other", ["occupation other", "other"]]]],
   ["Livestock / Animal Husbandry", "pie", [["Cow", ["cow"]], ["Buffalo", ["buffalo"]], ["Goat", ["goat"]], ["Poultry", ["poultry", "chicken"]], ["No Livestock", ["no livestock"]]]],
   ["Socially Inclusive & Awareness", "grouped-bar", [["SHG Membership", ["shg", "self help group"]], ["Government Scheme Awareness", ["scheme awareness", "government scheme"]], ["Skill Training", ["skill training"]], ["Digital Awareness", ["digital awareness"]], ["Social Participation", ["social participation"]]]],
 ];
@@ -38,12 +38,17 @@ const countValue = item => Number(item?.count ?? item?.householdCount ?? 0);
 
 const buildAnalytics = processedData => {
   const source = processedData?.categories || [];
-  const items = source.flatMap(category => category.graphData || category.indicators || []).map(item => ({
-    ...item, label: cleanText(item.indicator ?? item.name ?? item.parameter ?? ""), value: numberValue(item), count: countValue(item), originalDisplayValue: item.displayValue,
-  }));
+  const items = source.flatMap(category => (category.graphData || category.indicators || []).map(item => ({
+    ...item, label: cleanText(item.indicator ?? item.name ?? item.parameter ?? ""), value: numberValue(item), count: countValue(item), originalDisplayValue: item.displayValue, _sourceCategory: category.category,
+  })));
   return ANALYTIC_CATEGORIES.map(([category, type, parameters]) => {
     const graphData = parameters.map(([indicator, terms]) => {
-      const matches = items.filter(item => terms.some(term => item.label.includes(term)) && Number.isFinite(item.value) && item.value > 0);
+      let matches = items.filter(item => terms.some(term => item.label.includes(term)) && Number.isFinite(item.value) && item.value > 0);
+      // Household Source of Income: use only data from the same-named processor category
+      // to avoid picking up similar indicators from Socio-Economic Status category
+      if (category === "Household Source of Income") {
+        matches = matches.filter(item => item._sourceCategory === "Household Source of Income");
+      }
       if (!matches.length) return null;
       const count = matches.reduce((sum, item) => sum + item.count, 0);
       const value = matches.reduce((sum, item) => sum + item.value, 0) / matches.length;
@@ -61,10 +66,10 @@ const CustomTooltip = ({ active, payload, label }) => {
   return (
     <div style={{
       background:"#fff", border:"1px solid #e2e8f0", borderRadius:10,
-      padding:"10px 16px", fontSize:15, boxShadow:"0 2px 14px rgba(0,0,0,.09)",
+      padding:"10px 16px", fontSize:16, boxShadow:"0 2px 14px rgba(0,0,0,.09)",
       maxWidth:260
     }}>
-      <p style={{fontWeight:700, color:"#1e293b", marginBottom:6}}>{label}</p>
+      <p style={{fontWeight:700, color:"#1e293b", marginBottom:6, fontSize:17}}>{label}</p>
       {payload.map((p, i) => (
         <p key={i} style={{color: p.fill || p.color, margin:"2px 0", fontWeight:600}}>
           {p.name}: {p.payload?.displayValue ?? p.value}
@@ -88,7 +93,7 @@ const PieCard = ({ data, color, showTooltip = true }) => {
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     return (
       <text x={x} y={y} fill="#fff" textAnchor="middle"
-        dominantBaseline="central" fontSize={13} fontWeight={700}>
+        dominantBaseline="central" fontSize={16} fontWeight={600}>
         {`${(percent * 100).toFixed(1)}%`}
       </text>
     );
@@ -110,11 +115,11 @@ const PieCard = ({ data, color, showTooltip = true }) => {
                 `${item.payload.displayValue} (${item.payload.count} HH)`,
                 item.payload.indicator
               ]}
-              contentStyle={{borderRadius:8, fontSize:15}}
+              contentStyle={{borderRadius:8, fontSize:16}}
             />
           )}
           <Legend iconSize={13}
-            formatter={v => <span style={{fontSize:15, color:"#374151"}}>{v}</span>}
+            formatter={v => <span style={{fontSize:17, color:"#374151"}}>{v}</span>}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -131,16 +136,16 @@ const VBar = ({ data, color }) => {
     <div style={{width:"100%", overflowX:"auto"}}>
       <div style={{width: sw || "100%", height:400}}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{top:30, right:20, bottom:90, left:24}}>
+          <BarChart data={data} margin={{top:30, right:20, bottom:90, left:40}}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="indicator" tick={{fontSize:13, fill:"#475569"}}
+            <XAxis dataKey="indicator" tick={{fontSize:16, fill:"#475569"}}
               angle={-30} textAnchor="end" height={100} interval={0} />
-            <YAxis domain={dom} tick={{fontSize:14, fill:"#475569"}}
+            <YAxis domain={dom} tick={{fontSize:16, fill:"#475569"}}
               label={{value:"Households (%)", angle:-90, position:"insideLeft",
                 offset:0, style:{fontSize:13, fill:"#64748b", fontWeight:500}}} />
             <Tooltip content={<CustomTooltip />} />
             <Legend iconSize={13}
-              formatter={v => <span style={{fontSize:16, color:"#374151"}}>{v}</span>} />
+              formatter={v => <span style={{fontSize:17, color:"#374151"}}>{v}</span>} />
             <Bar dataKey="value" fill={color} radius={[6,6,0,0]}
               animationDuration={850} name="Coverage (%)">
               <LabelList dataKey="value"
@@ -148,7 +153,7 @@ const VBar = ({ data, color }) => {
                   const item = data[index];
                   return (
                     <text x={x + width / 2} y={y - 6} textAnchor="middle"
-                      fontSize={12} fill="#475569" fontWeight={600}>
+                      fontSize={16} fill="#475569" fontWeight={600}>
                       {item?.displayValue || `${value}%`}
                     </text>
                   );
@@ -173,7 +178,7 @@ const HBar = ({ data, color }) => {
     const label = item ? `${value}%  (${item.count} HH)` : `${value}%`;
     return (
       <text x={x + width + 8} y={y + height / 2} dominantBaseline="middle"
-        fontSize={13} fill="#475569" fontWeight={600}>
+        fontSize={16} fill="#475569" fontWeight={600}>
         {label}
       </text>
     );
@@ -183,14 +188,14 @@ const HBar = ({ data, color }) => {
     <div style={{width:"100%", height:h, overflowY:"auto"}}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical"
-          margin={{top:10, right:140, bottom:10, left:8}}>
+          margin={{top:10, right:140, bottom:10, left:16}}>
           <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-          <XAxis type="number" domain={dom} tick={{fontSize:14, fill:"#475569"}} />
+          <XAxis type="number" domain={dom} tick={{fontSize:16, fill:"#475569"}} />
           <YAxis type="category" dataKey="indicator" width={220}
-            tick={{fontSize:13, fill:"#475569"}} />
+            tick={{fontSize:16, fill:"#475569"}} />
           <Tooltip content={<CustomTooltip />} />
           <Legend iconSize={13}
-            formatter={v => <span style={{fontSize:16, color:"#374151"}}>{v}</span>} />
+            formatter={v => <span style={{fontSize:17, color:"#374151"}}>{v}</span>} />
           <Bar dataKey="value" fill={color} radius={[0,6,6,0]}
             animationDuration={850} name="Coverage (%)">
             <LabelList content={<CustomBarLabel />} />
@@ -208,22 +213,22 @@ const GroupedBar = ({ data }) => {
     <div style={{width:"100%", height:h, overflowY:"auto"}}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical"
-          margin={{top:10, right:120, bottom:10, left:8}}>
+          margin={{top:10, right:130, bottom:10, left:16}}>
           <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-          <XAxis type="number" domain={[0,100]} tick={{fontSize:14, fill:"#475569"}}
+          <XAxis type="number" domain={[0,100]} tick={{fontSize:16, fill:"#475569"}}
             tickFormatter={v => `${v}%`} />
           <YAxis type="category" dataKey="indicator" width={220}
-            tick={{fontSize:13, fill:"#475569"}} />
+            tick={{fontSize:16, fill:"#475569"}} />
           <Tooltip content={<CustomTooltip />} />
           <Legend iconSize={13}
-            formatter={v => <span style={{fontSize:16, color:"#374151"}}>{v}</span>} />
+            formatter={v => <span style={{fontSize:17, color:"#374151"}}>{v}</span>} />
           <Bar dataKey="Yes" fill={YES_COLOR} radius={[0,4,4,0]}
             animationDuration={850} name="Yes">
             <LabelList dataKey="Yes"
               content={({ x, y, width, height, value }) => (
                 value > 5 ? (
                   <text x={x + width + 4} y={y + height / 2}
-                    dominantBaseline="middle" fontSize={12} fill="#059669" fontWeight={600}>
+                    dominantBaseline="middle" fontSize={16} fill="#059669" fontWeight={600}>
                     {`${value}%`}
                   </text>
                 ) : null
@@ -236,7 +241,7 @@ const GroupedBar = ({ data }) => {
               content={({ x, y, width, height, value }) => (
                 value > 5 ? (
                   <text x={x + width + 4} y={y + height / 2}
-                    dominantBaseline="middle" fontSize={12} fill="#e11d48" fontWeight={600}>
+                    dominantBaseline="middle" fontSize={16} fill="#e11d48" fontWeight={600}>
                     {`${value}%`}
                   </text>
                 ) : null
@@ -371,6 +376,7 @@ const IndicatorsPage = () => {
   const onYear = y => { setSelYear(y); setSp({ year: String(y) }, { replace: true }); };
 
   const categories = buildAnalytics(survey?.processedData);
+  const myScoreValue = survey?.processedData?.summary?.myScore;
 
   if (err && !years.length) return (
     <div style={{borderRadius:20, border:"1px solid #e2e8f0", background:"#fff",
@@ -401,6 +407,24 @@ const IndicatorsPage = () => {
           </div>
         )}
       </div>
+
+      {/* My Score summary */}
+      {!loading && (
+        <div style={{display:"flex", justifyContent:"center"}}>
+          <div style={{width:"100%", maxWidth:760, borderRadius:20, border:"1px solid #e2e8f0",
+            background:"#fff", padding:"28px 32px", boxShadow:"0 1px 6px rgba(0,0,0,.06)",
+            textAlign:"center"}}>
+            <p style={{fontSize:14, fontWeight:700, color:"#64748b", margin:0, letterSpacing:"0.08em",
+              textTransform:"uppercase"}}>VDI</p>
+            <div style={{fontSize:56, fontWeight:800, color:"#2563eb", lineHeight:1.1, marginTop:10}}>
+              {myScoreValue !== undefined && myScoreValue !== null && !Number.isNaN(Number(myScoreValue))
+                ? Number(myScoreValue).toString()
+                : "—"}
+            </div>
+            <p style={{fontSize:15, color:"#64748b", margin:"10px 0 0"}}>Overall Village Development Index</p>
+          </div>
+        </div>
+      )}
 
       {/* Summary pills */}
       {!loading && categories.length > 0 && (
@@ -447,20 +471,13 @@ const IndicatorsPage = () => {
           onMouseEnter={e => e.currentTarget.style.boxShadow = "0 6px 24px rgba(0,0,0,.11)"}
           onMouseLeave={e => e.currentTarget.style.boxShadow = "0 1px 6px rgba(0,0,0,.06)"}
         >
-          <div style={{display:"flex", alignItems:"center", gap:14, marginBottom:8}}>
+          <div style={{display:"flex", alignItems:"center", gap:14}}>
             <div style={{width:5, height:38, borderRadius:4,
               background:PAL[idx%PAL.length], flexShrink:0}} />
             <div>
-              <h2 style={{fontSize:28, fontWeight:700, color:"#1e293b", margin:0, lineHeight:1.2}}>
+              <h2 style={{fontSize:30, fontWeight:700, color:"#1e293b", margin:0, lineHeight:1.2}}>
                 {cat.category}
               </h2>
-              <p style={{fontSize:14, color:"#94a3b8", marginTop:4}}>
-                {(cat.graphData||[]).length} parameter{(cat.graphData||[]).length!==1?"s":""} ·{" "}
-                {cat.type === "grouped-bar" ? "Yes / No grouped bars"
-                  : cat.type === "pie" ? "Pie chart"
-                  : cat.type === "hbar" ? "Horizontal bar chart"
-                  : "Bar chart"}
-              </p>
             </div>
           </div>
           <ChartCard
