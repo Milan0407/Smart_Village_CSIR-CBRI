@@ -103,7 +103,7 @@ const HeroSection = ({ data = {} }) => {
       relative
       overflow-hidden
       bg-slate-950
-      py-10
+      py-4 lg:py-6
     "
     >
       {/* Background */}
@@ -159,18 +159,21 @@ const HeroSection = ({ data = {} }) => {
             Fixed Glass Content Card
         ============================ */}
 
-        <div
-          className="
-            pointer-events-none
-            absolute
-            left-8
-            top-1/2
-            z-40
-            w-[520px]
-            -translate-y-1/2
-            lg:left-16
-          "
-        >
+       <div
+className="
+hidden
+md:block
+pointer-events-none
+absolute
+left-8
+top-[58%]
+z-40
+w-[440px]
+lg:w-[520px]
+-translate-y-1/2
+lg:left-20
+"
+>
           <div className="
 rounded-3xl
 border
@@ -185,7 +188,7 @@ backdrop-blur-[3px]
             <p
               className="
                 mb-4
-                text-lg
+                text-base
                 font-bold
                 uppercase
                 tracking-[0.35em]
@@ -197,10 +200,10 @@ backdrop-blur-[3px]
 
             <h1
               className="
-                text-4xl
+                text-3xl
                 font-bold
                 leading-tight
-                md:text-5xl
+                lg:text-4xl
               "
             >
               {heading}
@@ -256,7 +259,11 @@ backdrop-blur-[3px]
                   <div
                     className={`
                       relative
-                      h-[640px]
+h-[280px]
+sm:h-[340px]
+md:h-[400px]
+lg:h-[460px]
+xl:h-[500px]
                       overflow-hidden
                       rounded-[32px]
                       transition-all
