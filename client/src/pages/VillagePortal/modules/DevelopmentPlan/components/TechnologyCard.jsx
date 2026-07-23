@@ -154,7 +154,7 @@ const TechnologyCard = ({ technology }) => {
                     maxHeight:
                       isDescriptionOpen
                         ? `${descriptionHeight}px`
-                        : "3.5rem",
+                        : "6rem",
                   }}
                 >
                   <div

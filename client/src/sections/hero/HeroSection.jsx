@@ -168,8 +168,8 @@ absolute
 left-8
 top-[58%]
 z-40
-w-[440px]
-lg:w-[520px]
+w-[400px]
+lg:w-[480px]
 -translate-y-1/2
 lg:left-20
 "
@@ -286,7 +286,7 @@ xl:h-[500px]
                       className={`
                         h-full
                         w-full
-                        object-cover
+                        object-contain
                         transition-all
                         duration-[6000ms]
                         ease-linear
