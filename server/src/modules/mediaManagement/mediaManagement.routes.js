@@ -5,7 +5,7 @@ import * as mediaController
   from "./mediaManagement.controller.js";
 
 import upload
-  from "../../middleware/cloudinaryUpload.middleware.js";
+  from "../../middleware/upload.middleware.js";
 
 const router = Router();
 

@@ -2,10 +2,13 @@ import app from "./app.js";
 
 import { env } from "./config/env.js";
 import { connectDB } from "./config/database.js";
-import "./config/cloudinary.js";
 
 const startServer = async () => {
   try {
+    console.log({
+  region: process.env.AWS_REGION,
+  bucket: process.env.AWS_S3_BUCKET,
+});
     await connectDB();
 
     app.listen(env.port, () => {

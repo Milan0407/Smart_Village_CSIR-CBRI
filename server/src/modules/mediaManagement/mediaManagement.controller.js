@@ -4,11 +4,10 @@ import * as mediaService
 import ApiResponse
   from "../../utils/ApiResponse.js";
 
-import cloudinary
-  from "../../config/cloudinary.js";
-
-import streamifier
-  from "streamifier";
+import {
+  uploadFile,
+  deleteFile,
+} from "../../services/s3.service.js";
 
 export const uploadMedia =
   async (req, res) => {
@@ -20,72 +19,34 @@ export const uploadMedia =
     }
 
     const uploadResult =
-      await new Promise(
-        (
-          resolve,
-          reject
-        ) => {
+  await uploadFile({
+    file: req.file,
+    folder: "media",
+  });
 
-          const uploadStream =
-            cloudinary.uploader.upload_stream(
-              {
-                folder:
-                  "smart-village",
+   const media =
+  await mediaService.createMedia({
+    filename:
+      uploadResult.filename,
 
-                resource_type:
-                  "auto",
-              },
+    originalName:
+      req.file.originalname,
 
-              (
-                error,
-                result
-              ) => {
+    url:
+      uploadResult.url,
 
-                if (error) {
-                  reject(
-                    error
-                  );
-                } else {
-                  resolve(
-                    result
-                  );
-                }
-              }
-            );
+    publicId:
+      uploadResult.publicId,
 
-          streamifier
-            .createReadStream(
-              req.file.buffer
-            )
-            .pipe(
-              uploadStream
-            );
-        }
-      );
+    resourceType:
+      uploadResult.resourceType,
 
-    const media =
-      await mediaService.createMedia({
-        filename:
-          uploadResult.public_id,
+    mimeType:
+      uploadResult.mimeType,
 
-        originalName:
-          req.file.originalname,
-
-        url:
-          uploadResult.secure_url,
-
-        publicId:
-          uploadResult.public_id,
-
-        resourceType:
-          uploadResult.resource_type,
-
-        mimeType:
-          req.file.mimetype,
-
-        size:
-          req.file.size,
-      });
+    size:
+      uploadResult.size,
+  });
 
     return res.json(
       new ApiResponse(
@@ -156,14 +117,9 @@ export const deleteMedia =
       );
     }
 
-    await cloudinary.uploader.destroy(
-      media.publicId,
-      {
-        resource_type:
-          media.resourceType ||
-          "image",
-      }
-    );
+   await deleteFile(
+  media.publicId
+);
 
     await mediaService.deleteMedia(
       req.params.id
