@@ -27,7 +27,7 @@ const seedSiteSettings = async () => {
 
       contactEmail: "smartvillage@cbri.res.in",
 
-      contactPhone: "+91 XXXXX XXXXX",
+      contactPhone: "+91 96635 30674",
 
       address:
         "CSIR–Central Building Research Institute, Roorkee, Uttarakhand, India",
@@ -35,11 +35,12 @@ const seedSiteSettings = async () => {
       website: "https://cbri.res.in",
 
       socialLinks: {
-        facebook: "",
+        facebook: "https://www.facebook.com/CsirCbriRoorkee/",
         twitter: "",
-        linkedin: "",
-        youtube: "",
-        instagram: "",
+        linkedin:
+          "https://www.linkedin.com/school/central-building-research-institute-cbri-roorkee-uttarakhand-india-/",
+        youtube: "https://www.youtube.com/c/CbriResIn-roorkee",
+        instagram: "https://www.instagram.com/csir_cbri/?hl=en",
       },
 
       copyrightText: `© ${new Date().getFullYear()} CSIR-CBRI. All Rights Reserved.`,

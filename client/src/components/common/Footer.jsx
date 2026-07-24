@@ -280,7 +280,7 @@ const Footer = () => {
                   className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
                 >
                   {settings?.contactPhone ||
-                    "+91 XXXXX XXXXX"}
+                    "+91 96635 30674"}
                 </a>
 
               </div>

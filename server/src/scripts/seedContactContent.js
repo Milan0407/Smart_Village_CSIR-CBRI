@@ -30,7 +30,7 @@ const seedContactContent = async () => {
               "Feel free to contact the CSIR Smart Village team for any queries, collaborations, or support regarding the Smart Village Mission.",
             address: "CSIR-CBRI, Roorkee, Uttarakhand",
             email: "smartvillage@cbri.res.in",
-            phone: "+91 XXXXX XXXXX",
+            phone: "+91 9663530674",
             workingHours: "Monday - Friday, 9:00 AM - 5:30 PM",
           };
           break;

@@ -1,6 +1,6 @@
 import csirLogo from "../../../assets/logos/CSIRCBRI-Logo.jpg";
 // import cbriLogo from "../../../assets/logos/Smart.jpeg";
-import smartVillageLogo from "../../../assets/logos/SmartVill.jpeg";
+import smartVillageLogo from "../../../assets/logos/SmartVillage.jpeg";
 
 const Header = () => {
   return (
